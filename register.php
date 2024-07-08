@@ -170,21 +170,10 @@ function checkPhone($phone_number) {
     if (substr($phone_number, 0, 1) != '0' && substr($phone_number, 0, 2) != '9' && !in_array(substr($phone_number, 0, 2), $valid_area_codes)) {
         return false;
     }
-    if (substr($phone_number, 0, 2) != '09') {
-        return false;
-    }
 
     return true;
 }
-
 ?>
-
-<script>
-  function validateInput(input) {
-    input.value = input.value.replace(/\D/g, ''); // Remove non-numeric characters
-  }
-
-</script>
 
 <?php
 // Form submission
@@ -209,14 +198,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors = 0;
         $error_display = "";
 
-        if($age < 18){
-            $error_display = "Invalid Age. Must be 18 years old and Above";
-            $errors++;
-        }
-        if($age > 120){
-            $error_display = "Invalid Age. You're too old for this";
-            $errors++;
-        }
         if (!preg_match($email_pattern, $email) ) {
             $error_display = "Please enter a valid email address with a .com extension.";
             $errors++;
@@ -320,7 +301,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div class="form-group">
                     <p><span class="text-danger font-italic">*</span>Phone Number:</p>
-                    <input type="text" maxlength="11" id="phone_number" name="phone_number" class="form-control" value = "<?php retainInput('phone_number');?>" placeholder="09xxxxxxxxx" inputmode="numeric" required oninput="validateInput(this)">
+                    <input type="tel" id="phone_number" name="phone_number" class="form-control" value = "<?php retainInput('phone_number');?>" placeholder="09xxxxxxxxx" required>
                 </div>
                 <div class="form-group">
                     <p><span class="text-danger font-italic">*</span>Address:</p>

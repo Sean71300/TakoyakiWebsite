@@ -149,9 +149,9 @@
                         <input type="radio" name="rating" id="rating5" value="5">
                     </div>
                     <label for="comments">Comment/Suggestion:</label>
-                    <textarea name="comments" id="comments" placeholder="120 characters limit" maxlength="120"   rows="3" oninput="updateCharCount()"></textarea>
+                    <textarea name="comments" id="comments" placeholder="500 characters limit" maxlength="500"   rows="3" oninput="updateCharCount()"></textarea>
                     <p class="char-count" style="font-size: 13px; text-align: left; margin-left: 40px;"> 
-                        Characters left: <span id="charCount">120</span>
+                        Characters left: <span id="charCount">500</span>
                     </p>
                     <button type="submit" name="submit">Submit</button>
                 </form>
@@ -177,7 +177,7 @@
 
     function getProductID() {
 
-        return 123;
+        return 124;
     }
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -187,7 +187,7 @@
         $fullName = getFullName();
         $productID = getProductID();
 
-        $comment = substr($comment, 0, 120);
+        $comment = substr($comment, 0, 500);
 
 
         $connection = connect();
@@ -216,7 +216,7 @@
         function updateCharCount() {
             var textarea = document.getElementById('comments');
             var charCount = document.getElementById('charCount');
-            var remaining = 120 - textarea.value.length;
+            var remaining = 500 - textarea.value.length;
             charCount.textContent = remaining;
         }
     </script>
