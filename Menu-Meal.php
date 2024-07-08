@@ -1,3 +1,21 @@
+<?php
+  session_start();
+
+  if(isset($_POST['add_to_cart'])) {
+    $product_name = $_POST['product_name'];
+    $price = $_POST['price'];
+
+    if(!isset($_SESSION['cart'])) {
+        $_SESSION['cart'] = array();
+    }
+
+    $_SESSION['cart'][] = array(
+        'product_name' => $product_name,
+        'price' => $price,
+    );
+  }
+?>
+
 <html>
   <head>
     <title>Menu Page</title>
@@ -126,7 +144,11 @@
               <p class="card-title">Beef Gyudon</p>
               <div class="d-flex justify-content-evenly">
                 <p class="card-title fw-bold w-100" style="display:inline-block"><span class="text-warning" style="display:inline-block">₱</span>85.00</p>
-                <button class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" data-bs-toggle="modal" data-bs-target="#input" onclick="gyudonPrice()">+</button>
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+                <input type="hidden" name="product_name" value="Beef Gyudon">
+                <input type="hidden" name="price" value="85.00">
+                <input type="submit" name="add_to_cart" value="+" class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" ></input>
+                </form>
               </div>
             </div>
             <div class="card border-0 col-12" style="width: 20rem; margin-left: 1rem;">
@@ -137,7 +159,11 @@
               <p class="card-title">Pork Tonkatsu</p>
               <div class="d-flex justify-content-evenly">
                 <p class="card-title fw-bold w-100" style="display:inline-block"><span class="text-warning" style="display:inline-block">₱</span>75.00</p>
-                <button class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" data-bs-toggle="modal" data-bs-target="#input" onclick="porkPrice()">+</button>
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+                <input type="hidden" name="product_name" value="Pork Tonkatsu">
+                <input type="hidden" name="price" value="75.00">
+                <input type="submit" name="add_to_cart" value="+" class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" ></input>
+                </form>
               </div>
             </div>			
           </div>

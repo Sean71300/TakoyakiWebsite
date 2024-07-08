@@ -1,3 +1,21 @@
+<?php
+  session_start();
+
+  if(isset($_POST['add_to_cart'])) {
+    $product_name = $_POST['product_name'];
+    $price = $_POST['price'];
+
+    if(!isset($_SESSION['cart'])) {
+        $_SESSION['cart'] = array();
+    }
+
+    $_SESSION['cart'][] = array(
+        'product_name' => $product_name,
+        'price' => $price,
+    );
+  }
+?>
+
 <html>
   <head>
     <title>Menu Page</title>
@@ -154,8 +172,9 @@
               </a>
             </div>
           </div>
+
           <div class="row d-flex flex-row justify-content-evenly mt-5">
-            <!-- Octo Bits -->
+            <!-- Octo Bits -->          
             <div class="card border-0 col" style="width: 15rem">
               <div class="card-body">
                 <img src="Images/ribbon.png" alt="" style="display:inline; margin-left: -28px; margin-top: -17px;">
@@ -165,9 +184,14 @@
               <p class="card-title getProduct">Octo Bits</p>
               <div class="d-flex justify-content-evenly">
                 <p id="price" class="card-title fw-bold w-100" style="display:inline-block"><span class="text-warning" style="display:inline-block">₱</span>39.00</p>
-                <button class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" data-bs-toggle="modal" data-bs-target="#input">+</button>
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+                <input type="hidden" name="product_name" value="Octo Bits">
+                <input type="hidden" name="price" value="39.00">
+                <input type="submit" name="add_to_cart" value="+" class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" ></input>
+                </form>
               </div>
             </div>
+            
 
             <!-- Crab Bits -->
             <div class="card border-0 col" style="width: 15rem">
@@ -179,7 +203,11 @@
               <p class="card-title getProduct">Crab Bits</p>
               <div class="d-flex justify-content-evenly">
                 <p id="price" class="card-title fw-bold w-100" style="display:inline-block"><span class="text-warning" style="display:inline-block">₱</span>39.00</p>
-                <button class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" data-bs-toggle="modal" data-bs-target="#input">+</button>
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+                <input type="hidden" name="product_name" value="Crab Bits">
+                <input type="hidden" name="price" value="39.00">
+                <input type="submit" name="add_to_cart" value="+" class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" ></input>
+                </form>
               </div>
             </div>
 
@@ -193,7 +221,11 @@
               <p class="card-title getProduct">Cheese Bits</p>
               <div class="d-flex justify-content-evenly">
                 <p id="price" class="card-title fw-bold w-100" style="display:inline-block"><span class="text-warning" style="display:inline-block">₱</span>39.00</p>
-                <button class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" data-bs-toggle="modal" data-bs-target="#input">+</button>
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+                <input type="hidden" name="product_name" value="Cheese Bits">
+                <input type="hidden" name="price" value="39.00">
+                <input type="submit" name="add_to_cart" value="+" class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" ></input>
+                </form>
               </div>
             </div>
 
@@ -207,7 +239,11 @@
               <p class="card-title getProduct">Bacon Bits</p>
               <div class="d-flex justify-content-evenly">
                 <p id="price" class="card-title fw-bold w-100" style="display:inline-block"><span class="text-warning" style="display:inline-block">₱</span>39.00</p>
-                <button class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" data-bs-toggle="modal" data-bs-target="#input">+</button>
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+                <input type="hidden" name="product_name" value="Bacon Bits">
+                <input type="hidden" name="price" value="39.00">
+                <input type="submit" name="add_to_cart" value="+" class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" ></input>
+                </form>
               </div>
             </div>
 
@@ -216,6 +252,8 @@
           <div class="row" style="margin-top: 150px;">
             <h4 class="fw-bold">Special Offers</h4>
           </div>
+
+          <!-- Special Octo Bits -->
           <div class="row d-flex flex-row justify-content-evenly mt-5">
             <div class="card border-0 col" style="width: 15rem">
               <div class="card-body">
@@ -226,9 +264,15 @@
               <p class="card-title getProduct">Octo Bits</p>
               <div class="d-flex justify-content-evenly">
                 <p id="price" class="card-title fw-bold w-100" style="display:inline-block"><span class="text-warning" style="display:inline-block">₱</span>100.00</p>
-                <button class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" data-bs-toggle="modal" data-bs-target="#input">+</button>
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+                <input type="hidden" name="product_name" value="10+1 Octo Bits">
+                <input type="hidden" name="price" value="100.00">
+                <input type="submit" name="add_to_cart" value="+" class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" ></input>
+                </form>
               </div>
             </div>
+
+            <!-- Special Crab Bits -->
             <div class="card border-0 col" style="width: 15rem">
               <div class="card-body">
                 <img src="Images/ribbon-promo.png" alt="" style="display:inline; margin-left: -28px; margin-top: -17px;">
@@ -238,9 +282,15 @@
               <p class="card-title getProduct">Crab Bits</p>
               <div class="d-flex justify-content-evenly">
                 <p id="price" class="card-title fw-bold w-100" style="display:inline-block"><span class="text-warning" style="display:inline-block">₱</span>100.00</p>
-                <button class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" data-bs-toggle="modal" data-bs-target="#input">+</button>
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+                <input type="hidden" name="product_name" value="10+1 Crab Bits">
+                <input type="hidden" name="price" value="100.00">
+                <input type="submit" name="add_to_cart" value="+" class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" ></input>
+                </form>
               </div>
             </div>
+
+            <!-- Special Cheese Bits -->
             <div class="card border-0 col" style="width: 15rem">
               <div class="card-body">
                 <img src="Images/ribbon-promo.png" alt="" style="display:inline; margin-left: -28px; margin-top: -17px;">
@@ -250,9 +300,15 @@
               <p class="card-title getProduct">Cheese Bits</p>
               <div class="d-flex justify-content-evenly">
                 <p id="price" class="card-title fw-bold w-100" style="display:inline-block"><span class="text-warning" style="display:inline-block">₱</span>100.00</p>
-                <button class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" data-bs-toggle="modal" data-bs-target="#input">+</button>
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+                <input type="hidden" name="product_name" value="10+1 Cheese Bits">
+                <input type="hidden" name="price" value="100.00">
+                <input type="submit" name="add_to_cart" value="+" class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" ></input>
+                </form>
               </div>
             </div>
+
+            <!-- Special Bacon Bits -->
             <div class="card border-0 col" style="width: 15rem">
               <div class="card-body">
                 <img src="Images/ribbon-promo.png" alt="" style="display:inline; margin-left: -28px; margin-top: -17px;">
@@ -262,7 +318,11 @@
               <p class="card-title getProduct">Bacon Bits</p>
               <div class="d-flex justify-content-evenly">
                 <p class="card-title fw-bold w-100" style="display:inline-block" id="price"><span class="text-warning" style="display:inline-block">₱</span>100.00</p>
-                <button class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" data-bs-toggle="modal" data-bs-target="#input">+</button>
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+                <input type="hidden" name="product_name" value="10+1 Bacon Bits">
+                <input type="hidden" name="price" value="100.00">
+                <input type="submit" name="add_to_cart" value="+" class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" ></input>
+                </form>
               </div>
             </div>
           </div>
@@ -270,6 +330,8 @@
           <div class="row" style="margin-top: 150px;">
             <h4 class="fw-bold">Barkada Platters</h4>
           </div>
+
+          <!-- Assorted Barkada -->
           <div class="row mt-5" style="margin-bottom: 150px;">
             <div class="card border-0 col-12" style="width: 20rem">
               <div class="card-body">
@@ -280,7 +342,11 @@
               <p class="card-title getProduct">Assorted Barkada</p>
               <div class="d-flex justify-content-evenly">
                 <p id="price" class="card-title fw-bold w-100" style="display:inline-block"><span class="text-warning" style="display:inline-block">₱</span>400.00</p>
-                <button class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" data-bs-toggle="modal" data-bs-target="#input">+</button>
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+                <input type="hidden" name="product_name" value="Assorted Barkada">
+                <input type="hidden" name="price" value="400.00">
+                <input type="submit" name="add_to_cart" value="+" class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" ></input>
+                </form>
               </div>
             </div>
             <div class="card border-0 col-12" style="width: 20rem; margin-left: 1rem;">
@@ -292,7 +358,11 @@
               <p class="card-title getProduct">Cheesy Barkada</p>
               <div class="d-flex justify-content-evenly">
                 <p id="price" class="card-title fw-bold w-100" style="display:inline-block"><span class="text-warning" style="display:inline-block">₱</span>320.00</p>
-                <button class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" data-bs-toggle="modal" data-bs-target="#input">+</button>
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+                <input type="hidden" name="product_name" value="Cheesy Barkada">
+                <input type="hidden" name="price" value="320.00">
+                <input type="submit" name="add_to_cart" value="+" class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" ></input>
+                </form>
               </div>
             </div>
           </div>
