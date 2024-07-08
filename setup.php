@@ -1,195 +1,457 @@
 <?php
-function connect()
-{
-    // Configuration
-    $db_host = 'localhost';
-    $db_username = 'root';
-    $db_password = '';
-    $db_name = 'registration_db';
-
-    $conn = new mysqli($db_host, $db_username, $db_password, $db_name);
-
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-
-    return $conn;
-}
-
-function firstConnect()
-{
-    // Configuration
-    $db_host = 'localhost';
-    $db_username = 'root';
-    $db_password = '';
-
-    $DBconn = new mysqli($db_host, $db_username, $db_password);
-
-    if ($DBconn->connect_error) {
-        die("Connection failed: " . $DBconn->connect_error);
-    }
-
-    return $DBconn;
-}
-
-function createDB()
-{
-    // Configuration
-    $db_host = 'localhost';
-    $db_username = 'root';
-    $db_password = '';
-
-    // Create connection
-    $DBconn = new mysqli($db_host, $db_username, $db_password);
-
-    // Check connection
-    if ($DBconn->connect_error) {
-        die("Connection failed: " . $DBconn->connect_error);
-    }
-
-    // Creating database
-    $sql = "CREATE DATABASE registration_db";
-
-    if ($DBconn->query($sql) === TRUE) {
-        echo "The database registration_db is created successfully.";
-    } else {
-        echo "There is an error in creating the database: " . $DBconn->error;
-    }
-
-    $DBconn->close();
-}
-
-function createTable()
+    function connect()
     {
-        // Creating table
-        $sql = "CREATE TABLE registered(
-        id INT(10)  PRIMARY KEY,
-        type VARCHAR(8), 
-        full_name VARCHAR(70), 
-        birthdate DATE, 
-        age INT (3), 
-        gender VARCHAR(10), 
-        email VARCHAR(50), 
-        phone_number VARCHAR(11),
-        address VARCHAR(200), 
-        password VARCHAR(255), 
-        reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )";
+        // Configuration
+        $db_host = 'localhost';
+        $db_username = 'root';
+        $db_password = '';
+        $db_name = 'hentoki_db';
 
-        if (mysqli_query(connect(), $sql))
+        $conn = new mysqli($db_host, $db_username, $db_password, $db_name);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+        return $conn;
+    }
+
+    function createDB()
+    {
+        // Configuration
+        $db_host = 'localhost';
+        $db_username = 'root';
+        $db_password = '';
+
+        // Create connection
+        $conn = new mysqli($db_host, $db_username, $db_password);
+
+        // Check connection
+        if ($conn->connect_error) 
         {
-            $id = generateID();
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+        // Creating database
+        $sql = "CREATE DATABASE hentoki_db";
+
+        if ($conn->query($sql) === TRUE) 
+        {
+            echo "The database hentoki_db is created successfully.";
+        } 
+        else 
+        {
+            echo "There is an error in creating the database: " . $conn->error;
+        }
+
+        $conn->close();
+    }
+// -------------------------------------- CUSTOMERS TABLE & ID -------------------------------------- //
+    function create_CustomersTable()
+    {
+        $conn = connect();
+
+        $sql = "CREATE TABLE customers(
+                customer_id INT(10) PRIMARY KEY,
+                full_name VARCHAR(100),
+                age INT(3),
+                birthdate DATE,
+                gender VARCHAR(10),
+                email VARCHAR(50),
+                phone_number VARCHAR(11),
+                address VARCHAR(300),
+                password VARCHAR(255),
+                registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
+
+        if (mysqli_query($conn, $sql))
+        {
+            $id = generate_CustomerID();
             $password = 12345;
-            $email = "dimaano@educue.com";
-            
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+            $email = "tamayoyvonne0007@gmail.com";
 
-            $sql = "INSERT INTO registered 
-                    (id, type, full_name, birthdate, age, gender, email, phone_number, address, password) 
-                    VALUES 
-                    ($id,'Admin','Maam Kathleen Dimaano','',45,'Female','$email','09876543211','Valenzuela City','$hashed_password')";
+            $hashed_pw = password_hash($password, PASSWORD_DEFAULT);
 
-            mysqli_query(connect(), $sql);
+            $sql = "INSERT INTO customers
+                    (customer_id,full_name,age,birthdate,gender,email,phone_number,address,password)
+                    VALUES
+                    ($id,'Maki',24,'','Male','$email','09123456789','Makati City','$hashed_pw')";
 
-            echo "<br>The table registered is created successfully.";
+            mysqli_query($conn, $sql);
+
+            echo "<br>The table customers is created successfully.";
         }
         else
         {
-            echo "<br>There is an error in creating the table: " . connect()->connect_error;
+            echo "<br>There is an error in creating the table: " . $conn->connect_error;
         }
+
+        $conn->close();
     }
 
-    // ------------------------------------------------New Addition---------------------------------
-    function createProducttable(){
-        $query = " CREATE TABLE product(
-            product_id INT(10) PRIMARY KEY,
-            product_name VARCHAR(70)
-            
-            )";
-                if (mysqli_query(connect(), $query))
-                {
-                    echo "<br> The product table is created successfully.";
-                }else
-                {
-                    echo "<br> The is an error in creating table: " . connect() ->connect_error;
-                }
+    function generate_CustomerID()
+    {
+        $conn = connect();
 
+        $query = "SELECT COUNT(*) as count FROM customers";
+        $result = $conn->query($query);
+        $row = $result->fetch_assoc();
+        $rowCount = $row["count"];
+
+        // Get the current year
+        $currentYear = date("Y");
+        $currentMonth = date("m");
+
+        // Generate the ID
+        $genID = (int)($currentYear . $currentMonth . str_pad($rowCount, 4, "0", STR_PAD_LEFT));
+
+        $conn->close();
+        return $genID;
     }
+// -------------------------------------- EMPLOYEES TABLE & ID -------------------------------------- //
+    function create_EmployeesTable()
+    {
+        $conn = connect();
+
+        $sql = "CREATE TABLE employees(
+                employee_id INT(10) PRIMARY KEY,
+                position VARCHAR(30),
+                full_name VARCHAR(100),
+                age INT(3),
+                birthdate DATE,
+                gender VARCHAR(10),
+                email VARCHAR(50),
+                phone_number VARCHAR(11),
+                address VARCHAR(300),
+                password VARCHAR(255),
+                registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
+
+        if (mysqli_query($conn, $sql))
+        {
+            $id = generate_EmployeeID();
+            $password = 12345;
+            $email = "myntchaos@gmail.com";
+
+            $hashed_pw = password_hash($password, PASSWORD_DEFAULT);
+
+            $sql = "INSERT INTO employees
+                    (employee_id,position,full_name,age,birthdate,gender,email,phone_number,address,password)
+                    VALUES
+                    ($id,'Admin','Maloi',24,'','female','$email','09987654321','Makati City','$hashed_pw')";
+
+            mysqli_query($conn, $sql);
+
+            echo "<br>The table employees is created successfully.";
+        }
+        else
+        {
+            echo "<br>There is an error in creating the table: " . $conn->connect_error;
+        }
+
+        $conn->close();
+    }
+
+    function generate_EmployeeID()
+    {
+        $conn = connect();
+
+        $query = "SELECT COUNT(*) as count FROM employees";
+        $result = $conn->query($query);
+        $row = $result->fetch_assoc();
+        $rowCount = $row["count"];
+
+        // Get the current year
+        $currentYear = date("Y");
+
+        // Generate the ID
+        $genID = (int)($currentYear . str_pad(5, 2, "0", STR_PAD_LEFT) . str_pad($rowCount, 4, "0", STR_PAD_LEFT));
+
+        $conn->close();
+        return $genID;
+    }
+    // -------------------------------------- CATEGORIES TABLE & ID -------------------------------------- //
+        function create_CategoryTable()
+        {
+            $conn = connect();
     
-    function createRatingtable(){
-        $query = " CREATE TABLE rating(
-            id INT(10),
-            full_name VARCHAR(70),
-            product_id INT(10),
-            star INT(5), 
-            rate_date  TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
-            comment VARCHAR(100),
-            FOREIGN KEY (id) REFERENCES registered(id),
-            FOREIGN KEY (product_id) REFERENCES product(product_id)
-            )";
-                if (mysqli_query(connect(), $query))
-                {
-                    echo "<br> The rating table is created successfully.";
-                }else
-                {
-                    echo "<br> The is an error in creating table: " . connect() ->connect_error;
-                }
+            $sql = "CREATE TABLE categories(
+                    category_id INT(10) PRIMARY KEY,
+                    category_type VARCHAR(100))";
+    
+            if (mysqli_query($conn, $sql))
+            {
+                $categoryID = generate_CategoryID();
+    
+                $sql = "INSERT INTO categories
+                        (category_id,category_type)
+                        VALUES
+                        ($categoryID,'Takoyaki'),
+                        (". (++$categoryID) .",'10+1'),
+                        (". (++$categoryID) .",'Barkada Platters'),
+                        (". (++$categoryID) .",'Rice Meals')";
+    
+                mysqli_query($conn, $sql);
 
+                echo "<br>The table categories is created successfully.";
+            }
+            else
+            {
+                echo "<br>There is an error in creating the table: " . $conn->connect_error;
+            }
+    
+            $conn->close();
+        }
+    
+        function generate_CategoryID()
+        {
+            $conn = connect();
+    
+            $query = "SELECT COUNT(*) as count FROM categories";
+            $result = $conn->query($query);
+            $row = $result->fetch_assoc();
+            $rowCount = $row["count"];
+    
+            // Get the current year
+            $currentYear = date("Y");
+    
+            // Generate the ID
+            $genID = (int)($currentYear . str_pad(3, 2, "0", STR_PAD_LEFT) . str_pad($rowCount, 4, "0", STR_PAD_LEFT));
+    
+            $conn->close();
+            return $genID;
+        }
+// -------------------------------------- PRODUCTS TABLE & ID -------------------------------------- //
+    function generate_ProductID()
+    {
+        $conn = connect();
+
+        $query = "SELECT COUNT(*) as count FROM products";
+        $result = $conn->query($query);
+        $row = $result->fetch_assoc();
+        $rowCount = $row["count"];
+
+        // Get the current year
+        $currentYear = date("Y");
+
+        // Generate the ID
+        $genID = (int)($currentYear . str_pad(6, 2, "1", STR_PAD_LEFT) . str_pad($rowCount, 4, "0", STR_PAD_LEFT));
+
+        $conn->close();
+        return $genID;
+    }    
+
+    function create_ProductTable()
+    {
+        $conn = connect();
+
+        $sql = "CREATE TABLE products(
+                product_id INT(10) PRIMARY KEY,
+                product_name VARCHAR(50),
+                category_id INT(10),
+                category_type VARCHAR(100),
+                status VARCHAR(30),
+                price FLOAT(6),
+                FOREIGN KEY (category_id) REFERENCES categories(category_id))";
+
+        if (mysqli_query($conn, $sql))
+        {
+            $id = generate_ProductID();
+            $categoryID = generate_CategoryID();
+            $catID = $categoryID - 4;
+
+            $sql = "INSERT INTO products
+                (product_id, product_name, category_id, category_type, status, price)
+                VALUES
+                ($id, 'Octo Bits', $catID , 'Takoyaki', 'Available', 39),
+                (". (++$id) .", 'Crab Bits', $catID , 'Takoyaki', 'Available', 39),
+                (". (++$id) .", 'Cheese Bits', $catID, 'Takoyaki', 'Available', 39),
+                (". (++$id) .", 'Bacon Bits', $catID, 'Takoyaki', 'Available', 39),
+                (". (++$id) .", 'Octo Bits', ". (++$catID) .", '10+1', 'Available', 100),
+                (". (++$id) .", 'Crab Bits', $catID , '10+1', 'Available', 100),
+                (". (++$id) .", 'Cheese Bits', $catID , '10+1', 'Available', 100),
+                (". (++$id) .", 'Bacon Bits', $catID , '10+1', 'Available', 100),
+                (". (++$id) .", 'Assorted Barkada', ". (++$catID) .", 'Barkada Platter', 'Available', 400),
+                (". (++$id) .", 'Cheesey Barkada', $catID, 'Barkada Platter', 'Available', 320),
+                (". (++$id) .", 'Beef Gyudon', ". (++$catID) .", 'Rice Meals', 'Available', 85),
+                (". (++$id) .", 'Pork Tonkatsun', $catID, 'Rice Meals', 'Available', 75)";
+
+            mysqli_query($conn, $sql);
+
+            echo "<br>The table products is created successfully.";
+        }
+        else
+        {
+            echo "<br>There is an error in creating the table: " . $conn->connect_error;
+        }
+
+        $conn->close();
     }
 
+    
+// -------------------------------------- RATINGS TABLE & ID -------------------------------------- //
+    function create_RatingsTable()
+    {
+        $conn = connect();
 
-function generateID()
-{
-    $conn = connect();
+        $sql = "CREATE TABLE ratings(
+                customer_id INT(10),
+                full_name VARCHAR(100),
+                product_id INT(10),
+                rating INT(2),
+                comment VARCHAR(300),
+                FOREIGN KEY (customer_id) REFERENCES customers(customer_id),
+                FOREIGN KEY (product_id) REFERENCES products(product_id))";
 
-    $query = "SELECT COUNT(*) as count FROM registered";
-    $result = $conn->query($query);
-    $row = $result->fetch_assoc();
-    $rowCount = $row["count"];
+        if (mysqli_query($conn, $sql))
+        {
+            $id = generate_CustomerID();
+            $custID = --$id;
+            $prodID = generate_ProductID();
+            $productID = --$prodID;
 
-    // Get the current year
-    $currentYear = date("Y");
+            $sql = "INSERT INTO ratings
+                    (customer_id,full_name,product_id,rating,comment)
+                    VALUES
+                    ($custID,'Maki',$productID,4,'Yummy takoyaki')";
 
-    // Generate the ID
-    $genID = (int)($currentYear . str_pad(101, 3, "0", STR_PAD_LEFT) . str_pad($rowCount, 3, "0", STR_PAD_LEFT));
+            mysqli_query($conn, $sql);
 
-    $conn->close();
-    return $genID;
-}
+            echo "<br>The table ratings is created successfully.";
+        }
+        else
+        {
+            echo "<br>There is an error in creating the table: " . $conn->connect_error;
+        }
+
+        $conn->close();
+    }
+// -------------------------------------- TRANSACTION TABLE & ID -------------------------------------- //
+    function create_TansactionTable()
+    {
+        $conn = connect();
+
+        $sql = "CREATE TABLE transaction_history(
+                transaction_id INT(10) PRIMARY KEY,
+                customer_id INT(10),
+                full_name VARCHAR(100),
+                product_id INT(10),
+                total_price FLOAT(6),
+                transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (customer_id) REFERENCES customers(customer_id),
+                FOREIGN KEY (product_id) REFERENCES products(product_id))";
+
+        if (mysqli_query($conn, $sql))
+        {
+            $id = generate_CustomerID();
+            $custID = --$id;
+            $transacID = generate_TransactionID();
+            $prodID = generate_ProductID();
+            $productID = --$prodID;
+
+            $sql = "INSERT INTO transaction_history
+                    (transaction_id,customer_id,full_name,product_id,total_price)
+                    VALUES
+                    ($transacID,$custID,'Maki',$productID,300.00)";
+
+            mysqli_query($conn, $sql);
+
+            echo "<br>The table transaction_history is created successfully.";
+        }
+        else
+        {
+            echo "<br>There is an error in creating the table: " . $conn->connect_error;
+        }
+
+        $conn->close();
+    }
+
+    function generate_TransactionID()
+    {
+        $conn = connect();
+
+        $query = "SELECT COUNT(*) as count FROM transaction_history";
+        $result = $conn->query($query);
+        $row = $result->fetch_assoc();
+        $rowCount = $row["count"];
+
+        // Get the current year
+        $currentYear = date("Y");
+
+        // Generate the ID
+        $genID = (int)($currentYear . str_pad(0, 2, "1", STR_PAD_LEFT) . str_pad($rowCount, 4, "0", STR_PAD_LEFT));
+
+        $conn->close();
+        return $genID;
+    }
 ?>
 
 <?php
-firstConnect();
+    // Check if the database exists
+    $conn = new mysqli('localhost','root','');
+    $db_check_query = "SHOW DATABASES LIKE 'hentoki_db'";
 
-// Check if the database exists
-$db_check_query = "SHOW DATABASES LIKE 'registration_db'";
-$result = mysqli_query(firstConnect(), $db_check_query);
+    $result = mysqli_query($conn, $db_check_query);
 
-if (mysqli_num_rows($result) == 0) {
-    createDB();
-}
+    if (mysqli_num_rows($result) == 0) 
+    {
+        createDB();
 
-// Check if the table exists
-$table_check_query = "SHOW TABLES LIKE 'registered'";
-$result = mysqli_query(connect(), $table_check_query);
+        $conn->close();
+    }
 
-if (mysqli_num_rows($result) == 0) {
-    createTable();
-}
+    // Check if the table exists
+    $conn = connect();
+    $table_check_query = "SHOW TABLES LIKE 'customers'";
+    $result = mysqli_query($conn, $table_check_query);
 
-$table_product_check_query = "SHOW TABLES LIKE 'product'";
-$result = mysqli_query(connect(), $table_product_check_query);
+    if (mysqli_num_rows($result) == 0) 
+    {
+        create_CustomersTable();
+    }
 
-if(mysqli_num_rows($result)==0){
-    createProducttable();
-}
+    // Check if the table exists
+    $table_check_query = "SHOW TABLES LIKE 'employees'";
+    $result = mysqli_query($conn, $table_check_query);
 
-$table_rate_check_query = "SHOW TABLES LIKE 'rating'";
-$result = mysqli_query(connect(), $table_rate_check_query);
+    if (mysqli_num_rows($result) == 0) 
+    {
+        create_EmployeesTable();
+    }
 
-if (mysqli_num_rows($result) == 0) {
-    createRatingtable();
-}
+    // Check if the table exists
+    $table_check_query = "SHOW TABLES LIKE 'categories'";
+    $result = mysqli_query($conn, $table_check_query);
 
+    if (mysqli_num_rows($result) == 0) 
+    {
+        create_CategoryTable();
+    }
 
+    // Check if the table exists
+    $table_check_query = "SHOW TABLES LIKE 'products'";
+    $result = mysqli_query($conn, $table_check_query);
+
+    if (mysqli_num_rows($result) == 0) 
+    {
+        create_ProductTable();
+    }
+
+    // Check if the table exists
+    $table_check_query = "SHOW TABLES LIKE 'ratings'";
+    $result = mysqli_query($conn, $table_check_query);
+
+    if (mysqli_num_rows($result) == 0) 
+    {
+        create_RatingsTable();
+    }
+
+    // Check if the table exists
+    $table_check_query = "SHOW TABLES LIKE 'transaction_history'";
+    $result = mysqli_query($conn, $table_check_query);
+
+    if (mysqli_num_rows($result) == 0) 
+    {
+        create_TansactionTable();
+    }
+
+    $conn->close();
 ?>
