@@ -3,7 +3,7 @@ session_start();
 
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
     if($_SESSION["type"] === "client"){
-        header("location: welcome.php");
+        header("location: index.php");
         exit;
     } elseif($_SESSION["type"] === "admin"){
         header("location: admin.php");
@@ -50,7 +50,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             
                             if($type === "Client"){
                                 session_start();
-                                header("location: welcome.php");
+                                header("location: index.php");
                             } else if($type === "Admin"){
                                 session_start();
                                 header("location: admin.php");

@@ -32,7 +32,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         
     // Check input errors before updating the database
     if(empty($new_password_err) && empty($confirm_password_err)){
-        $sql = "UPDATE users SET password = ? WHERE id = ?";
+        $sql = "UPDATE registered SET password = ? WHERE id = ?";
         
         if($stmt = mysqli_prepare($link, $sql)){
             mysqli_stmt_bind_param($stmt, "si", $param_password, $param_id);
@@ -86,7 +86,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
                 <div class="form-group">
                     <button class="btn btn-primary w-100" value="Submit">Submit</button>
-                    <a href="welcome.php" class="mt-3 btn btn-secondary w-100">Back</a>
+                    <a href="index.php" class="mt-3 btn btn-secondary w-100">Back</a>
                 </div>
             </form>
             

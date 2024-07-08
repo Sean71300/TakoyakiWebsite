@@ -1,6 +1,5 @@
 <?php
     include 'setup.php';
-    include 'welcome.php';
 ?>
 
 
