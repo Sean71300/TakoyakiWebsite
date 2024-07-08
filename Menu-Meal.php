@@ -1,9 +1,14 @@
+<?php
+  session_start();
+?>
 <html>
   <head>
     <title>Menu Page</title>
-    <script src="js/bootstrap.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
     <script src="https://kit.fontawesome.com/af468059ce.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="customCodes/custom.css">
+    <script src="customCodes/custom.js"></script>
     <style>
       a {
         text-decoration: inherit;
@@ -48,43 +53,63 @@
   </head>
 
   <body class="bg-body-tertiary">
-    <div class="forNavigationbar sticky-top">
-      <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-          <a href="index.html"><img src="Images/Logo.jpg" class="logo ms-4 ms-lg-5 "></a>
-          <a class="navbar-brand " href="index.html"><b>Hentoki</b></a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav  ps-5 mb-2 mb-lg-0 ">
-                <li class="nav-item">
-                  <a class="nav-link"  href="index.html">Home</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="About.html">About</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link"  href="Menu.html">Menu</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link"  href="Pages.html">Personnel</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="Contact.html">Contact</a>
-                </li>                              
-              </ul>              
-            </div>
-        </div>
-      </nav>
-    </div>
+  <div class="forNavigationbar sticky-top">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+          <div class="container-fluid">
+            <a href="index.php"><img src="Images/Logo.jpg" class="logo ms-4 ms-lg-5 "></a>
+            <a class="navbar-brand " href="index.php"><b>Hentoki</b></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav  ps-5 mb-2 mb-lg-0 col d-flex justify-content-between">
+                  <li class="nav-item">
+                    <a class="nav-link"  href="index.php">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="About.php">About</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link"  href="Menu.php">Menu</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link"  href="Pages.php">Personnel</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="Contact.php">Contact</a>
+                  </li> 
+                  <?php  
+                  if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+                    echo '<li class="nav-item">';
+                    echo '<a class="nav-link " href="Login.php">Login</a>';
+                    echo '</li>';
+                  }
+                  else{          
+                    echo  '<div class="dropdown">';
+                    echo  '<button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">';
+                    echo    "Welcome ".htmlspecialchars($_SESSION["full_name"]).'';   
+                    echo  '</button>';
+                    echo  '<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
+                    echo    '<li><a class="dropdown-item" href="#">Rate</a></li>';
+                    echo    '<li><a class="dropdown-item" href="reset.php">Change Password</a></li>';
+                    echo    '<li><a class="dropdown-item" href="logout.php">Sign Out</a></li>';
+                    echo  '</ul>';
+                    echo  '</div>';
+                    
+                  }
+                  ?>                                    
+                </ul>              
+              </div>
+          </div>
+        </nav>
+      </div>
 
       <!--                                             -->
         <div class="container">
           <div class="row">
             <h3 class="text-center fw-bold">Category</h3>
             <div class="container d-flex flex-row justify-content-center mt-4">
-              <a href="Menu.html">
+              <a href="Menu.php">
                 <div class="card category-card border-black" id="scale" style="transition: transform 0.2s ease-in-out;">
                   <div class="card-body">
                     <img src="Images/category-1.png" alt="" class="category-icon">
@@ -92,7 +117,7 @@
                   <h5 class="text-center text-secondary mt-2">Takoyaki</h5>
                 </div>
               </a>
-              <a href="Menu-Meal.html">
+              <a href="Menu-Meal.php">
                 <div class="card category-card border-black" id="scale" style="transition: transform 0.2s ease-in-out;"> 
                   <div class="card-body"> 
                     <img src="Images/category-2.png" alt="" class="category-icon">
@@ -134,7 +159,7 @@
               </div>
             </div>
 			<div class="text-right" style="text-align: right;  margin-top:50px;">
-			  <a href="Checkout.html" > 
+			  <a href="Checkout.php" > 
 				<button type="button" class="btn Bcol rounded-5 text-light mt-4" style="background-color:#eb5757; padding:20px; transition: transform 0.2s ease-in-out;" id="scale"><img src="Images/checkout.png" height="35px;"><b>Check Out</b></button>
 			  </a>
 			</div>			
@@ -163,17 +188,17 @@
         <div class="container-fluid text-light bg-black mt-5">          
           <div class="row ">
             <div class="col-12 text-center">
-              <a href="index.html"><img src="Images/Logo.jpg" class="footer image-fluid my-4"></a>
+              <a href="index.php"><img src="Images/Logo.jpg" class="footer image-fluid my-4"></a>
             </div>           
             <div class="col-12">
               <div class="row">
                 <div class="col-lg-3 col-md-1 col-sm-0"></div>
                 <div class="col-lg-6 col-md-10 col-sm-12 d-flex justify-content-around pe-4">
-                  <a href="index.html" class="text-decoration-none text-reset">Home</a>
-                  <a href="About.html" class="text-decoration-none text-reset">About us</a>
-                  <a href="Menu.html" class="text-decoration-none text-reset">Menu</a>
-                  <a href="Contact.html" class="text-decoration-none text-reset">Contact</a>
-                  <a href="Pages.html" class="text-decoration-none text-reset">Personnel</a>
+                  <a href="index.php" class="text-decoration-none text-reset">Home</a>
+                  <a href="About.php" class="text-decoration-none text-reset">About us</a>
+                  <a href="Menu.php" class="text-decoration-none text-reset">Menu</a>
+                  <a href="Contact.php" class="text-decoration-none text-reset">Contact</a>
+                  <a href="Pages.php" class="text-decoration-none text-reset">Personnel</a>
                 </div>
                 <div class="col-lg-3 col-md-1 col-sm-0"></div>
               </div>              

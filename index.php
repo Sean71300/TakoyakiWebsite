@@ -1,7 +1,7 @@
 <?php
 session_start();
-
 ?>
+
 <html>
     <head>
         <title>
@@ -194,8 +194,8 @@ session_start();
       <div class="forNavigationbar sticky-top">
         <nav class="navbar navbar-expand-lg bg-body-tertiary ">
           <div class="container-fluid ">
-            <a href="index.html"><img src="Images/Logo.jpg" class="logo ms-4 ms-lg-5 "></a>
-            <a class="navbar-brand " href="index.html"><b>Hentoki</b></a>
+            <a href="index.php"><img src="Images/Logo.jpg" class="logo ms-4 ms-lg-5 "></a>
+            <a class="navbar-brand " href="index.php"><b>Hentoki</b></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
@@ -205,18 +205,17 @@ session_start();
                     <a class="nav-link" href="index.php">Home</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="About.html">About</a>
+                    <a class="nav-link" href="About.php">About</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link"  href="Menu.php">Menu</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link"  href="Pages.html">Personnel</a>
+                    <a class="nav-link"  href="Pages.php">Personnel</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="Contact.html">Contact</a>
-                  </li> 
-                 
+                    <a class="nav-link" href="Contact.php">Contact</a>
+                  </li>                  
                   <?php  
                   if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                     echo '<li class="nav-item">';
@@ -252,7 +251,7 @@ session_start();
               <br>
               <span class="fs-6 fw-light" id="caption">Within a few clicks, find meals that will satisfy you.</span>
               <br>
-              <a href="About.html">
+              <a href="About.php">
                 <button type="button" class="btn Bcol rounded-5 text-light mt-4" style="animation: btn-fade-left 3s ease 0s 1 normal forwards;"><b>About Us</b></button>
               </a>
             </div>
@@ -324,7 +323,7 @@ session_start();
             <div class="col-1 text-center"></div>                  
           </div>
           <div class="text-center">
-            <a href="Menu.html">
+            <a href="Menu.php">
               <button type="button" class="btn Bcol rounded-5 text-light mt-4" style="animation: fade 4s ease 0s 1 normal forwards;"><b>See More</b></button>
             </a>
           </div>
@@ -392,17 +391,17 @@ session_start();
         <div class="container-fluid text-light bg-black mt-5">          
           <div class="row ">
             <div class="col-12 text-center">
-              <a href="index.html"><img src="Images/Logo.jpg" class="footer image-fluid my-4"></a>
+              <a href="index.php"><img src="Images/Logo.jpg" class="footer image-fluid my-4"></a>
             </div>           
             <div class="col-12">
               <div class="row">
                 <div class="col-lg-3 col-md-1 col-sm-0"></div>
                 <div class="col-lg-6 col-md-10 col-sm-12 d-flex justify-content-around pe-4">
-                  <a href="index.html" class="text-decoration-none text-reset">Home</a>
-                  <a href="About.html" class="text-decoration-none text-reset">About Us</a>
-                  <a href="Menu.html" class="text-decoration-none text-reset">Menu</a>
-                  <a href="Contact.html" class="text-decoration-none text-reset">Contact</a>
-                  <a href="Pages.html" class="text-decoration-none text-reset">Personnel</a>
+                  <a href="index.php" class="text-decoration-none text-reset">Home</a>
+                  <a href="About.php" class="text-decoration-none text-reset">About Us</a>
+                  <a href="Menu.php" class="text-decoration-none text-reset">Menu</a>
+                  <a href="Contact.php" class="text-decoration-none text-reset">Contact</a>
+                  <a href="Pages.php" class="text-decoration-none text-reset">Personnel</a>
                 </div>
                 <div class="col-lg-3 col-md-1 col-sm-0"></div>
               </div>              
