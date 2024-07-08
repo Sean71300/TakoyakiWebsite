@@ -1,0 +1,200 @@
+<html>
+    <head>
+        <title>
+            Contacts Page
+        </title>
+        <script src="js/bootstrap.bundle.min.js"></script>
+        <script src="https://kit.fontawesome.com/af468059ce.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="customCodes/custom.css">
+        <script src="customCodes/custom.js"></script>
+        <style>
+		.loading-screen {
+		  position: fixed;
+		  top: 0;
+		  left: 0;
+		  width: 100%;
+		  height: 100%;
+		  display: flex;
+		  background-color:white;
+		  justify-content: center;
+		  align-items: center;
+		  opacity:1;
+		  transition: opacity 1s ease-in-out;
+		  z-index: 999;
+		}
+
+		.loading-screen img {
+		  animation: spin 1s linear forwards;
+		}
+
+		@keyframes spin {
+		  from { transform: rotate(0deg); }
+		  to { transform: rotate(1000deg); }
+		}
+		
+		</style>
+    </head>
+    <body class="bg-body-tertiary">
+	<script>
+		window.onload = function() {
+		  const loadingScreen = document.querySelector('.loading-screen');
+		  loadingScreen.style.opacity = 0;
+		  setTimeout(() => {
+		    loadingScreen.remove();
+			document.body.style.display = 'block';
+		  }, 1000);
+		}
+	  </script>
+	  <div class="loading-screen">
+		<img src="Images/loading.png" alt="Loading...">
+	  </div>
+      <div class="forNavigationbar sticky-top">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+          <div class="container-fluid">
+            <a href="index.html"><img src="Images/Logo.jpg" class="logo ms-4 ms-lg-5 "></a>
+            <a class="navbar-brand " href="index.html"><b>Hentoki</b></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav  ps-5 mb-2 mb-lg-0 ">
+                  <li class="nav-item">
+                    <a class="nav-link"  href="index.html">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="About.html">About</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link"  href="Menu.html">Menu</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link"  href="Pages.html">Personnel</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="Contact.html">Contact</a>
+                  </li>                              
+                </ul>              
+              </div>
+          </div>
+        </nav>
+      </div>
+      <div class="forbanner">
+        <div class="banner col-12 bg-black ">
+          <div class="py-lg-4 py-3"></div>
+          <div class="py-lg-5 py-4"></div>
+          <div class="py-lg-4 py-3"></div>
+        </div>        
+      </div>
+      <div class="forcontent">        
+        <div class="container-fluid">
+          <div class="row d-flex justify-content-center py-5 mt-5">
+            <div class="col-lg-5 col-12 fw-bolder">
+              <span class="fs-3">Contact Us</span> 
+              <br>
+              <br>
+              <span class="fs-6">Fill out this form to contact Hentoki about your concerns and comments</span>
+              <form name="contacts" class="p-2 mt-4">                
+                <input name="txtName" class="my-2 rounded-2 w-100" type="text" placeholder="Name*" ><br>
+                <input name="txtEmail" class="my-2 rounded-2 w-100" type="text" placeholder="Email"><br>
+                <input name="txtNumber" class="my-2 rounded-2 w-100" onkeypress="return /[0-9]/i.test(event.key)" type="text" placeholder="Phone Number*">
+                <select name="Means" class="my-2 border-2 rounded-2 w-100" >
+                  <option value = "" disabled selected>How did you find us?</option>
+                  <option value = "Social Medias">Social Medias</option>
+                  <option value = "Friends">Friends</option>
+                  <option value = "Posters">Posters</option>
+                  <option value = "Net">Search engines like google,yahoo,etc</option><br>
+                  <option value = "Others">Others</option>
+                </select>     
+                         
+                <br>
+                <button type="button" class=" w-100 btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="sub_buttonpress()">
+                  Send
+                </button>                
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-3" id="exampleModalLabel">Thanks for Contacting us</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <p id="modalName"></p>
+                        <p id="modalEmail"></p>
+                        <p id="modalNumber"></p>
+                        <p id="modalMeans"></p>
+                        <hr class="border rounded-5 border-danger border-2 opacity-25">
+                        <p id="end" class="text-center fs-4">We will be back with you shortly!</p>
+                      </div>
+                      <div class="modal-footer">                        
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Return</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="row mt-4  rounded-3 justify-content-center">                      
+                    <div class="col-1 col-lg-2 my-2 ">
+                      <img src="Images/call.png" class="img-fluid iconssm">
+                    </div>                             
+                    <div class="col-4 col-lg-9 m-3 align-self-center"> 
+                        Phone <br>  <span class="text-danger"> 0945884598 </span> 
+                    </div> 
+                    <div class="col-1 col-lg-2 my-2">
+                      <img src="Images/security.png" class="img-fluid iconssm">
+                    </div>             
+                    <div class="col-4 col-lg-9 m-3 align-self-center">
+                      Opening Hour <br> <span class="text-danger"> 7:00 PM - 2:00 AM </span> 
+                    </div>      
+                    <div class="col-12 col-lg-0"></div>  
+                    <div class="col-1 col-lg-2 my-2">
+                      <img src="Images/email.png" class="img-fluid iconssm">
+                    </div>          
+                      
+                    <div class="col-4 col-lg-9 m-3 align-self-center">
+                      Email <br> <span class="text-danger"> hentokitakoyaki@gmail.com </span>
+                    </div>
+                  </div>  
+                </div>
+                         
+              </form>
+              
+            </div>
+            <div class="col-lg-5 col-11 text-center ms-0 ms-lg-5 text-center map-responsive">
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d965.0104223833935!2d120.9692609670136!3d14.653574979154179!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397b5f3015260a5%3A0x555c5623d562a4fe!2sHentoki!5e0!3m2!1sen!2sph!4v1716303284036!5m2!1sen!2sph" width="700" height="600" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+      <div class="forfooter">
+        <div class="container-fluid text-light bg-black mt-5">          
+          <div class="row ">
+            <div class="col-12 text-center">
+              <a href="index.html"><img src="Images/Logo.jpg" class="footer image-fluid my-4"></a>
+            </div>           
+            <div class="col-12">
+              <div class="row">
+                <div class="col-lg-3 col-md-1 col-sm-0"></div>
+                <div class="col-lg-6 col-md-10 col-sm-12 d-flex justify-content-around pe-4">
+                  <a href="index.html" class="text-decoration-none text-reset">Home</a>
+                  <a href="About.html" class="text-decoration-none text-reset">About us</a>
+                  <a href="Menu.html" class="text-decoration-none text-reset">Menu</a>
+                  <a href="Contact.html" class="text-decoration-none text-reset">Contact</a>
+                  <a href="Pages.html" class="text-decoration-none text-reset">Personnel</a>
+                </div>
+                <div class="col-lg-3 col-md-1 col-sm-0"></div>
+              </div>              
+            </div> 
+            <div class="col-12 text-center my-3">
+              <a href="https://www.facebook.com/hentokitakoyaki"><img src="Images/facebook.png" class="img-fluid footer1 m-2"></a>
+              <a href="https://www.instagram.com/hentokitakoyaki/"><img src="Images/instagram.png" class="img-fluid footer1 m-2"></a> <br>  
+              <span class="text-white-50">@copyright 2023 - hentoki</span>
+            </div> 
+          </div>          
+        </div>
+      </div>
+      
+    </body>
+</html>
