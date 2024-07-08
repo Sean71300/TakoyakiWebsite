@@ -4,9 +4,11 @@
 <html>
   <head>
     <title>Menu Page</title>
-    <script src="js/bootstrap.js"></script>
-    <script src="https://kit.fontawesome.com/af468059ce.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="css/bootstrap.css">
+    <script src="js/bootstrap.bundle.min.js"></script>
+        <script src="https://kit.fontawesome.com/af468059ce.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="customCodes/custom.css">
+        <script src="customCodes/custom.js"></script>
     <style>
       a {
         text-decoration: inherit;
@@ -127,7 +129,7 @@
                     echo    "Welcome ".htmlspecialchars($_SESSION["full_name"]).'';   
                     echo  '</button>';
                     echo  '<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
-                    echo    '<li><a class="dropdown-item" href="#">Rate</a></li>';
+                    echo    '<li><a class="dropdown-item" href="rating.php">Rate</a></li>';
                     echo    '<li><a class="dropdown-item" href="reset.php">Change Password</a></li>';
                     echo    '<li><a class="dropdown-item" href="logout.php">Sign Out</a></li>';
                     echo  '</ul>';

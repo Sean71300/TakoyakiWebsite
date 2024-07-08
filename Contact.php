@@ -89,7 +89,7 @@
                     echo    "Welcome ".htmlspecialchars($_SESSION["full_name"]).'';   
                     echo  '</button>';
                     echo  '<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
-                    echo    '<li><a class="dropdown-item" href="#">Rate</a></li>';
+                    echo    '<li><a class="dropdown-item" href="rating.php">Rate</a></li>';
                     echo    '<li><a class="dropdown-item" href="reset.php">Change Password</a></li>';
                     echo    '<li><a class="dropdown-item" href="logout.php">Sign Out</a></li>';
                     echo  '</ul>';
@@ -117,10 +117,10 @@
               <br>
               <br>
               <span class="fs-6">Fill out this form to contact Hentoki about your concerns and comments</span>
-              <form name="contacts" class="p-2 mt-4">                
+              <form action="<?php echo $_SERVER["PHP_SELF"]?>" id="Contacts" method="post" class="w-100">
                 <input name="txtName" class="my-2 rounded-2 w-100" type="text" placeholder="Name*" ><br>
-                <input name="txtEmail" class="my-2 rounded-2 w-100" type="text" placeholder="Email"><br>
-                <input name="txtNumber" class="my-2 rounded-2 w-100" onkeypress="return /[0-9]/i.test(event.key)" type="text" placeholder="Phone Number*">
+                <input name="txtEmail" class="my-2 rounded-2 w-100" type="text" placeholder="Subject*"><br>
+                <textarea name="txtComments" class = "my-2 rounded-2 w-100" id="comments" placeholder="Comments/Message/Rating*" rows="3"></textarea>
                 <select name="Means" class="my-2 border-2 rounded-2 w-100" >
                   <option value = "" disabled selected>How did you find us?</option>
                   <option value = "Social Medias">Social Medias</option>
@@ -131,9 +131,7 @@
                 </select>     
                          
                 <br>
-                <button type="button" class=" w-100 btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="sub_buttonpress()">
-                  Send
-                </button>                
+                <button type="submit" id="con" class="btn btn-danger ml-3 mr-3 w-100"data-bs-toggle="modal" data-bs-target="#exampleModal">Submit</button>              
                 <!-- Modal -->
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                   <div class="modal-dialog">
@@ -179,8 +177,7 @@
                       Email <br> <span class="text-danger"> hentokitakoyaki@gmail.com </span>
                     </div>
                   </div>  
-                </div>
-                         
+                </div>                         
               </form>
               
             </div>
@@ -218,6 +215,55 @@
           </div>          
         </div>
       </div>
-      
+      <?php
+        include 'setup.php';
+
+        function getFullName() {
+            return "Maam Kathleen Dimaano";
+        }
+
+        function getUserID() {
+            return 2024101000;
+        }
+
+        function getProductID() {
+            return 123;
+        }
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $star = $_POST['rating'];
+            $comment = $_POST['comments'];
+            $userID = getUserID();
+            $fullName = getFullName();
+            $productID = getProductID();
+
+            $comment = substr($comment, 0, 120);
+
+            echo "Star: $star, Comment: $comment, UserID: $userID, FullName: $fullName, ProductID: $productID";
+
+            $connection = connect();
+            $comment = mysqli_real_escape_string($connection, $comment);
+
+            $query = "INSERT INTO rating (id, full_name, product_id, star, comment) 
+                      VALUES ($userID, '$fullName', $productID, $star, '$comment')";
+
+            if (mysqli_query($connection, $query)) {
+                echo "<br>Rating submitted successfully.";
+            } else {
+                echo "<br>Error submitting rating: " . mysqli_error($connection);
+            }
+
+        }
+        ?>
+
+        <script>
+            function openPopup() {
+                document.getElementById("popup").style.display = "flex";
+            }
+
+            function closePopup() {
+                document.getElementById("popup").style.display = "none";
+            }
+        </script>
     </body>
 </html>

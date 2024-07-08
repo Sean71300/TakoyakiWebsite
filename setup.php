@@ -286,13 +286,13 @@
         $conn->close();
     }
 
-    
 // -------------------------------------- RATINGS TABLE & ID -------------------------------------- //
     function create_RatingsTable()
     {
         $conn = connect();
 
         $sql = "CREATE TABLE ratings(
+                rating_id INT(10) PRIMARY KEY,
                 customer_id INT(10),
                 full_name VARCHAR(100),
                 product_id INT(10),
@@ -303,15 +303,16 @@
 
         if (mysqli_query($conn, $sql))
         {
+            $ratingID = generate_RatingID();
             $id = generate_CustomerID();
             $custID = --$id;
             $prodID = generate_ProductID();
             $productID = --$prodID;
 
             $sql = "INSERT INTO ratings
-                    (customer_id,full_name,product_id,rating,comment)
+                    (rating_id,customer_id,full_name,product_id,rating,comment)
                     VALUES
-                    ($custID,'Maki',$productID,4,'Yummy takoyaki')";
+                    ($ratingID,$custID,'Maki',$productID,4,'Yummy takoyaki')";
 
             mysqli_query($conn, $sql);
 
@@ -324,6 +325,26 @@
 
         $conn->close();
     }
+
+    function generate_RatingID()
+    {
+        $conn = connect();
+
+        $query = "SELECT COUNT(*) as count FROM ratings";
+        $result = $conn->query($query);
+        $row = $result->fetch_assoc();
+        $rowCount = $row["count"];
+
+        // Get the current year
+        $currentYear = date("Y");
+
+        // Generate the ID
+        $genID = (int)($currentYear . str_pad(8, 2, "1", STR_PAD_LEFT) . str_pad($rowCount, 4, "0", STR_PAD_LEFT));
+
+        $conn->close();
+        return $genID;
+    }
+    
 // -------------------------------------- TRANSACTION TABLE & ID -------------------------------------- //
     function create_TansactionTable()
     {

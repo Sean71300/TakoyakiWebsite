@@ -3,7 +3,7 @@ function sub_buttonpress(){
     
     const Name = contacts.txtName.value
     const Email = contacts.txtEmail.value
-    const number = contacts.txtNumber.value
+    const comments = contacts.txtComments.value
     const means = contacts.Means.value
 
     if (Name === '' || number === '' || Email === '') {
@@ -15,14 +15,14 @@ function sub_buttonpress(){
     else{
         modalName.textContent = `Name: ${Name}`;
         modalEmail.textContent = `Email: ${Email}`;
-        modalNumber.textContent = `Phone Number: ${number}`; 
+        modalNumber.textContent = `Comment: ${comments}`; 
         modalMeans.textContent = `Means: ${means}`;
         exampleModalLabel.textContent='Thanks for Contacting us';
         end.textContent="We will be back with you shortly";
       }    
     contacts.txtName.value = ''
     contacts.txtEmail.value = ''
-    contacts.txtNumber.value = ''
+    contacts.txtComments.value = ''
     contacts.Means.value = ''
     }
     
