@@ -1,3 +1,10 @@
+<?php
+ include 'welcome.php';
+ include 'posted-rate.php';
+ require_once 'setup.php';
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -103,7 +110,8 @@
         }
 
         .rating-css button {
-            padding: 10px 20px;
+            margin-top: 10px;
+            padding: 10px 10px;
             color: #333;
             border: none;
             cursor: pointer;
@@ -111,10 +119,11 @@
             font-weight: bold;
             text-transform: uppercase;
             transition: background-color 0.3s ease;
+            background-color: #1AAF57;
         }
 
         .rating-css button:hover {
-            background-color: #ccb400;
+            background-color: #097F08;
         }
     </style>
 </head>
@@ -141,7 +150,10 @@
                         <input type="radio" name="rating" id="rating5" value="5">
                     </div>
                     <label for="comments">Comment/Suggestion:</label>
-                    <textarea name="comments" id="comments" placeholder="120 characters limit" rows="3"></textarea>
+                    <textarea name="comments" id="comments" placeholder="500 characters limit" maxlength="500"   rows="3" oninput="updateCharCount()"></textarea>
+                    <p class="char-count" style="font-size: 13px; text-align: left; margin-left: 40px;"> 
+                        Characters left: <span id="charCount">500</span>
+                    </p>
                     <button type="submit" name="submit">Submit</button>
                 </form>
             </div>
@@ -150,38 +162,41 @@
 
     <?php
 
-    include 'setup.php';
-    
+    function getFullName() {
+     
+        if(isset($_SESSION['full_name']))
+        $fullname =  $_SESSION['full_name'];
 
-    function getFullName() {     
-        return "Maam Kathleen Dimaano";
+        return $fullname;
     }
 
     function getUserID() {
-        return 2024101000;
+        if(isset($_SESSION['id']))
+        $uID =  $_SESSION['id'];
+        return $uID;
     }
 
     function getProductID() {
-        return 123;
+
+        return 2024160001;
     }
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $star = $_POST['rating'];
         $comment = $_POST['comments'];
+        $rating_id = generate_RatingID();
         $userID = getUserID();
         $fullName = getFullName();
         $productID = getProductID();
 
-        $comment = substr($comment, 0, 120);
+        $comment = substr($comment, 0, 500);
 
-        echo "Star: $star, Comment: $comment, UserID: $userID, FullName: $fullName, ProductID: $productID";
 
         $connection = connect();
         $comment = mysqli_real_escape_string($connection, $comment);
-        $rating_id = generate_RatingID();
 
-        $query = "INSERT INTO ratings (rating_id, customer_id , product_id, rating, comment) 
-                  VALUES ('$rating_id', '$userID', $productID, $star, '$comment')";
+        $query = "INSERT INTO ratings (rating_id,customer_id, full_name, product_id, rating, comment) 
+                  VALUES ($rating_id, $userID, '$fullName', $productID, $star, '$comment')";
 
         if (mysqli_query($connection, $query)) {
             echo "<br>Rating submitted successfully.";
@@ -195,15 +210,17 @@
     <script>
         function openPopup() {
             document.getElementById("popup").style.display = "flex";
-            
         }
 
         function closePopup() {
             document.getElementById("popup").style.display = "none";
-               
         }
-        
-        
+        function updateCharCount() {
+            var textarea = document.getElementById('comments');
+            var charCount = document.getElementById('charCount');
+            var remaining = 500 - textarea.value.length;
+            charCount.textContent = remaining;
+        }
     </script>
 </body>
 </html>

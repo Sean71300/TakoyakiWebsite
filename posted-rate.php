@@ -1,11 +1,11 @@
 <?php
-include 'welcome.php'; 
-include 'setup.php'; 
+require_once 'setup.php';
 $conn = connect();
 
-$sql = "SELECT r.product_id, r.full_name, r.rate_date, r.star, r.comment, p.product_name
-        FROM rating r
-        INNER JOIN product p ON r.product_id = p.product_id";
+
+$sql = "SELECT r.product_id, r.full_name, r.rate_timedate, r.rating, r.comment, p.product_name
+        FROM ratings r
+        INNER JOIN products p ON r.product_id = p.product_id";
 $result = $conn->query($sql);
 
 if (!$result) {
@@ -20,7 +20,7 @@ while ($row = $result->fetch_assoc()) {
         $avgRatings[$product_id] = 0;
         $productCounts[$product_id] = 0;
     }
-    $avgRatings[$product_id] += (int)$row["star"];
+    $avgRatings[$product_id] += (int)$row["rating"];
     $productCounts[$product_id]++;
 }
 
@@ -51,7 +51,7 @@ $result->data_seek(0);
         }
         .rate-box {
             background-color: #fff;
-            border-radius: 3px;
+            border-radius: 3px; 
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
             padding: 15px;
             width: 500px;
@@ -124,10 +124,10 @@ $result->data_seek(0);
             echo '<div class="comment"><p>' . htmlspecialchars($row["comment"]) . '</p></div>';
             echo '<div class="rowf">';
             echo '<div class="name">' . htmlspecialchars($row["full_name"]) . '</div>';
-            echo '<div class="DateTime">' . htmlspecialchars(date("M j, Y - H:i", strtotime($row["rate_date"]))) . '</div>';
+            echo '<div class="DateTime">' . htmlspecialchars(date("M j, Y - H:i", strtotime($row["rate_timedate"]))) . '</div>';
             echo '</div>';
             echo '<div class="rowf">';
-            echo '<div class="star">' . str_repeat('⭐', (int)$row["star"]) . '</div>';
+            echo '<div class="star">' . str_repeat('⭐', (int)$row["rating"]) . '</div>';
             echo '<div class="avg_rate"><p>(' . $avg_rate . ')</p></div>';
             echo '</div>';
             echo '</div>';

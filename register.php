@@ -5,7 +5,7 @@ function connect()
     $db_host = 'localhost';
     $db_username = 'root';
     $db_password = '';
-    $db_name = 'registration_db';
+    $db_name = 'hentoki_db';
 
     $conn = new mysqli($db_host, $db_username, $db_password, $db_name);
 
@@ -18,8 +18,8 @@ function connect()
 
 function getColumnName()
 {
-    $dbname = "registration_db";
-    $table = "registered";
+    $dbname = "hentoki_db";
+    $table = "customers";
 
     $conn = connect();
     // Run a simple query to get the table structure
@@ -44,7 +44,7 @@ function getColumnName()
 function checkRecord($row)
 {
     // Remove specific columns
-    $remove = ['id', 'type', 'birthdate', 'age', 'gender', 'reg_date'];
+    $remove = ['id', 'position', 'birthdate', 'age', 'gender', 'reg_date'];
     $column = array_diff(getColumnName(), $remove);
     
     // Establish a single database connection
@@ -57,7 +57,7 @@ function checkRecord($row)
         foreach ($rec as $val) {
             // Escape the value to prevent SQL injection
             $val = mysqli_real_escape_string($conn, $val);
-            $sql = "SELECT * FROM registered WHERE $columnName = '$val'";
+            $sql = "SELECT * FROM customers WHERE $columnName = '$val'";
             $result = mysqli_query($conn, $sql);
             $numRow = mysqli_num_rows($result);
 
@@ -93,16 +93,17 @@ function generateID()
 {
     $conn = connect();
 
-    $query = "SELECT COUNT(*) as count FROM registered";
+    $query = "SELECT COUNT(*) as count FROM customers";
     $result = $conn->query($query);
     $row = $result->fetch_assoc();
     $rowCount = $row["count"];
 
     // Get the current year
     $currentYear = date("Y");
+    $currentMonth = date("m");
 
     // Generate the ID
-    $genID = (int)($currentYear . str_pad(101, 3, "0", STR_PAD_LEFT) . str_pad($rowCount, 3, "0", STR_PAD_LEFT));
+    $genID = (int)($currentYear . $currentMonth . str_pad($rowCount, 4, "0", STR_PAD_LEFT));
 
     $conn->close();
     return $genID;
@@ -178,7 +179,7 @@ function checkPhone($phone_number) {
 <?php
 // Form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $checkQuery = "SELECT id FROM registered WHERE id = ?";
+    $checkQuery = "SELECT customer_id FROM customers WHERE customer_id = ?";
     // HOW TO USE THE CHECK UNIQUE ID
     $gen_id = checkDuplication(generateID(),$checkQuery);
     $type = "Client";
@@ -237,12 +238,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $unique = $res['array'];
                     // Insert data into database
                     $conn = connect();
-                    $sql = "INSERT INTO registered 
-                            (id, type, full_name, birthdate, age, gender, email, phone_number, address, password) 
+                    $sql = "INSERT INTO customers 
+                            (customer_id, position, full_name, birthdate, age, gender, email, phone_number, address, password) 
                             VALUES 
                             ($gen_id, '$type', '$unique[0]', '$birthdate', $age, '$gender', '$unique[1]', '$unique[2]', '$unique[3]', '$hashed_password')";
                     if ($conn->query($sql) === TRUE) {
-                        $message = "Registered successfully!";
+                        $message = "customers successfully!";
                         header("Refresh: 3; url=login.php");
                     } else {
                         echo "Error occured in connecting to the database, please try again.";

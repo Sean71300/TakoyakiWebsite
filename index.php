@@ -1,5 +1,6 @@
 <?php
 session_start();
+include_once 'setup.php';
 ?>
 
 <html>
@@ -384,7 +385,7 @@ session_start();
               </div>
             </div>           
           </div>
-		  
+		
         </div>
       </div>
       <div class="forfooter">

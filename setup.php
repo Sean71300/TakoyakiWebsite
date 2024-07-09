@@ -53,6 +53,7 @@
 
         $sql = "CREATE TABLE customers(
                 customer_id INT(10) PRIMARY KEY,
+                position VARCHAR(10),
                 full_name VARCHAR(100),
                 age INT(3),
                 birthdate DATE,
@@ -72,9 +73,9 @@
             $hashed_pw = password_hash($password, PASSWORD_DEFAULT);
 
             $sql = "INSERT INTO customers
-                    (customer_id,full_name,age,birthdate,gender,email,phone_number,address,password)
+                    (customer_id,position,full_name,age,birthdate,gender,email,phone_number,address,password)
                     VALUES
-                    ($id,'Maki',24,'','Male','$email','09123456789','Makati City','$hashed_pw')";
+                    ($id,'Client','Maki',24,'','Male','$email','09123456789','Makati City','$hashed_pw')";
 
             mysqli_query($conn, $sql);
 
@@ -86,6 +87,11 @@
         }
 
         $conn->close();
+    }
+
+    function position(){
+
+        return Client;
     }
 
     function generate_CustomerID()
@@ -297,7 +303,8 @@
                 full_name VARCHAR(100),
                 product_id INT(10),
                 rating INT(2),
-                comment VARCHAR(300),
+                comment VARCHAR(550), 
+                rate_timedate TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
                 FOREIGN KEY (customer_id) REFERENCES customers(customer_id),
                 FOREIGN KEY (product_id) REFERENCES products(product_id))";
 

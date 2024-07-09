@@ -2,10 +2,10 @@
 session_start();
 
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-    if($_SESSION["type"] === "client"){
+    if($_SESSION["position"] === "client"){
         header("location: index.php");
         exit;
-    } elseif($_SESSION["type"] === "admin"){
+    } elseif($_SESSION["position"] === "admin"){
         header("location: admin.php");
         exit;
     }
@@ -30,7 +30,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }
 
     if(empty($email_err) && empty($password_err)){
-        $sql = "SELECT id, email, full_name, password, type FROM registered WHERE email = ?";
+        $sql = "SELECT customer_id, email, full_name, password, position FROM customers WHERE email = ?";
         if($stmt = mysqli_prepare($link, $sql)){
             mysqli_stmt_bind_param($stmt, "s", $param_email);
             $param_email = $email;
