@@ -2,9 +2,10 @@
   session_start();
 ?>
 <html>
+  
     <head>
         <title>
-            About Page
+            About Page capricorn thingz
         </title>
         <script src="js/bootstrap.bundle.min.js"></script>
         <script src="https://kit.fontawesome.com/af468059ce.js" crossorigin="anonymous"></script>
