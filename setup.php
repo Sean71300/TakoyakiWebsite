@@ -93,7 +93,7 @@
 
         return Client;
     }
-//isa panghatdog
+
     function generate_CustomerID()
     {
         $conn = connect();
@@ -251,6 +251,7 @@
 
         $sql = "CREATE TABLE products(
                 product_id INT(10) PRIMARY KEY,
+                product_img BLOB,
                 product_name VARCHAR(50),
                 category_id INT(10),
                 category_type VARCHAR(100),
@@ -361,11 +362,9 @@
                 transaction_id INT(10) PRIMARY KEY,
                 customer_id INT(10),
                 full_name VARCHAR(100),
-                product_id INT(10),
                 total_price FLOAT(6),
                 transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (customer_id) REFERENCES customers(customer_id),
-                FOREIGN KEY (product_id) REFERENCES products(product_id))";
+                FOREIGN KEY (customer_id) REFERENCES customers(customer_id))";
 
         if (mysqli_query($conn, $sql))
         {
@@ -376,9 +375,9 @@
             $productID = --$prodID;
 
             $sql = "INSERT INTO transaction_history
-                    (transaction_id,customer_id,full_name,product_id,total_price)
+                    (transaction_id,customer_id,full_name,total_price)
                     VALUES
-                    ($transacID,$custID,'Maki',$productID,300.00)";
+                    ($transacID,$custID,'Maki',300.00)";
 
             mysqli_query($conn, $sql);
 
@@ -409,6 +408,41 @@
 
         $conn->close();
         return $genID;
+    }
+
+// -------------------------------------- RATINGS TABLE & ID -------------------------------------- //
+    function create_ShippingAddressTable()
+    {
+        $conn = connect();
+
+        $sql = "CREATE TABLE shipping_address(
+                customer_id INT(10) PRIMARY KEY,
+                shipping_address VARCHAR(550), 
+                FOREIGN KEY (customer_id) REFERENCES customers(customer_id))";
+
+        if (mysqli_query($conn, $sql))
+        {
+            $ratingID = generate_RatingID();
+            $id = generate_CustomerID();
+            $custID = --$id;
+            $prodID = generate_ProductID();
+            $productID = --$prodID;
+
+            $sql = "INSERT INTO shipping_address
+                    (customer_id,shipping_address)
+                    VALUES
+                    ($custID,'Malabon City')";
+
+            mysqli_query($conn, $sql);
+
+            echo "<br>The table ratings is created successfully.";
+        }
+        else
+        {
+            echo "<br>There is an error in creating the table: " . $conn->connect_error;
+        }
+
+        $conn->close();
     }
 ?>
 
@@ -479,6 +513,15 @@
     if (mysqli_num_rows($result) == 0) 
     {
         create_TansactionTable();
+    }
+
+    // Check if the table exists
+    $table_check_query = "SHOW TABLES LIKE 'shipping_address'";
+    $result = mysqli_query($conn, $table_check_query);
+
+    if (mysqli_num_rows($result) == 0) 
+    {
+        create_ShippingAddressTable();
     }
 
     $conn->close();
