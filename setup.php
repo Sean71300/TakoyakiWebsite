@@ -1,4 +1,5 @@
 <?php
+// -------------------------------------- CONNECTION -------------------------------------- //
     function connect()
     {
         // Configuration
@@ -15,7 +16,7 @@
 
         return $conn;
     }
-
+// -------------------------------------- DATABASE CREATION -------------------------------------- //
     function createDB()
     {
         // Configuration
@@ -45,7 +46,7 @@
 
         $conn->close();
     }
-// -------------------------------------- CUSTOMERS TABLE & ID -------------------------------------- //
+// -------------------------------------- CUSTOMERS TABLE CREATION -------------------------------------- //
     function create_CustomersTable()
     {
         $conn = connect();
@@ -53,6 +54,7 @@
         $sql = "CREATE TABLE customers(
                 customer_id INT(10) PRIMARY KEY,
                 position VARCHAR(10),
+                customer_img BLOB,
                 full_name VARCHAR(100),
                 age INT(3),
                 birthdate DATE,
@@ -90,7 +92,7 @@
 
         return Client;
     }
-
+// -------------------------------------- CUSTOMER ID CREATION -------------------------------------- //
     function generate_CustomerID()
     {
         $conn = connect();
@@ -110,13 +112,14 @@
         $conn->close();
         return $genID;
     }
-// -------------------------------------- EMPLOYEES TABLE & ID -------------------------------------- //
+// -------------------------------------- EMPLOYEES TABLE CREATION -------------------------------------- //
     function create_EmployeesTable()
     {
         $conn = connect();
 
         $sql = "CREATE TABLE employees(
                 employee_id INT(10) PRIMARY KEY,
+                employee_img BLOB,
                 position VARCHAR(30),
                 full_name VARCHAR(100),
                 age INT(3),
@@ -150,7 +153,7 @@
 
         $conn->close();
     }
-
+// -------------------------------------- EMPLOYEE ID CREATION -------------------------------------- //
     function generate_EmployeeID()
     {
         $conn = connect();
@@ -169,7 +172,7 @@
         $conn->close();
         return $genID;
     }
-    // -------------------------------------- CATEGORIES TABLE & ID -------------------------------------- //
+    // -------------------------------------- CATEGORIES TABLE CREATION -------------------------------------- //
         function create_CategoryTable()
         {
             $conn = connect();
@@ -199,7 +202,7 @@
     
             $conn->close();
         }
-    
+// -------------------------------------- CATEGORY ID CREATION -------------------------------------- //
         function generate_CategoryID()
         {
             $conn = connect();
@@ -218,27 +221,8 @@
             $conn->close();
             return $genID;
         }
-// -------------------------------------- PRODUCTS TABLE & ID -------------------------------------- //
-    function generate_ProductID()
-    {
-        $conn = connect();
-
-        $query = "SELECT COUNT(*) as count FROM products";
-        $result = $conn->query($query);
-        $row = $result->fetch_assoc();
-        $rowCount = $row["count"];
-
-        // Get the current year
-        $currentYear = date("Y");
-
-        // Generate the ID
-        $genID = (int)($currentYear . str_pad(6, 2, "1", STR_PAD_LEFT) . str_pad($rowCount, 4, "0", STR_PAD_LEFT));
-
-        $conn->close();
-        return $genID;
-    }    
-
-    function create_ProductTable()
+// -------------------------------------- PRODUCTS TABLE CREATION -------------------------------------- //
+     function create_ProductTable()
     {
         $conn = connect();
 
@@ -283,8 +267,27 @@
 
         $conn->close();
     }
+// -------------------------------------- PRODUCTS ID CREATION -------------------------------------- //  
+    function generate_ProductID()
+    {
+        $conn = connect();
 
-// -------------------------------------- RATINGS TABLE & ID -------------------------------------- //
+        $query = "SELECT COUNT(*) as count FROM products";
+        $result = $conn->query($query);
+        $row = $result->fetch_assoc();
+        $rowCount = $row["count"];
+
+        // Get the current year
+        $currentYear = date("Y");
+
+        // Generate the ID
+        $genID = (int)($currentYear . str_pad(6, 2, "1", STR_PAD_LEFT) . str_pad($rowCount, 4, "0", STR_PAD_LEFT));
+
+        $conn->close();
+        return $genID;
+    }   
+
+// -------------------------------------- RATINGS TABLE CREATION -------------------------------------- //
     function create_RatingsTable()
     {
         $conn = connect();
@@ -322,7 +325,7 @@
 
         $conn->close();
     }
-
+// -------------------------------------- RATING ID CREATION -------------------------------------- //
     function generate_RatingID()
     {
         $conn = connect();
@@ -342,7 +345,7 @@
         return $genID;
     }
     
-// -------------------------------------- TRANSACTION TABLE & ID -------------------------------------- //
+// -------------------------------------- TRANSACTION TABLE CREATION -------------------------------------- //
     function create_TansactionTable()
     {
         $conn = connect();
@@ -377,7 +380,7 @@
 
         $conn->close();
     }
-
+// -------------------------------------- TRANSACTION ID CREATION -------------------------------------- //
     function generate_TransactionID()
     {
         $conn = connect();
@@ -397,7 +400,7 @@
         return $genID;
     }
 
-// -------------------------------------- RATINGS TABLE & ID -------------------------------------- //
+// -------------------------------------- SHIPPING ADDRESS TABLE CREATION -------------------------------------- //
     function create_ShippingAddressTable()
     {
         $conn = connect();
