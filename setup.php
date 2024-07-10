@@ -37,7 +37,6 @@
 
         if ($conn->query($sql) === TRUE) 
         {
-            echo "The database hentoki_db is created successfully.";
         } 
         else 
         {
@@ -78,8 +77,6 @@
                     ($id,'Client','Maki',24,'','Male','$email','09123456789','Makati City','$hashed_pw')";
 
             mysqli_query($conn, $sql);
-
-            echo "<br>The table customers is created successfully.";
         }
         else
         {
@@ -145,8 +142,6 @@
                     ($id,'Admin','Maloi',24,'','female','$email','09987654321','Makati City','$hashed_pw')";
 
             mysqli_query($conn, $sql);
-
-            echo "<br>The table employees is created successfully.";
         }
         else
         {
@@ -196,8 +191,6 @@
                         (". (++$categoryID) .",'Rice Meals')";
     
                 mysqli_query($conn, $sql);
-
-                echo "<br>The table categories is created successfully.";
             }
             else
             {
@@ -282,8 +275,6 @@
                 (". (++$id) .", 'Pork Tonkatsun', $catID, 'Rice Meals', 'Available', 75)";
 
             mysqli_query($conn, $sql);
-
-            echo "<br>The table products is created successfully.";
         }
         else
         {
@@ -323,8 +314,6 @@
                     ($ratingID,$custID,'Maki',$productID,4,'Yummy takoyaki')";
 
             mysqli_query($conn, $sql);
-
-            echo "<br>The table ratings is created successfully.";
         }
         else
         {
@@ -380,8 +369,6 @@
                     ($transacID,$custID,'Maki',300.00)";
 
             mysqli_query($conn, $sql);
-
-            echo "<br>The table transaction_history is created successfully.";
         }
         else
         {
@@ -434,8 +421,6 @@
                     ($custID,'Malabon City')";
 
             mysqli_query($conn, $sql);
-
-            echo "<br>The table ratings is created successfully.";
         }
         else
         {
