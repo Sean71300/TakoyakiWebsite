@@ -93,7 +93,7 @@
 
         return Client;
     }
-
+//isa panghatdog
     function generate_CustomerID()
     {
         $conn = connect();
