@@ -6,7 +6,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
         header("location: index.php");
         exit;
     } elseif($_SESSION["position"] === "admin"){
-        header("location: admin.php");
+        header("location: Admin_dashboard.php");
         exit;
     }
 }
