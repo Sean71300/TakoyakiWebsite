@@ -30,6 +30,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }
 
     if(empty($email_err) && empty($password_err)){
+        // unite employees & customers tables to find user
         $sql = "
             SELECT id, email, full_name, password, position FROM (
                 SELECT customer_id AS id, email, full_name, password, position FROM customers
