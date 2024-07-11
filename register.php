@@ -171,9 +171,17 @@ function checkPhone($phone_number) {
         return false;
     }
 
+
     return true;
 }
 ?>
+
+<script>
+  function validateInput(input) {
+    input.value = input.value.replace(/\D/g, ''); // Remove non-numeric characters
+  }
+
+</script>
 
 <?php
 // Form submission
@@ -272,15 +280,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <form action="<?php echo $_SERVER["PHP_SELF"]?>" id="registrationForm" method="post" class="w-100">
                 <div class="form-group">
                     <p><span class="text-danger font-italic">*</span>First Name:</p>
-                    <input type="text" id="firstN" name="firstN" class="form-control" pattern = "[A-Za-z\s]+" placeholder="ex. Juan" value="<?php retainInput('firstN'); ?>" required>
+                    <input type="text" id="firstN" name="firstN" class="form-control" pattern="[A-Za-z\s]+" placeholder="ex. Juan" value="<?php retainInput('firstN'); ?>" required>
                 </div>
                 <div class="form-group">
                     <p>Middle Name:</p>
-                    <input type="text" id="middleN" name="middleN" class="form-control" pattern = "[A-Za-z\s]+" placeholder="ex. Marquez" value="<?php retainInput('middleN'); ?>">
+                    <input type="text" id="middleN" name="middleN" class="form-control" pattern="[A-Za-z\s]+" placeholder="ex. Marquez" value="<?php retainInput('middleN'); ?>">
                 </div>
                 <div class="form-group">
                     <p><span class="text-danger font-italic">*</span>Last Name:</p>
-                    <input type="text" id="lastN" name="lastN" class="form-control" pattern = "[A-Za-z\s]+" placeholder="ex. Dela Cruz" value="<?php retainInput('lastN'); ?>" required>
+                    <input type="text" id="lastN" name="lastN" class="form-control" pattern="[A-Za-z\s]+" placeholder="ex. Dela Cruz" value="<?php retainInput('lastN'); ?>" required>
                 </div>
                 <div>
                     <p><span class="text-danger font-italic">*</span>Birthdate:</p>
@@ -301,7 +309,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div class="form-group">
                     <p><span class="text-danger font-italic">*</span>Phone Number:</p>
-                    <input type="tel" id="phone_number" name="phone_number" class="form-control" value = "<?php retainInput('phone_number');?>" placeholder="09xxxxxxxxx" required>
+                    <input type="text" maxlength="11" id="phone_number" name="phone_number" class="form-control" value = "<?php retainInput('phone_number');?>" placeholder="09xxxxxxxxx" inputmode="numeric" required oninput="validateInput(this)">
                 </div>
                 <div class="form-group">
                     <p><span class="text-danger font-italic">*</span>Address:</p>
