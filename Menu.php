@@ -41,28 +41,28 @@ if (isset($_POST['add_to_cart'])) {
         'price' => $_SESSION["price"],
     );
 
-  echo '<div class="modal fade" id="input" tabindex="-1">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-              <div class="modal-header">
+    echo '<div class="modal fade" id="input" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
                 <h5 class="modal-title" id="quantityInput">Order Successful</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-              </div>
-              <div class="modal-body">
-                <p class="text-center p-3">Order Added!</p>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Okay</button>
-              </div>
             </div>
-          </div>
-        </div>';
+            <div class="modal-body">
+                <p class="text-center p-3">Order Added!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Okay</button>
+            </div>
+        </div>
+    </div>
+</div>';
 }
 ?>
 <html>
   <head>
     <title>Menu Page</title>
-    <script src="js/bootstrap.bundle.min.js"></script>
+        <script src="js/bootstrap.bundle.min.js"></script>
         <script src="https://kit.fontawesome.com/af468059ce.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" href="customCodes/custom.css">
@@ -251,7 +251,7 @@ if (isset($_POST['add_to_cart'])) {
                 <?php #set product_id for database connection ?>
                 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
                   <input type="hidden" name="product_id" value="2024160000">
-                  <input type="submit" name="add_to_cart" value="+" class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" ></input>
+                  <input type="submit" name="add_to_cart" value="+" class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" data-bs-toggle="modal" data-bs-target="#input"></input>
                 </form>
               </div>
             </div>
