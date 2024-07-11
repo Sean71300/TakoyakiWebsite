@@ -5,7 +5,7 @@
   
     <head>
         <title>
-            About Page for lyka
+            About Page for ellaine
         </title>
         <script src="js/bootstrap.bundle.min.js"></script>
         <script src="https://kit.fontawesome.com/af468059ce.js" crossorigin="anonymous"></script>
