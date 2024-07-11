@@ -1,12 +1,11 @@
 <?php
   session_start();
-  //ellaine hi
 ?>
 <html>
   
     <head>
         <title>
-            About Page for ellaine
+            About Page
         </title>
         <script src="js/bootstrap.bundle.min.js"></script>
         <script src="https://kit.fontawesome.com/af468059ce.js" crossorigin="anonymous"></script>
