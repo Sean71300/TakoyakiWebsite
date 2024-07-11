@@ -1,7 +1,7 @@
 <?php
- include 'welcome.php';
- include 'posted-rate.php';
- require_once 'setup.php';
+//  include 'welcome.php';
+include 'posted-rate.php';
+require_once 'setup.php';
 ?>
 
 

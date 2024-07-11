@@ -229,7 +229,7 @@ include_once 'setup.php';
                     echo    "Welcome ".htmlspecialchars($_SESSION["full_name"]).'';   
                     echo  '</button>';
                     echo  '<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
-                    echo    '<li><a class="dropdown-item" href="rating.php">Rate</a></li>';
+                    echo    '<li><a class="dropdown-item" href="posted-rate.php">Rate</a></li>';
                     echo    '<li><a class="dropdown-item" href="reset.php">Change Password</a></li>';
                     echo    '<li><a class="dropdown-item" href="logout.php">Sign Out</a></li>';
                     echo  '</ul>';
