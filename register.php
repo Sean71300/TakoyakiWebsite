@@ -127,7 +127,6 @@ function checkDuplication($id, $checkQuery) {
     }
     $stmt->close();
     $conn->close();
-     echo $id;
     return $id;
 }
 

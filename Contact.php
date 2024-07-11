@@ -1,5 +1,6 @@
 <?php
   session_start();
+  
 ?>
 <html>
     <head>
@@ -123,20 +124,11 @@
                 <!--Subject-->
                 <input name="subject" class="my-2 rounded-2 w-100" type="text" placeholder="Subject*" required><br>
                 <!--Message/Comments-->
-                <textarea name="message" class = "my-2 rounded-2 w-100" id="comments" placeholder="Comments/Message/Rating*" rows="3" required></textarea>
-
-                <!--Drop Down List-->
-                <select name="Means" class="my-2 border-2 rounded-2 w-100" >
-                  <option value = "" disabled selected>How did you find us?</option>
-                  <option value = "Social Medias">Social Medias</option>
-                  <option value = "Friends">Friends</option>
-                  <option value = "Posters">Posters</option>
-                  <option value = "Net">Search engines like google,yahoo,etc</option><br>
-                  <option value = "Others">Others</option>
-                </select>     
+                <textarea name="message" class = "my-2 rounded-2 w-100" id="comments" placeholder="Comments/Message/Rating*" rows="15" required></textarea>
+                 
                          
                 <br>
-                <button type="submit" name="send" id="con" class="btn btn-danger ml-3 mr-3 w-100" data-bs-toggle="modal" data-bs-target="#exampleModal" >Submit</button>              
+                <button action="" type="submit" name="send" id="con" class="btn btn-danger ml-3 mr-3 w-100" data-bs-toggle="modal" data-bs-target="#exampleModal" >Submit</button>              
                 
 
                 
@@ -162,6 +154,8 @@
                     </div>
                   </div>
                 </div>
+
+                <!--Footer-->
                 <div class="col-12">
                   <div class="row mt-4  rounded-3 justify-content-center">                      
                     <div class="col-1 col-lg-2 my-2 ">
