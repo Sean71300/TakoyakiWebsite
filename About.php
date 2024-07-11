@@ -5,7 +5,7 @@
   
     <head>
         <title>
-            About Page capricorn thingz
+            About Page Hello ellaine
         </title>
         <script src="js/bootstrap.bundle.min.js"></script>
         <script src="https://kit.fontawesome.com/af468059ce.js" crossorigin="anonymous"></script>
