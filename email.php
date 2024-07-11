@@ -1,4 +1,6 @@
 <?php
+require 'setup.php';
+session_start();
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -6,6 +8,8 @@ use PHPMailer\PHPMailer\Exception;
 require 'phpmailer/src/Exception.php';
 require 'phpmailer/src/PHPMailer.php';
 require 'phpmailer/src/SMTP.php';
+
+
 
 if (isset($_POST["send"])) {
     $mail = new PHPMailer(true);
@@ -19,7 +23,7 @@ if (isset($_POST["send"])) {
         $mail->SMTPSecure = 'ssl';
         $mail->Port = 465;
 
-        $mail->setFrom('chuzuchum@gmail.com', 'Hentoki Customer: ' . 'Test Name'); // your email     <UPDATE--get from DB--> //Lyka
+        $mail->setFrom('chuzuchum@gmail.com', 'Hentoki Customer: ' . htmlspecialchars($_SESSION["full_name"])); // your email     <UPDATE--get from DB--> //Lyka
         $mail->addAddress('hentokireceive@gmail.com'); //Receiving Email Address
 
         $mail->isHTML(true);

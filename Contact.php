@@ -1,6 +1,11 @@
 <?php
   session_start();
-  
+  if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)
+  {
+    header("Refresh: 2; url=login.php");
+    exit;
+  }
+
 ?>
 <html>
     <head>
@@ -121,6 +126,22 @@
               <form action="email.php" id="Contacts" method="post" class="w-100">
                 
                 <!--User Input-->
+                <!--Name-->
+                <?php 
+                if(isset($_SESSION["full_name"]))
+                  {
+                    
+                    
+                  }
+                  
+                  
+                
+                ?>
+
+
+
+
+
                 <!--Subject-->
                 <input name="subject" class="my-2 rounded-2 w-100" type="text" placeholder="Subject*" required><br>
                 <!--Message/Comments-->
