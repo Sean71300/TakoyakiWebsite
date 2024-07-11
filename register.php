@@ -128,7 +128,6 @@ function checkDuplication($id, $checkQuery) {
     }
     $stmt->close();
     $conn->close();
-     echo $id;
     return $id;
 }
 
@@ -243,7 +242,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             VALUES 
                             ($gen_id, '$type', '$unique[0]', '$birthdate', $age, '$gender', '$unique[1]', '$unique[2]', '$unique[3]', '$hashed_password')";
                     if ($conn->query($sql) === TRUE) {
-                        $message = "customers successfully!";
+                        $message = "Successfully Registered!";
                         header("Refresh: 3; url=login.php");
                     } else {
                         echo "Error occured in connecting to the database, please try again.";
@@ -273,15 +272,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <form action="<?php echo $_SERVER["PHP_SELF"]?>" id="registrationForm" method="post" class="w-100">
                 <div class="form-group">
                     <p><span class="text-danger font-italic">*</span>First Name:</p>
-                    <input type="text" id="firstN" name="firstN" class="form-control" pattern="[A-Za-z]+" placeholder="ex. Juan" value="<?php retainInput('firstN'); ?>" required>
+                    <input type="text" id="firstN" name="firstN" class="form-control" pattern = "[A-Za-z\s]+" placeholder="ex. Juan" value="<?php retainInput('firstN'); ?>" required>
                 </div>
                 <div class="form-group">
                     <p>Middle Name:</p>
-                    <input type="text" id="middleN" name="middleN" class="form-control" pattern="[A-Za-z]+" placeholder="ex. Marquez" value="<?php retainInput('middleN'); ?>">
+                    <input type="text" id="middleN" name="middleN" class="form-control" pattern = "[A-Za-z\s]+" placeholder="ex. Marquez" value="<?php retainInput('middleN'); ?>">
                 </div>
                 <div class="form-group">
                     <p><span class="text-danger font-italic">*</span>Last Name:</p>
-                    <input type="text" id="lastN" name="lastN" class="form-control" pattern="[A-Za-z]+" placeholder="ex. Dela Cruz" value="<?php retainInput('lastN'); ?>" required>
+                    <input type="text" id="lastN" name="lastN" class="form-control" pattern = "[A-Za-z\s]+" placeholder="ex. Dela Cruz" value="<?php retainInput('lastN'); ?>" required>
                 </div>
                 <div>
                     <p><span class="text-danger font-italic">*</span>Birthdate:</p>
