@@ -117,10 +117,15 @@
               <br>
               <br>
               <span class="fs-6">Fill out this form to contact Hentoki about your concerns and comments</span>
-              <form action="<?php echo $_SERVER["PHP_SELF"]?>" id="Contacts" method="post" class="w-100">
-                <input name="txtName" class="my-2 rounded-2 w-100" type="text" placeholder="Name*" ><br>
-                <input name="txtEmail" class="my-2 rounded-2 w-100" type="text" placeholder="Subject*"><br>
-                <textarea name="txtComments" class = "my-2 rounded-2 w-100" id="comments" placeholder="Comments/Message/Rating*" rows="3"></textarea>
+              <form action="email.php" id="Contacts" method="post" class="w-100">
+                
+                <!--User Input-->
+                <!--Subject-->
+                <input name="subject" class="my-2 rounded-2 w-100" type="text" placeholder="Subject*" required><br>
+                <!--Message/Comments-->
+                <textarea name="message" class = "my-2 rounded-2 w-100" id="comments" placeholder="Comments/Message/Rating*" rows="3" required></textarea>
+
+                <!--Drop Down List-->
                 <select name="Means" class="my-2 border-2 rounded-2 w-100" >
                   <option value = "" disabled selected>How did you find us?</option>
                   <option value = "Social Medias">Social Medias</option>
@@ -131,7 +136,10 @@
                 </select>     
                          
                 <br>
-                <button type="submit" id="con" class="btn btn-danger ml-3 mr-3 w-100"data-bs-toggle="modal" data-bs-target="#exampleModal">Submit</button>              
+                <button type="submit" name="send" id="con" class="btn btn-danger ml-3 mr-3 w-100" data-bs-toggle="modal" data-bs-target="#exampleModal" >Submit</button>              
+                
+
+                
                 <!-- Modal -->
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                   <div class="modal-dialog">

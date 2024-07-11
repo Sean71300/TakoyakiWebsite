@@ -1,5 +1,63 @@
 <?php
-    session_start();
+#Connect to Database
+session_start();
+require_once "connect.php";
+
+if (isset($_POST['product_id'])) {
+    $product_id = $_POST['product_id'];
+} else {
+    $product_id = null;
+}
+
+#Select database and initialize product
+$sql = "SELECT product_name, category_type, price FROM products WHERE product_id = ?";
+
+if ($stmt = mysqli_prepare($link, $sql)) {
+    mysqli_stmt_bind_param($stmt, "i", $product_id);
+
+    if (mysqli_stmt_execute($stmt)) {
+        mysqli_stmt_store_result($stmt);
+        if (mysqli_stmt_num_rows($stmt) == 1) {
+            mysqli_stmt_bind_result($stmt, $product_name, $category_type, $price);
+            if (mysqli_stmt_fetch($stmt)) {
+                $_SESSION["product_name"] = $product_name;
+                $_SESSION["category_type"] = $category_type;
+                $_SESSION["price"] = $price;
+            }
+        }
+    }
+    mysqli_stmt_close($stmt);
+}
+
+#Initialize Cart
+if (isset($_POST['add_to_cart'])) {
+    if (!isset($_SESSION['cart'])) {
+        $_SESSION['cart'] = array();
+    }
+
+    $_SESSION['cart'][] = array(
+        'product_name' => $_SESSION["product_name"],
+        'product_category' => $_SESSION["category_type"],
+        'price' => $_SESSION["price"],
+    );
+
+  echo '<div class="modal fade" id="input" tabindex="-1">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="quantityInput">Order Successful</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                <p class="text-center p-3">Order Added!</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Okay</button>
+              </div>
+            </div>
+          </div>
+        </div>';
+}
 ?>
 <html>
   <head>
@@ -190,7 +248,11 @@
               <p class="card-title getProduct">Octo Bits</p>
               <div class="d-flex justify-content-evenly">
                 <p id="price" class="card-title fw-bold w-100" style="display:inline-block"><span class="text-warning" style="display:inline-block">₱</span>39.00</p>
-                <button class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" data-bs-toggle="modal" data-bs-target="#input">+</button>
+                <?php #set product_id for database connection ?>
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+                  <input type="hidden" name="product_id" value="2024160000">
+                  <input type="submit" name="add_to_cart" value="+" class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" ></input>
+                </form>
               </div>
             </div>
 
@@ -204,7 +266,11 @@
               <p class="card-title getProduct">Crab Bits</p>
               <div class="d-flex justify-content-evenly">
                 <p id="price" class="card-title fw-bold w-100" style="display:inline-block"><span class="text-warning" style="display:inline-block">₱</span>39.00</p>
-                <button class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" data-bs-toggle="modal" data-bs-target="#input">+</button>
+                <?php #set product_id for database connection ?>
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+                  <input type="hidden" name="product_id" value="2024160001">
+                  <input type="submit" name="add_to_cart" value="+" class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" ></input>
+                </form>
               </div>
             </div>
 
@@ -218,7 +284,11 @@
               <p class="card-title getProduct">Cheese Bits</p>
               <div class="d-flex justify-content-evenly">
                 <p id="price" class="card-title fw-bold w-100" style="display:inline-block"><span class="text-warning" style="display:inline-block">₱</span>39.00</p>
-                <button class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" data-bs-toggle="modal" data-bs-target="#input">+</button>
+                <?php #set product_id for database connection ?>
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+                  <input type="hidden" name="product_id" value="2024160002">
+                  <input type="submit" name="add_to_cart" value="+" class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" ></input>
+                </form>
               </div>
             </div>
 
@@ -232,7 +302,11 @@
               <p class="card-title getProduct">Bacon Bits</p>
               <div class="d-flex justify-content-evenly">
                 <p id="price" class="card-title fw-bold w-100" style="display:inline-block"><span class="text-warning" style="display:inline-block">₱</span>39.00</p>
-                <button class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" data-bs-toggle="modal" data-bs-target="#input">+</button>
+                <?php #set product_id for database connection ?>
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+                  <input type="hidden" name="product_id" value="2024160003">
+                  <input type="submit" name="add_to_cart" value="+" class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" ></input>
+                </form>
               </div>
             </div>
 
@@ -251,7 +325,11 @@
               <p class="card-title getProduct">Octo Bits</p>
               <div class="d-flex justify-content-evenly">
                 <p id="price" class="card-title fw-bold w-100" style="display:inline-block"><span class="text-warning" style="display:inline-block">₱</span>100.00</p>
-                <button class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" data-bs-toggle="modal" data-bs-target="#input">+</button>
+                <?php #set product_id for database connection ?>
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+                  <input type="hidden" name="product_id" value="2024160004">
+                  <input type="submit" name="add_to_cart" value="+" class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" ></input>
+                </form>
               </div>
             </div>
             <div class="card border-0 col" style="width: 15rem">
@@ -263,7 +341,11 @@
               <p class="card-title getProduct">Crab Bits</p>
               <div class="d-flex justify-content-evenly">
                 <p id="price" class="card-title fw-bold w-100" style="display:inline-block"><span class="text-warning" style="display:inline-block">₱</span>100.00</p>
-                <button class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" data-bs-toggle="modal" data-bs-target="#input">+</button>
+                <?php #set product_id for database connection ?>
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+                  <input type="hidden" name="product_id" value="2024160005">
+                  <input type="submit" name="add_to_cart" value="+" class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" ></input>
+                </form>
               </div>
             </div>
             <div class="card border-0 col" style="width: 15rem">
@@ -275,7 +357,11 @@
               <p class="card-title getProduct">Cheese Bits</p>
               <div class="d-flex justify-content-evenly">
                 <p id="price" class="card-title fw-bold w-100" style="display:inline-block"><span class="text-warning" style="display:inline-block">₱</span>100.00</p>
-                <button class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" data-bs-toggle="modal" data-bs-target="#input">+</button>
+                <?php #set product_id for database connection ?>
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+                  <input type="hidden" name="product_id" value="2024160006">
+                  <input type="submit" name="add_to_cart" value="+" class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" ></input>
+                </form>
               </div>
             </div>
             <div class="card border-0 col" style="width: 15rem">
@@ -287,7 +373,11 @@
               <p class="card-title getProduct">Bacon Bits</p>
               <div class="d-flex justify-content-evenly">
                 <p class="card-title fw-bold w-100" style="display:inline-block" id="price"><span class="text-warning" style="display:inline-block">₱</span>100.00</p>
-                <button class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" data-bs-toggle="modal" data-bs-target="#input">+</button>
+                <?php #set product_id for database connection ?>
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+                  <input type="hidden" name="product_id" value="2024160007">
+                  <input type="submit" name="add_to_cart" value="+" class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" ></input>
+                </form>
               </div>
             </div>
           </div>
@@ -305,7 +395,11 @@
               <p class="card-title getProduct">Assorted Barkada</p>
               <div class="d-flex justify-content-evenly">
                 <p id="price" class="card-title fw-bold w-100" style="display:inline-block"><span class="text-warning" style="display:inline-block">₱</span>400.00</p>
-                <button class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" data-bs-toggle="modal" data-bs-target="#input">+</button>
+                <?php #set product_id for database connection ?>
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+                  <input type="hidden" name="product_id" value="2024160008">
+                  <input type="submit" name="add_to_cart" value="+" class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" ></input>
+                </form>
               </div>
             </div>
             <div class="card border-0 col-12" style="width: 20rem; margin-left: 1rem;">
@@ -317,26 +411,11 @@
               <p class="card-title getProduct">Cheesy Barkada</p>
               <div class="d-flex justify-content-evenly">
                 <p id="price" class="card-title fw-bold w-100" style="display:inline-block"><span class="text-warning" style="display:inline-block">₱</span>320.00</p>
-                <button class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" data-bs-toggle="modal" data-bs-target="#input">+</button>
-              </div>
-            </div>
-          </div>
-		  
-		  
-        </div>
-  
-        <div class="modal fade" id="input" tabindex="-1">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="quantityInput">Order Successful</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-              </div>
-              <div class="modal-body">
-                <p class="text-center p-3">Order Added!</p>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Okay</button>
+                <?php #set product_id for database connection ?>
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+                  <input type="hidden" name="product_id" value="2024160009">
+                  <input type="submit" name="add_to_cart" value="+" class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" ></input>
+                </form>
               </div>
             </div>
           </div>

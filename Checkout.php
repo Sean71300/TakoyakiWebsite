@@ -1,4 +1,5 @@
 <?php
+/*
 session_start();
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
   echo '<html>';
@@ -15,6 +16,28 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
   header("Refresh: 2; url=login.php");
   exit;
 }
+*/
+?>
+
+<?php
+session_start();
+function connect()
+{
+    // Configuration
+    $db_host = 'localhost';
+    $db_username = 'root';
+    $db_password = '';
+    $db_name = 'registration_db';
+
+    $conn = new mysqli($db_host, $db_username, $db_password, $db_name);
+
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    return $conn;
+}
+$total = 0.00;
 ?>
 
 <html>
@@ -174,14 +197,25 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
             <h4>Cart:</h4>
             <div class="row">
                 <div class="container border border-black" style="height: 35vh; overflow-y: auto;" id="product-container">
-    
+                <?php
+                $total = 0;
+                if (isset($_SESSION['cart'])) {
+                    foreach ($_SESSION['cart'] as $item) {
+                        $product_total = $item['price'];
+                        $total += $product_total;
+                        echo $item['product_name'] . " - " . $item['product_category'];
+                        echo " - ₱" . $item['price'];
+                        echo "<br>";
+                    }
+                }
+                ?>
                 </div>
             </div>
     
             <div class="row">
                 <hr>
                 <div id="total-container">
-                    
+                  Total: ₱<?php echo $total; ?>
                 </div>
             </div>
         </div>
@@ -196,8 +230,56 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
         </div>
     </div>
   </div>
-      <!--                                             -->
 
+  <?php
+    #Check for valid phone number:
+    function checkPhone($phone_number) {
+      $phone_number = preg_replace('/\D/', '', $phone_number);
+  
+      if (strlen($phone_number) != 10 && strlen($phone_number) != 11) {
+          return false;
+      }
+      $valid_area_codes = array('02', '032', '033', '034', '035', '036', '037', '038', '039', '041', '042', '043', '044', '045', '046', '047', '048', '049', '052', '053', '054', '055', '056', '057', '058', '059', '063', '064', '065', '066', '067', '068', '077', '078', '082', '083', '084', '085', '086', '087', '088', '089');
+      if (substr($phone_number, 0, 1) != '0' && substr($phone_number, 0, 2) != '9' && !in_array(substr($phone_number, 0, 2), $valid_area_codes)) {
+          return false;
+      }
+  
+      return true;
+    }
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+      $errors = 0;
+      $phone_number = $_POST["phone_number"];
+
+        if(checkPhone($phone_number) == false){
+          $error_display = "Invalid phone number, please check or try again.";
+          $errors++;
+      }
+
+      /*
+      if ($errors == 0) {
+        if ($res["result"] == 0) {
+          $unique = $res['array'];
+          // Insert data into database
+          $conn = connect();
+          $sql = "INSERT INTO registered 
+                  (id, type, full_name, birthdate, age, gender, email, phone_number, address, password) 
+                  VALUES 
+                  ($gen_id, '$type', '$unique[0]', '$birthdate', $age, '$gender', '$unique[1]', '$unique[2]', '$unique[3]', '$hashed_password')";
+          if ($conn->query($sql) === TRUE) {
+              $message = "Payment success!";
+          } else {
+              echo "Error occured in connecting to the database, please try again.";
+          } 
+          $conn->close();
+      } else {
+          $errors++;
+      }
+          
+    }*/
+  }
+  ?>
+      <!--                                             -->
       <div class="forfooter">
         <div class="container-fluid text-light bg-black mt-5">          
           <div class="row ">

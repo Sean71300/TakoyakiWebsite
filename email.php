@@ -12,15 +12,15 @@ if (isset($_POST["send"])) {
     
     try {
         $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com';
+        $mail->Host = 'smtp.gmail.com'; //SMTP email address suffix identifier
         $mail->SMTPAuth = true;
         $mail->Username = 'chuzuchum@gmail.com'; // your email
         $mail->Password = 'jtzf wkue vkqb yplq'; // your email password
         $mail->SMTPSecure = 'ssl';
         $mail->Port = 465;
 
-        $mail->setFrom('chuzuchum@gmail.com', 'Hentoki Customer: ' . $_POST["name"]); // your email
-        $mail->addAddress('yvontagum@gmail.com');
+        $mail->setFrom('chuzuchum@gmail.com', 'Hentoki Customer: ' . 'Test Name'); // your email     <UPDATE--get from DB--> //Lyka
+        $mail->addAddress('hentokireceive@gmail.com'); //Receiving Email Address
 
         $mail->isHTML(true);
         $mail->Subject = $_POST["subject"];
@@ -31,8 +31,7 @@ if (isset($_POST["send"])) {
         echo
         "
         <script>
-            alert('Sent Successfully!');
-            document.location.href = 'emailForm.php';
+            document.location.href = 'Contact.php';
         </script>
         ";
     } catch (Exception $e) {
@@ -40,7 +39,7 @@ if (isset($_POST["send"])) {
         "
         <script>
             alert('Message could not be sent. Mailer Error: {$mail->ErrorInfo}');
-            document.location.href = 'emailForm.php';
+            document.location.href = 'Contact.php';
         </script>
         ";
     }

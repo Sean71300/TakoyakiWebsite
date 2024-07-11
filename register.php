@@ -5,7 +5,7 @@ function connect()
     $db_host = 'localhost';
     $db_username = 'root';
     $db_password = '';
-    $db_name = 'hentoki_db';
+    $db_name = 'registration_db';
 
     $conn = new mysqli($db_host, $db_username, $db_password, $db_name);
 
@@ -18,8 +18,8 @@ function connect()
 
 function getColumnName()
 {
-    $dbname = "hentoki_db";
-    $table = "customers";
+    $dbname = "registration_db";
+    $table = "registered";
 
     $conn = connect();
     // Run a simple query to get the table structure
@@ -44,7 +44,7 @@ function getColumnName()
 function checkRecord($row)
 {
     // Remove specific columns
-    $remove = ['id', 'position', 'birthdate', 'age', 'gender', 'reg_date'];
+    $remove = ['id', 'type', 'birthdate', 'age', 'gender', 'reg_date'];
     $column = array_diff(getColumnName(), $remove);
     
     // Establish a single database connection
@@ -57,7 +57,7 @@ function checkRecord($row)
         foreach ($rec as $val) {
             // Escape the value to prevent SQL injection
             $val = mysqli_real_escape_string($conn, $val);
-            $sql = "SELECT * FROM customers WHERE $columnName = '$val'";
+            $sql = "SELECT * FROM registered WHERE $columnName = '$val'";
             $result = mysqli_query($conn, $sql);
             $numRow = mysqli_num_rows($result);
 
@@ -93,17 +93,16 @@ function generateID()
 {
     $conn = connect();
 
-    $query = "SELECT COUNT(*) as count FROM customers";
+    $query = "SELECT COUNT(*) as count FROM registered";
     $result = $conn->query($query);
     $row = $result->fetch_assoc();
     $rowCount = $row["count"];
 
     // Get the current year
     $currentYear = date("Y");
-    $currentMonth = date("m");
 
     // Generate the ID
-    $genID = (int)($currentYear . $currentMonth . str_pad($rowCount, 4, "0", STR_PAD_LEFT));
+    $genID = (int)($currentYear . str_pad(101, 3, "0", STR_PAD_LEFT) . str_pad($rowCount, 3, "0", STR_PAD_LEFT));
 
     $conn->close();
     return $genID;
@@ -171,15 +170,26 @@ function checkPhone($phone_number) {
     if (substr($phone_number, 0, 1) != '0' && substr($phone_number, 0, 2) != '9' && !in_array(substr($phone_number, 0, 2), $valid_area_codes)) {
         return false;
     }
+    if (substr($phone_number, 0, 2) != '09') {
+        return false;
+    }
 
     return true;
 }
+
 ?>
+
+<script>
+  function validateInput(input) {
+    input.value = input.value.replace(/\D/g, ''); // Remove non-numeric characters
+  }
+
+</script>
 
 <?php
 // Form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $checkQuery = "SELECT customer_id FROM customers WHERE customer_id = ?";
+    $checkQuery = "SELECT id FROM registered WHERE id = ?";
     // HOW TO USE THE CHECK UNIQUE ID
     $gen_id = checkDuplication(generateID(),$checkQuery);
     $type = "Client";
@@ -199,6 +209,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors = 0;
         $error_display = "";
 
+        if($age < 18){
+            $error_display = "Invalid Age. Must be 18 years old and Above";
+            $errors++;
+        }
+        if($age > 120){
+            $error_display = "Invalid Age. You're too old for this";
+            $errors++;
+        }
         if (!preg_match($email_pattern, $email) ) {
             $error_display = "Please enter a valid email address with a .com extension.";
             $errors++;
@@ -238,12 +256,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $unique = $res['array'];
                     // Insert data into database
                     $conn = connect();
-                    $sql = "INSERT INTO customers 
-                            (customer_id, position, full_name, birthdate, age, gender, email, phone_number, address, password) 
+                    $sql = "INSERT INTO registered 
+                            (id, type, full_name, birthdate, age, gender, email, phone_number, address, password) 
                             VALUES 
                             ($gen_id, '$type', '$unique[0]', '$birthdate', $age, '$gender', '$unique[1]', '$unique[2]', '$unique[3]', '$hashed_password')";
                     if ($conn->query($sql) === TRUE) {
-                        $message = "customers successfully!";
+                        $message = "Registered successfully!";
                         header("Refresh: 3; url=login.php");
                     } else {
                         echo "Error occured in connecting to the database, please try again.";
@@ -273,15 +291,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <form action="<?php echo $_SERVER["PHP_SELF"]?>" id="registrationForm" method="post" class="w-100">
                 <div class="form-group">
                     <p><span class="text-danger font-italic">*</span>First Name:</p>
-                    <input type="text" id="firstN" name="firstN" class="form-control" pattern="[A-Za-z]+" placeholder="ex. Juan" value="<?php retainInput('firstN'); ?>" required>
+                    <input type="text" id="firstN" name="firstN" class="form-control" pattern="[A-Za-z\s]+" placeholder="ex. Juan" value="<?php retainInput('firstN'); ?>" required>
                 </div>
                 <div class="form-group">
                     <p>Middle Name:</p>
-                    <input type="text" id="middleN" name="middleN" class="form-control" pattern="[A-Za-z]+" placeholder="ex. Marquez" value="<?php retainInput('middleN'); ?>">
+                    <input type="text" id="middleN" name="middleN" class="form-control" pattern="[A-Za-z\s]+" placeholder="ex. Marquez" value="<?php retainInput('middleN'); ?>">
                 </div>
                 <div class="form-group">
                     <p><span class="text-danger font-italic">*</span>Last Name:</p>
-                    <input type="text" id="lastN" name="lastN" class="form-control" pattern="[A-Za-z]+" placeholder="ex. Dela Cruz" value="<?php retainInput('lastN'); ?>" required>
+                    <input type="text" id="lastN" name="lastN" class="form-control" pattern="[A-Za-z\s]+" placeholder="ex. Dela Cruz" value="<?php retainInput('lastN'); ?>" required>
                 </div>
                 <div>
                     <p><span class="text-danger font-italic">*</span>Birthdate:</p>
@@ -302,7 +320,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div class="form-group">
                     <p><span class="text-danger font-italic">*</span>Phone Number:</p>
-                    <input type="tel" id="phone_number" name="phone_number" class="form-control" value = "<?php retainInput('phone_number');?>" placeholder="09xxxxxxxxx" required>
+                    <input type="text" maxlength="11" id="phone_number" name="phone_number" class="form-control" value = "<?php retainInput('phone_number');?>" placeholder="09xxxxxxxxx" inputmode="numeric" required oninput="validateInput(this)">
                 </div>
                 <div class="form-group">
                     <p><span class="text-danger font-italic">*</span>Address:</p>
