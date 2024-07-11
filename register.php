@@ -250,7 +250,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             VALUES 
                             ($gen_id, '$type', '$unique[0]', '$birthdate', $age, '$gender', '$unique[1]', '$unique[2]', '$unique[3]', '$hashed_password')";
                     if ($conn->query($sql) === TRUE) {
-                        $message = "customers successfully!";
+                        $message = "Successfully Registered!";
                         header("Refresh: 3; url=login.php");
                     } else {
                         echo "Error occured in connecting to the database, please try again.";
