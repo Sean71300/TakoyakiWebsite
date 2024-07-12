@@ -1,7 +1,13 @@
 <?php
-session_start();
-include_once 'customer_functions.php';
-$Confirmation = "";
+    session_start();
+    include_once 'customer_functions.php';
+    $Confirmation = "";
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST")
+    {
+        editdata();
+        $Confirmation='<h5 class="mt-3">Record Edited successfully!</h5><br>';
+    }
 ?>
 
 <html>
@@ -155,51 +161,8 @@ $Confirmation = "";
     <div class="loading-screen">
         <img src="Images/loading.png" alt="Loading...">
     </div>
-<!-- Navigation Bar -->
-<nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
-    <div class="container-fluid">
-        <a href="index.php" class="navbar-brand">
-            <img src="Images/Logo.jpg" class="logo ms-4 ms-lg-5" alt="Logo">
-            <b>Hentoki</b>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav  ps-5 mb-2 mb-lg-0 col d-flex justify-content-between">
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="About.php">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="Menu.php">Menu</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="Pages.php">Personnel</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="Contact.php">Contact</a>
-                </li>
-                <?php                
-                    echo '<li class="nav-item dropdown">';
-                    echo '<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-                           aria-expanded="false">';
-                    echo "Welcome " .display_Value("full_name",htmlspecialchars($_SESSION["id"]));
-                    echo '</a>';
-                    echo '<ul class="dropdown-menu" aria-labelledby="navbarDropdown">';
-                    echo '<li><a class="dropdown-item" href="edit.php">Edit Profile</a></li>';
-                    echo '<li><a class="dropdown-item" href="rating.php">Rate</a></li>';
-                    echo '<li><a class="dropdown-item" href="logout.php">Sign Out</a></li>';
-                    echo '</ul>';
-                    echo '</li>';                
-                ?>
-            </ul>
-        </div>
-    </div>
-</nav>
+<!-- Navbar -->
+<?php include "Navigation.php"?>      
 
 <!-- Edit Profile Section -->
 <div class="container mt-5">
@@ -228,7 +191,7 @@ $Confirmation = "";
             <!-- Edit Profile Form -->
             <div class="profile-section">
                 <form action="<?php echo $_SERVER["PHP_SELF"]?>" method="POST" id="CustomerEdit">
-                <?php if ($_SERVER["REQUEST_METHOD"] == "POST"){editdata();$Confirmation='<h5 class="mt-3">Record Edited successfully!</h5><br>';}?>
+                
                     <div class="mb-0">
                         <label for="name" class="form-label">User ID: <?php echo htmlspecialchars($_SESSION["id"])?></label>
                     </div>                    
@@ -273,33 +236,8 @@ $Confirmation = "";
     </div>
 </div>
 
-      <div class="forfooter">
-        <div class="container-fluid text-light bg-black mt-5">          
-          <div class="row ">
-            <div class="col-12 text-center">
-              <a href="index.php"><img src="Images/Logo.jpg" class="footer image-fluid my-4"></a>
-            </div>           
-            <div class="col-12">
-              <div class="row">
-                <div class="col-lg-3 col-md-1 col-sm-0"></div>
-                <div class="col-lg-6 col-md-10 col-sm-12 d-flex justify-content-around pe-4">
-                  <a href="index.php" class="text-decoration-none text-reset">Home</a>
-                  <a href="About.php" class="text-decoration-none text-reset">About us</a>
-                  <a href="Menu.php" class="text-decoration-none text-reset">Menu</a>
-                  <a href="Contact.php" class="text-decoration-none text-reset">Contact</a>
-                  <a href="Pages.php" class="text-decoration-none text-reset">Personnel</a>
-                </div>
-                <div class="col-lg-3 col-md-1 col-sm-0"></div>
-              </div>              
-            </div> 
-            <div class="col-12 text-center my-3">
-              <a href="https://www.facebook.com/hentokitakoyaki"><img src="Images/facebook.png" class="img-fluid footer1 m-2"></a>
-              <a href="https://www.instagram.com/hentokitakoyaki/"><img src="Images/instagram.png" class="img-fluid footer1 m-2"></a> <br>  
-              <span class="text-white-50">@copyright 2023 - hentoki</span>
-            </div> 
-          </div>          
-        </div>
-      </div>
+      <!-- Footer -->
+    <?php include "Footer.php"?>      
 <!-- Bootstrap JS -->
 <script src="js/bootstrap.bundle.min.js"></script>
 </body>

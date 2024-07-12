@@ -16,8 +16,7 @@
         mysqli_query($conn, $sql);
     }
     function editdata()
-    {
-        
+    {        
         $customer_name = $_POST["custoname"];
         $birthdate = $_POST["BirthD"];
         $age = calculateAge($_POST["BirthD"]);    
@@ -28,9 +27,7 @@
         $customerID = htmlspecialchars($_SESSION["id"]);
         
         update_Customer($customer_name,$age,$birthdate,$gender,$email,$phone_num,$address,$customerID);      
-        $_SESSION["full_name"] = $customer_name;
-        
-        
+        $_SESSION["full_name"] = $customer_name;  
     }
     function update_Customer($customer_name,$age,$birthdate,$gender,$email,$phone_num,$address,$customerID)
     {

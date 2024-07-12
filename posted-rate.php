@@ -268,58 +268,8 @@ $result->data_seek(0);
             }
         </script>
 
-        <div class="forNavigationbar sticky-top">
-        <nav class="navbar navbar-expand-lg bg-body-tertiary ">
-            <div class="container-fluid ">
-            <a href="index.php"><img src="Images/Logo.jpg" class="logo ms-4 ms-lg-5 "></a>
-            <a class="navbar-brand " href="index.php"><b>Hentoki</b></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ps-5 mb-2 mb-lg-0 col d-flex justify-content-between">                  
-                    <li class="nav-item">
-                    <a class="nav-link" href="index.php">Home</a>
-                    </li>
-                    <li class="nav-item">
-                    <a class="nav-link" href="About.php">About</a>
-                    </li>
-                    <li class="nav-item">
-                    <a class="nav-link"  href="Menu.php">Menu</a>
-                    </li>
-                    <li class="nav-item">
-                    <a class="nav-link"  href="Pages.php">Personnel</a>
-                    </li>
-                    <li class="nav-item">
-                    <a class="nav-link" href="Contact.php">Contact</a>
-                    </li> 
-                
-                    <?php  
-                    if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-                    echo '<li class="nav-item">';
-                    echo '<a class="nav-link " href="Login.php">Login</a>';
-                    echo '</li>';
-                    }
-                    else{          
-                    echo  '<div class="dropdown">';
-                    echo  '<button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">';
-                    echo    "Welcome ".htmlspecialchars($_SESSION["full_name"]).'';   
-                    echo  '</button>';
-                    echo  '<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
-                    echo    '<li><a class="dropdown-item" href="rating.php">Rate</a></li>';
-                    echo    '<li><a class="dropdown-item" href="reset.php">Change Password</a></li>';
-                    echo    '<li><a class="dropdown-item" href="logout.php">Sign Out</a></li>';
-                    echo  '</ul>';
-                    echo  '</div>';
-                    
-                    }
-                    ?>                               
-                    </ul>   
-                                    
-                </div>                    
-            </div>                   
-            </nav>
-        </div>
+        <!-- Navbar -->
+        <?php include "Navigation.php"?>    
         <div class="forbanner">
             <div class="banner col-12 bg-black ">
             <div class="py-lg-5 py-3"></div>
@@ -333,183 +283,185 @@ $result->data_seek(0);
             </div>
         </div>
 
-<div class="container-fluid"> 
-    <div class="row">
+    <div class="container-fluid"> 
+        <div class="row">
 
-        <?php
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $product_id = $row["product_id"];
-                $avg_rate = number_format($avgRatings[$product_id], 1);
-                    echo '<div class="col-12 col-lg-3 col-md-3 col-sm-6">';
-                        echo '<div class="card p-3 m-2">';
-                            echo '<div class="row">';
-                                echo '<div class="col-12 d-flex justify-content-between align-items-end">';
-                                    echo '<p class="fw-bold m-0 ">' . htmlspecialchars($row["full_name"]) . '</p>';
-                                    echo '<p class="bg-warning m-0 ml-2 text-uppercase text-dark px-2 py-1 rounded"><em>' .htmlspecialchars($row["product_name"]) . '</em></p>';
+            <?php
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    $product_id = $row["product_id"];
+                    $avg_rate = number_format($avgRatings[$product_id], 1);
+                        echo '<div class="col-12 col-lg-3 col-md-3 col-sm-6">';
+                            echo '<div class="card p-3 m-2">';
+                                echo '<div class="row">';
+                                    echo '<div class="col-12 d-flex justify-content-between align-items-end">';
+                                        echo '<p class="fw-bold m-0 ">' . htmlspecialchars($row["full_name"]) . '</p>';
+                                        echo '<p class="bg-warning m-0 ml-2 text-uppercase text-dark px-2 py-1 rounded"><em>' .htmlspecialchars($row["product_name"]) . '</em></p>';
+                                    echo '</div>';
+                                    echo '<div class="col-12  d-flex align-items-center">';
+                                        echo '<div>' .  str_repeat('⭐', (int)$row["rating"]). '</div>';
+                                        echo '<p class="mb-0 ms-2">'. $avg_rate .'</p>';
+                                    echo '</div>';
                                 echo '</div>';
-                                echo '<div class="col-12  d-flex align-items-center">';
-                                    echo '<div>' .  str_repeat('⭐', (int)$row["rating"]). '</div>';
-                                    echo '<p class="mb-0 ms-2">'. $avg_rate .'</p>';
+                                echo '<div class="row">';
+                                    echo '<div class="col-12 comment">';
+                                        echo '<p>' . htmlspecialchars($row["comment"]) . '</p>';
+                                    echo '</div>';
                                 echo '</div>';
-                            echo '</div>';
-                            echo '<div class="row">';
-                                echo '<div class="col-12 comment">';
-                                    echo '<p>' . htmlspecialchars($row["comment"]) . '</p>';
-                                echo '</div>';
-                            echo '</div>';
-                            echo '<div class="row">';
-                                echo '<div class="col-12 d-flex justify-content-between align-items-end">';
-                                    echo '<p class="mb-0 bg-secondary text-light px-2 py-1 rounded">Taste</p>';
-                                    echo '<div class="DateTime mb-0">' . htmlspecialchars(date("M j Y", strtotime($row["rate_timedate"]))) .  '</div>';
+                                echo '<div class="row">';
+                                    echo '<div class="col-12 d-flex justify-content-between align-items-end">';
+                                        echo '<p class="mb-0 bg-secondary text-light px-2 py-1 rounded">Taste</p>';
+                                        echo '<div class="DateTime mb-0">' . htmlspecialchars(date("M j Y", strtotime($row["rate_timedate"]))) .  '</div>';
+                                    echo '</div>';
                                 echo '</div>';
                             echo '</div>';
                         echo '</div>';
-                    echo '</div>';
-                    // echo '</div>';
+                        // echo '</div>';
+                    }
+                } else {
+                    echo "No reviews found.";
                 }
-            } else {
-                echo "No reviews found.";
-            }
-            $conn->close();
-            ?>
+                $conn->close();
+                ?>
+        </div>
     </div>
-</div>
 
 
-<?php
+    <?php
 
-function getFullName() {
- 
-    if(isset($_SESSION['full_name']))
-    $fullname =  $_SESSION['full_name'];
+    function getFullName() {
+    
+        if(isset($_SESSION['full_name']))
+        $fullname =  $_SESSION['full_name'];
 
-    return $fullname;
-}
-
-function getUserID() {
-    if(isset($_SESSION['id']))
-    $uID =  $_SESSION['id'];
-    return $uID;
-}
-
-function getProductID() {
-
-    return 2024160001;
-}
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $star = $_POST['rating'];
-    $comment = $_POST['comments'];
-    $rating_id = generate_RatingID();
-    $userID = getUserID();
-    $fullName = getFullName();
-    $productID = getProductID();
-
-    $comment = substr($comment, 0, 500);
-
-
-    $connection = connect();
-    $comment = mysqli_real_escape_string($connection, $comment);
-
-    $query = "INSERT INTO ratings (rating_id,customer_id, full_name, product_id, rating, comment) 
-              VALUES ($rating_id, $userID, '$fullName', $productID, $star, '$comment')";
-
-    if (mysqli_query($connection, $query)) {
-        echo "<br>Rating submitted successfully.";
-    } else {
-        echo "<br>Error submitting rating: " . mysqli_error($connection);
+        return $fullname;
     }
 
-}
-?>
+    function getUserID() {
+        if(isset($_SESSION['id']))
+        $uID =  $_SESSION['id'];
+        return $uID;
+    }
 
-<a href="#addReviewModal" class="floating-icon" data-toggle="modal" data-target="#addReviewModal">
-        <img src="Images/addComment.png" alt="Add Review">
-    </a>  
-            
-         <!-- Modal Structure -->
-    <div class="modal fade" id="addReviewModal" tabindex="-1" role="dialog" aria-labelledby="addReviewModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header justify-content-between">
-                    <h5 class="modal-title" id="addReviewModalLabel">Add Review</h5>
-                    <button type="button" class="close " data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-                        <div class="rating-css">
-                            <div class="star-icon">
-                                <input type="radio" name="rating" id="rating5" value="5">
-                                <label for="rating5" class="fa fa-star"></label>
-                                
-                                <input type="radio" name="rating" id="rating4" value="4">
-                                <label for="rating4" class="fa fa-star"></label>
-                                
-                                <input type="radio" name="rating" id="rating3" value="3">
-                                <label for="rating3" class="fa fa-star"></label>
-                                
-                                <input type="radio" name="rating" id="rating2" value="2">
-                                <label for="rating2" class="fa fa-star"></label>
-                                
-                                <input type="radio" name="rating" id="rating1" value="1" checked>
-                                <label for="rating1" class="fa fa-star"></label>
+    function getProductID() {
+
+        return 2024160001;
+    }
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $star = $_POST['rating'];
+        $comment = $_POST['comments'];
+        $rating_id = generate_RatingID();
+        $userID = getUserID();
+        $fullName = getFullName();
+        $productID = getProductID();
+
+        $comment = substr($comment, 0, 500);
+
+
+        $connection = connect();
+        $comment = mysqli_real_escape_string($connection, $comment);
+
+        $query = "INSERT INTO ratings (rating_id,customer_id, full_name, product_id, rating, comment) 
+                VALUES ($rating_id, $userID, '$fullName', $productID, $star, '$comment')";
+
+        if (mysqli_query($connection, $query)) {
+            echo "<br>Rating submitted successfully.";
+        } else {
+            echo "<br>Error submitting rating: " . mysqli_error($connection);
+        }
+
+    }
+    ?>
+
+    <a href="#addReviewModal" class="floating-icon" data-toggle="modal" data-target="#addReviewModal">
+            <img src="Images/addComment.png" alt="Add Review">
+        </a>  
+                
+            <!-- Modal Structure -->
+        <div class="modal fade" id="addReviewModal" tabindex="-1" role="dialog" aria-labelledby="addReviewModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header justify-content-between">
+                        <h5 class="modal-title" id="addReviewModalLabel">Add Review</h5>
+                        <button type="button" class="close " data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+                            <div class="rating-css">
+                                <div class="star-icon">
+                                    <input type="radio" name="rating" id="rating5" value="5">
+                                    <label for="rating5" class="fa fa-star"></label>
+                                    
+                                    <input type="radio" name="rating" id="rating4" value="4">
+                                    <label for="rating4" class="fa fa-star"></label>
+                                    
+                                    <input type="radio" name="rating" id="rating3" value="3">
+                                    <label for="rating3" class="fa fa-star"></label>
+                                    
+                                    <input type="radio" name="rating" id="rating2" value="2">
+                                    <label for="rating2" class="fa fa-star"></label>
+                                    
+                                    <input type="radio" name="rating" id="rating1" value="1" checked>
+                                    <label for="rating1" class="fa fa-star"></label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="comments">Comment/Suggestion:</label>
-                            <textarea name="comments" id="comments" class="form-control" placeholder="500 characters limit" maxlength="500" rows="3" oninput="updateCharCount()"></textarea>
-                        </div>
-                        <p class="char-count">
-                            Characters left: <span id="charCount">500</span>
-                        </p>
-                        <button type="submit" name="submit" class="btn btn-primary">Submit</button>
-                    </form>
+                            <div class="form-group">
+                                <label for="comments">Comment/Suggestion:</label>
+                                <textarea name="comments" id="comments" class="form-control" placeholder="500 characters limit" maxlength="500" rows="3" oninput="updateCharCount()"></textarea>
+                            </div>
+                            <p class="char-count">
+                                Characters left: <span id="charCount">500</span>
+                            </p>
+                            <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-        <div class="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title">Modal title</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
+            <div class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Modal body text goes here.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+            </div>
         </div>
-        <div class="modal-body">
-            <p>Modal body text goes here.</p>
         </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-primary">Save changes</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-        </div>
-    </div>
-    </div>
 
 
-<script>
-        function openPopup() {
-            document.getElementById("popup").style.display = "flex";
-        }
+    <script>
+            function openPopup() {
+                document.getElementById("popup").style.display = "flex";
+            }
 
-        function closePopup() {
-            document.getElementById("popup").style.display = "none";
-        }
-        function updateCharCount() {
-            var textarea = document.getElementById('comments');
-            var charCount = document.getElementById('charCount');
-            var remaining = 500 - textarea.value.length;
-            charCount.textContent = remaining;
-        }
-    </script>    
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+            function closePopup() {
+                document.getElementById("popup").style.display = "none";
+            }
+            function updateCharCount() {
+                var textarea = document.getElementById('comments');
+                var charCount = document.getElementById('charCount');
+                var remaining = 500 - textarea.value.length;
+                charCount.textContent = remaining;
+            }
+        </script>    
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+        <!-- Footer -->
+        <?php include "Footer.php"?>    
 </body>
 </html>
