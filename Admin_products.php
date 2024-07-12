@@ -199,27 +199,22 @@
                 <table class="transaction-table">
                     <thead>
                         <tr>
+                            
                             <th>Product ID</th>
                             <th>Product Name</th>
-                            <th>Category</th>
-                            <th>Price</th>
+                            <th>Category ID</th>
+                            <th>Category Type</th>
                             <th>Status</th>
-                            <th>Actions</th> <!-- Added missing header -->
+                            <th>Price</th>
+                            <th>Action</th>
+
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Sample Data -->
-                        <tr>
-                            <td>10241001</td>
-                            <td>OctoBits</td>
-                            <td>Takoyaki</td>
-                            <td>Php 100.00</td>
-                            <td>Available</td>
-                            <td>
-                                <i class="fas fa-edit edit-icon" title="Edit"></i>
-                                <i class="fas fa-trash delete-icon" title="Delete"></i>
-                            </td>
-                        </tr>
+                        <?php 
+                            include 'product_functions.php';
+                            display_Products();
+                        ?>
                     </tbody>
                 </table>
             </div>

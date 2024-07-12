@@ -85,7 +85,11 @@
                     echo "<td>" . $row["category_type"] . "</td>";
                     echo "<td>" . $row["status"] . "</td>";
                     echo "<td>" . $row["price"] . "</td>";
-                    echo "</tr>";
+                    echo "<td>
+                        <i class=\"fas fa-edit edit-icon\" title=\"Edit\"></i>
+                        <i class=\"fas fa-trash delete-icon\" title=\"Delete\"></i>";
+                    echo "<td>";
+                    echo "<tr>";
                 }
             }
         }
