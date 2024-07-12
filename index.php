@@ -189,9 +189,12 @@ include_once 'setup.php';
 		  }, 1000);
 		}
 	</script>
+    <!-- Loading Functionality -->
 	  <div class="loading-screen">
 		<img src="Images/loading.png" alt="Loading...">
 	  </div>
+    
+    <!-- NavBar -->
       <div class="forNavigationbar sticky-top">
         <nav class="navbar navbar-expand-lg bg-body-tertiary ">
           <div class="container-fluid ">
