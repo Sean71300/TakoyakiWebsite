@@ -36,11 +36,16 @@
 		.loading-screen img {
 		  animation: spin 1s linear forwards;
 		}
-
 		@keyframes spin {
 		  from { transform: rotate(0deg); }
 		  to { transform: rotate(1000deg); }
 		}
+    .banner-image { 
+      background-size: cover; /* Cover the entire container */ 
+      background-position: center; /* Center the image */ 
+      background-repeat: no-repeat;
+      height: 300px; /* Set a fixed height or adjust as needed  */
+    }
 		
 		</style>
     </head>
@@ -110,9 +115,13 @@
       </div>
       <div class="forbanner">
         <div class="banner col-12 bg-black ">
-          <div class="py-lg-4 py-3"></div>
-          <div class="py-lg-5 py-4"></div>
-          <div class="py-lg-4 py-3"></div>
+          <!-- Image as background -->
+          <div class="banner-image" style="background-image: url('Images/cont-bg.jpg');">
+            <div class="py-lg-4 py-3"></div>
+            <div class="py-lg-5 py-4"></div>
+            <div class="py-lg-4 py-3"></div>
+          </div>
+          
         </div>        
       </div>
       <div class="forcontent">        
