@@ -33,11 +33,11 @@
           }
 		  
 		  .banner{
-			background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.80), rgb(0, 0, 0,0.75)), url('Images/banner_t.png');;
-			background-repeat: no-repeat;
-			background-position: 100% 25%;
-			background-attachment:fixed;
-			background-size: cover;
+        background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.80), rgb(0, 0, 0,0.75)), url('Images/banner_t.png');;
+        background-repeat: no-repeat;
+        background-position: 100% 25%;
+        background-attachment:fixed;
+        background-size: cover;
 		  }
 		  
 		  #caption {
@@ -46,8 +46,8 @@
 			background-size: 0% 100%;
 			background-clip:text;
 			background-image: linear-gradient(90deg, #ffffff, #ffffff);
-			animation-timeline: view();
-			
+			animation-timeline: view();			
+
 			animation: scroll-anim 1.5s ease 0s 1 normal forwards;
 		}
 		
@@ -119,6 +119,7 @@
 		  from { transform: rotate(0deg); }
 		  to { transform: rotate(1000deg); }
 		}
+    
         </style>
     </head>
     <body class="bg-body-tertiary">
@@ -196,7 +197,7 @@
           </div>
           <div class="py-lg-5 py-3 "></div>
         </div>
-      </div>
+    </div>
       <div class="forWhyus" style="animation: fade-bottom 2s ease 0s 1 normal forwards;">
   <div class="container-fluid">
     <div class="row justify-content-center">

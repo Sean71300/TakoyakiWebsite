@@ -40,6 +40,68 @@
 		  from { transform: rotate(0deg); }
 		  to { transform: rotate(1000deg); }
 		}
+    .banner{
+        background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.50), rgb(0, 0, 0,0.45)), url('Images/cont-bg.jpg');;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-attachment: fixed;
+        background-size: cover;
+		  }
+
+      #caption {
+			color: hsl(0, 4%, 11%, 0.1);
+			background-repeat:no-repeat;
+			background-size: 0% 100%;
+			background-clip:text;
+			background-image: linear-gradient(90deg, #ffffff, #ffffff);
+			animation-timeline: view();			
+
+			animation: scroll-anim 1.5s ease 0s 1 normal forwards;
+		}
+    @keyframes scroll-anim{
+		  0% {
+			background-size: 0% 100%;
+		  }
+		  
+		  60% {
+			background-size: 0% 100%;
+		  }
+		  
+		  100% {
+			background-size: 100% 100%;
+		  }
+		}
+		
+		@keyframes fade {
+			0% {
+				opacity: 0;
+			}
+			
+			50% {
+				opacity: 0;
+			}
+
+			100% {
+				opacity: 1;
+			}
+		}
+		
+		@keyframes fade-bottom {
+			0% {
+				opacity: 0;
+				transform: translateY(50px);
+			}
+			
+			70% {
+				opacity: 0;
+				transform: translateY(50px);
+			}
+
+			100% {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
     .banner-image { 
       background-size: cover; /* Cover the entire container */ 
       background-position: center; /* Center the image */ 
@@ -115,14 +177,16 @@
       </div>
       <div class="forbanner">
         <div class="banner col-12 bg-black ">
-          <!-- Image as background -->
-          <div class="banner-image" style="background-image: url('Images/cont-bg.jpg');">
-            <div class="py-lg-4 py-3"></div>
-            <div class="py-lg-5 py-4"></div>
-            <div class="py-lg-4 py-3"></div>
+          <div class="py-lg-5 py-3"></div>
+          <div class="col-12 text-center text-light fs-1 fw-bolder" style="animation: fade 1s ease 0s 1 normal forwards;">
+            CONTACTS & LOCATION
+            <span class="fw-light fs-4" id="caption">
+              <br> Easy Access And Fast Interaction
+            </span>
           </div>
-          
-        </div>        
+          <div class="py-lg-5 py-3 "></div>
+        </div>
+    </div>       
       </div>
       <div class="forcontent">        
         <div class="container-fluid">
