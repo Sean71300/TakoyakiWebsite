@@ -199,27 +199,22 @@
                 <table class="transaction-table">
                     <thead>
                         <tr>
+                            
                             <th>Product ID</th>
                             <th>Product Name</th>
-                            <th>Category</th>
-                            <th>Price</th>
+                            <th>Category ID</th>
+                            <th>Category Type</th>
                             <th>Status</th>
-                            <th>Actions</th> <!-- Added missing header -->
+                            <th>Price</th>
+                            <th>Action</th>
+
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Sample Data -->
-                        <tr>
-                            <td>10241001</td>
-                            <td>OctoBits</td>
-                            <td>Takoyaki</td>
-                            <td>Php 100.00</td>
-                            <td>Available</td>
-                            <td>
-                                <i class="fas fa-edit edit-icon" title="Edit"></i>
-                                <i class="fas fa-trash delete-icon" title="Delete"></i>
-                            </td>
-                        </tr>
+                        <?php 
+                            include 'product_functions.php';
+                            display_Products();
+                        ?>
                     </tbody>
                 </table>
             </div>
@@ -267,6 +262,98 @@
                 });
             }
         }
+
+// EDIT-------------------------------------------------- UPDATE PRODUCT MODAL JS -------------------------------------------------- //
+
+    // Function to fetch employee data and fill the fields
+    function getEmployee(productId) 
+    {
+        fetch(`product_functions.php?product_id=${productId}`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('product').value = data.full_name;
+            document.getElementById('employeeAge').value = data.age;
+            document.getElementById('EmployeeGender').value = data.gender;
+        })
+
+        .catch(error => {
+            console.error('Error fetching employee data:', error);
+        });
+    }
+
+    function changeFormTitleAndButton(title, buttonText) 
+    {
+        // Change the modal title
+        document.getElementById('title').innerText = title;
+
+        // Change the button value
+        document.getElementById('updateBtn').innerText = buttonText;
+    }
+
+    // Function to open the modal and populate the fields
+    function updateEmployee(employeeId) 
+    {
+        // Open the modal
+        const modal = document.getElementById('addEmployeeModal');
+        modal.style.display = 'block';
+
+        // Fetch the employee details
+        getEmployee(employeeId);
+
+        // Change the modal title and button text for updating employee
+        changeFormTitleAndButton('Update Employee', 'Update');
+    }
+
+    // Example saveUpdatedEmployee function to handle the form submission
+    function saveUpdatedEmployee() 
+    {
+        const form = document.getElementById('addEmployeeModal');
+        const formData = new FormData(form);
+
+        fetch('employee_functions.php', 
+        {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => 
+        {
+            alert('Employee updated successfully!');
+        })
+        .catch(error => 
+        {
+            console.error('Error updating employee:', error);
+        });
+    }
+
+
+// -------------------------------------------------- DELETE PRODUCT JS -------------------------------------------------- //
+
+    function deleteProduct(productID) 
+{
+    if (confirm("Are you sure you want to delete Product ID: " + productID + "?")) {
+        
+        // Create an XMLHttpRequest object
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "product_functions.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+        // Define what happens on successful data submission
+        xhr.onload = function () {
+            if (xhr.status == 200) {
+                // Do something with the response
+                alert(xhr.responseText);
+                // Optionally, you can remove the row from the table or refresh the page
+                location.reload();
+            } else {
+                alert("Error deleting Product.");
+            }
+        };
+
+        // Send the request with the transaction ID
+        xhr.send("productID=" + productID);
+    }
+}
         
         // For input field to detect changes in input value
         document.getElementById('searchInput').addEventListener('input', searchTransactions);
