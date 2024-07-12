@@ -191,7 +191,7 @@ include_once 'setup.php';
 	</script>
     <!-- Loading Functionality -->
 	  <div class="loading-screen">
-		<img src="Images/loading.png" alt="Loading...">
+		  <img src="Images/loading.png" alt="Loading...">
 	  </div>
     
     <!-- NavBar -->

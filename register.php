@@ -160,6 +160,7 @@ function retainInput($fieldName, $type = 'text', $radioValue = '') {
         }
     }
 }
+
 function checkPhone($phone_number) {
     $phone_number = preg_replace('/\D/', '', $phone_number);
 

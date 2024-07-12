@@ -203,11 +203,8 @@
                 <?php 
                 if(isset($_SESSION["full_name"]))
                   {
-                    
-                    
-                  }
-                  
-                  
+                                        
+                  }                 
                 
                 ?>
 

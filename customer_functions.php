@@ -1,5 +1,5 @@
 <?php
-    include 'setup.php';
+    include_once 'setup.php';
 
     function add_Customer($customer_name,$age,$birthdate,$gender,$email,$phone_num,$address,$password)
     {
@@ -15,17 +15,33 @@
 
         mysqli_query($conn, $sql);
     }
-
-    function update_Customer($customer_name,$age,$birthdate,$gender,$email,$phone_num,$address,$password,$cusomerID)
+    function editdata()
+    {
+        
+        $customer_name = $_POST["custoname"];
+        $birthdate = $_POST["BirthD"];
+        $age = calculateAge($_POST["BirthD"]);    
+        $gender = $_POST["gender"];
+        $email = $_POST["email"];
+        $phone_num = $_POST["phone"];    
+        $address = $_POST["address"];
+        $customerID = htmlspecialchars($_SESSION["id"]);
+        
+        update_Customer($customer_name,$age,$birthdate,$gender,$email,$phone_num,$address,$customerID);      
+        $_SESSION["full_name"] = $customer_name;
+        
+        
+    }
+    function update_Customer($customer_name,$age,$birthdate,$gender,$email,$phone_num,$address,$customerID)
     {
         $conn = connect();
-    
-        $stmt = $conn->prepare("UPDATE customers SET full_name = ?, age = ?, birthdate = ?, gender = ?, email = ?, phone_number = ?, address = ?, password = ? WHERE customer_id = ?");
-        $stmt->bind_param("sidsssssi", $customer_name, $age, $birthdate, $gender, $email, $phone_num, $address, $hashed_pw, $cusomerID);
+        
+        $stmt = $conn->prepare("UPDATE customers SET full_name = ?, age = ?, birthdate = ?, gender = ?, email = ?, phone_number = ?, address = ? WHERE customer_id = ?");
+        $stmt->bind_param("sisssssi", $customer_name, $age, $birthdate, $gender, $email, $phone_num, $address,$customerID);
     
         if ($stmt->execute()) 
         {
-            echo "<h1>Record edited successfully!</h1><br>";
+            echo "";            
         }
         else 
         {
@@ -45,7 +61,7 @@
     
         if ($stmt->execute()) 
         {
-            echo "<h1>Record deleted successfully!</h1><br>";
+            echo "<h5>Record deleted successfully!</h5><br>";
         } 
         else 
         {
@@ -55,7 +71,26 @@
         $stmt->close();
         $conn->close();
     }
-    
+
+    function calculateAge($birthdate) 
+    {
+        $birthDate = new DateTime($birthdate);
+        $today = new DateTime();
+        $age = $today->diff($birthDate)->y;
+        return $age;
+    }
+    function retainInput($fieldName, $type = 'text', $radioValue = '') {
+        if (isset($_POST[$fieldName])) {
+            $value = htmlspecialchars($_POST[$fieldName]);
+            if ($type === 'radio') {
+                if ($_POST[$fieldName] === $radioValue) {
+                    echo 'checked';
+                }
+            } else {
+                echo $value;
+            }
+        }
+    }
     function display_Customers()
     {
         $conn = connect();
@@ -83,4 +118,31 @@
         }
         $conn->close();
     }
+    function display_Value($value,$id)
+    {
+        $conn = connect();
+        
+        $sql = "SELECT $value FROM customers WHERE customer_id=$id";
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            // Output data of each row
+            while($row = $result->fetch_assoc()) {
+                return $row["$value"];
+            }
+        } else {
+            echo "No results found";
+        }
+        $conn->close();
+    }
+    function gender_check($value,$gender)
+    {
+        if ($value==$gender){
+            echo 'Checked="Checked"';
+        }
+        else{
+            echo "";
+        }
+    }
+
 ?>

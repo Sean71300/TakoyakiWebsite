@@ -1,6 +1,7 @@
 <?php
 session_start();
-include_once 'setup.php';
+include_once 'customer_functions.php';
+$Confirmation = "";
 ?>
 
 <html>
@@ -113,15 +114,47 @@ include_once 'setup.php';
             background-color: #ed7b7a;
             border-color: #ed7b7a;
         }
-
         .form-control:focus {
             border-color: #eb5757; /* Red border color on focus */
             box-shadow: 0 0 0 0.2rem rgba(235, 87, 87, 0.25); /* Red box shadow on focus */
-        }
+        }        
+        .loading-screen {
+		  position: fixed;
+		  top: 0;
+		  left: 0;
+		  width: 100%;
+		  height: 100%;
+		  display: flex;
+		  background-color:white;
+		  justify-content: center;
+		  align-items: center;
+		  opacity:1;
+		  transition: opacity 1s ease-in-out;
+		  z-index: 999;
+		}
+        .loading-screen img {
+		  animation: spin 1s linear forwards;
+		}
+        @keyframes spin {
+		  from { transform: rotate(0deg); }
+		  to { transform: rotate(1000deg); }
+		}
     </style>
 </head>
 <body class="bg-body-tertiary">
-
+    <script>
+        window.onload = function() {
+        const loadingScreen = document.querySelector('.loading-screen');
+        loadingScreen.style.opacity = 0;
+        setTimeout(() => {
+            loadingScreen.remove();
+            document.body.style.display = 'block';
+        }, 1000);
+        }
+    </script>
+    <div class="loading-screen">
+        <img src="Images/loading.png" alt="Loading...">
+    </div>
 <!-- Navigation Bar -->
 <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
     <div class="container-fluid">
@@ -150,24 +183,18 @@ include_once 'setup.php';
                 <li class="nav-item">
                     <a class="nav-link" href="Contact.php">Contact</a>
                 </li>
-                <?php
-                if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-                    echo '<li class="nav-item">';
-                    echo '<a class="nav-link" href="Login.php">Login</a>';
-                    echo '</li>';
-                } else {
+                <?php                
                     echo '<li class="nav-item dropdown">';
                     echo '<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
                            aria-expanded="false">';
-                    echo "Welcome " . htmlspecialchars($_SESSION["full_name"]);
+                    echo "Welcome " .display_Value("full_name",htmlspecialchars($_SESSION["id"]));
                     echo '</a>';
                     echo '<ul class="dropdown-menu" aria-labelledby="navbarDropdown">';
                     echo '<li><a class="dropdown-item" href="edit.php">Edit Profile</a></li>';
                     echo '<li><a class="dropdown-item" href="rating.php">Rate</a></li>';
                     echo '<li><a class="dropdown-item" href="logout.php">Sign Out</a></li>';
                     echo '</ul>';
-                    echo '</li>';
-                }
+                    echo '</li>';                
                 ?>
             </ul>
         </div>
@@ -190,39 +217,56 @@ include_once 'setup.php';
                       enctype="multipart/form-data">
                     <label for="profile_picture" class="btn btn-success add-picture-button mt-3">
                         <input type="file" id="profile_picture" name="profile_picture" style="display:none;"> Add Profile
-                    </label>
-                    <button class="btn btn-primary edit-profile-button mt-3">Edit Profile</button>
+                    </label>  
                 </form>
+                <a href="reset.php">
+                    <button class="btn btn-primary edit-profile-button mt-1 ">Change Password</button>
+                </a>
             </div>
         </div>
-        <div class="col-md-9">
+        <div class="col-md-9">        
             <!-- Edit Profile Form -->
             <div class="profile-section">
-                <form action="update_profile.php" method="POST">
+                <form action="<?php echo $_SERVER["PHP_SELF"]?>" method="POST" id="CustomerEdit">
+                <?php if ($_SERVER["REQUEST_METHOD"] == "POST"){editdata();$Confirmation='<h5 class="mt-3">Record Edited successfully!</h5><br>';}?>
+                    <div class="mb-0">
+                        <label for="name" class="form-label">User ID: <?php echo htmlspecialchars($_SESSION["id"])?></label>
+                    </div>                    
                     <div class="mb-3">
                         <label for="name" class="form-label">Full Name</label>
-                        <input type="text" id="name" name="name" class="form-control" value="Current Name" required>
+                        <input type="text" id="custoname" name="custoname" class="form-control" value="<?php echo display_Value("full_name",htmlspecialchars($_SESSION["id"]))?>" required>
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
-                        <input type="email" id="email" name="email" class="form-control" value="user@example.com"
+                        <input type="email" id="email" name="email" class="form-control"  value="<?php echo display_Value("email",htmlspecialchars($_SESSION["id"]))?>"
                                readonly>
                     </div>
                     <div class="mb-3">
                         <label for="phone" class="form-label">Phone Number</label>
-                        <input type="text" id="phone" name="phone" class="form-control" value="Current Phone Number"
+                        <input type="text" id="phone" name="phone" class="form-control"   value="<?php echo display_Value("phone_number",htmlspecialchars($_SESSION["id"]))?>"
                                required>
                     </div>
                     <div class="mb-3">
+                        <label for="birthday" class="form-label">Birthdate:</label>
+                        <input type="date" id="BirthD" name="BirthD" class="form-control"  value="<?php echo display_Value("birthdate",htmlspecialchars($_SESSION["id"]))?>"
+                               required>
+                    </div>                    
+                    <div class="mb-3">
                         <label for="address" class="form-label">Address</label>
-                        <textarea id="address" name="address" class="form-control" required>Current Address</textarea>
+                        <textarea type="text" id="address" name="address" class="form-control" rows="" ><?php echo display_Value("address",htmlspecialchars($_SESSION["id"]))?></textarea>
                     </div>
                     <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" id="password" name="password" class="form-control"
-                               placeholder="Enter new password">
-                    </div>
+                        <label for="address" class="form-label">Gender:</label>
+                        <br>
+                        <input type="radio" name="gender" value="Male" required <?php echo gender_check(display_Value("gender",htmlspecialchars($_SESSION["id"])),"Male")?>>
+                        <label for="male">Male</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" name="gender" value="Female" required <?php echo gender_check(display_Value("gender",htmlspecialchars($_SESSION["id"])),"Female")?>>
+                        <label for="female">Female</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" name="gender" value="Others" required <?php echo gender_check(display_Value("gender",htmlspecialchars($_SESSION["id"])),"Others")?>>
+                        <label for="female">Others</label>
+                    </div>        
                     <button type="submit" class="btn btn-primary save-changes-button">Save Changes</button>
+                    <?php echo $Confirmation?>
                 </form>
             </div>
         </div>
