@@ -1,19 +1,37 @@
 <?php
+// ------------------------------ INCLUDE SETUP ------------------------------ //
+
     include 'setup.php';
+
+// ------------------------------ ADD CATEGORIES ------------------------------ //
 
     function add_Category($categoryType)
     {
         $conn = connect();
         
-        $categoryID = generate_CategoryID();
-    
-        $sql = "INSERT INTO categories
-                (category_id,category_type)
-                VALUES
-                ($categoryID,'Takoyaki')";
+        $checkQuery = "SELECT category_id FROM categories WHERE category_id = ?";
 
-        mysqli_query($conn, $sql);
+        $id = checkDuplication(generate_CategoryID(),$checkQuery);
+    
+        $stmt = $conn->prepare("INSERT INTO categories (category_id, category_type) VALUES (?, ?)");
+        $stmt->bind_param("is", $id, $categoryType);
+
+        if ($stmt->execute()) 
+        {
+            $message = "Category added successfully!";
+            header("Refresh: 0; url=Admin_category.php");
+            echo "<script type='text/javascript'>alert('$message');</script>";
+        } 
+        else 
+        {
+            echo "Error adding category: " . $stmt->error;
+        }
+
+        $stmt->close();
+        $conn->close();
     }
+
+// ------------------------------ UPDATE CATEGORIES ------------------------------ //
 
     function update_Category($categoryID,$categoryType)
     {
@@ -24,7 +42,9 @@
     
         if ($stmt->execute()) 
         {
-            echo "<h1>Record edited successfully!</h1><br>";
+            $message = "Updated successfully!";
+            header("Refresh: 0; url=Admin_category.php");
+            echo "<script type='text/javascript'>alert('$message');</script>";
         }
         else 
         {
@@ -35,26 +55,47 @@
         $conn->close();
     }
 
+// ------------------------------ DELETE CATEGORIES ------------------------------ //
+
     function delete_Category($categoryID)
     {
         $conn = connect();
 
-        $stmt = $conn->prepare("DELETE FROM categories WHERE category_id = ?");
-        $stmt->bind_param("i", $categoryID);
-    
-        if ($stmt->execute()) 
+        if ($_SERVER["REQUEST_METHOD"] == "POST") 
         {
-            echo "<h1>Record deleted successfully!</h1><br>";
+            $categoryID = intval($_POST["categoryID"]);
+        
+            // Prepare a delete statement
+            $sql = "DELETE FROM categories WHERE category_id = ?";
+            if ($stmt = $conn->prepare($sql)) 
+            {
+                $stmt->bind_param("i", $categoryID);
+        
+                // Attempt to execute the prepared statement
+                if ($stmt->execute()) 
+                {
+                    echo "Category deleted successfully.";
+                } 
+                else 
+                {
+                    echo "Error: Could not execute the delete statement.";
+                }
+            } 
+            else 
+            {
+                echo "Error: Could not prepare the delete statement.";
+            }
         } 
         else 
         {
-            echo "Could not delete data: " . $stmt->error;
+            echo "Invalid request.";
         }
-    
-        $stmt->close();
+        
         $conn->close();
     }
     
+// ------------------------------ DISPLAY CATEGORIES ------------------------------ //
+
     function display_Categories()
     {
         $conn = connect();
@@ -62,18 +103,77 @@
         $sql = "SELECT * FROM categories";
         $retval = $conn->query($sql);
     
-        if (!$retval) {
+        if (!$retval) 
+        {
             echo "Error: " . $conn->error;
-        } else {
-            if ($retval->num_rows > 0) {
-                while ($row = $retval->fetch_assoc()) {
+        } 
+        else 
+        {
+            if ($retval->num_rows > 0) 
+            {
+                while ($row = $retval->fetch_assoc()) 
+                {
+                    $categoryID = $row["category_id"];
                     echo "<tr>";
                     echo "<td>" . $row["category_id"] . "</td>";
                     echo "<td>" . $row["category_type"] . "</td>";
+                    echo "<td class='category-actions'>
+                            <a href='#' class='btn btn-sm btn-success'><i class='fas fa-edit' onclick='updateCategory(" . $categoryID . ")'></i></a>
+                            <a href='#' class='btn btn-sm btn-danger'><i class='fas fa-trash' onclick='deleteCategory(" . $categoryID . ")'></i></a>
+                        </td>";
                     echo "</tr>";
                 }
             }
         }
         $conn->close();
     }
+
+// ------------------------------ CHECK FOR DUPLICATION ------------------------------ //
+
+    function checkDuplication($id, $checkQuery) 
+    {
+        $conn = connect();
+        // Function to check for duplicate ID
+        while (true) 
+        {
+            // Prepare the query to check for the duplicate ID
+            $stmt = $conn->prepare($checkQuery);
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+            $stmt->store_result();
+    
+            if ($stmt->num_rows == 0) 
+            {
+                break;
+            }
+            $id++;
+    
+            $stmt->close();
+        }
+        $stmt->close();
+        $conn->close();
+
+        return $id;
+    }
+
+// ------------------------------ HANDLE FORM SUBMISSION ------------------------------ //
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") 
+    {
+        if (isset($_POST['categoryType']) && empty($_POST["categoryID"])) 
+        {
+            add_Category($_POST['categoryType']);
+        }
+        else if(isset($_POST['categoryType'], $_POST["categoryID"]))
+        {
+            update_Category($_POST['categoryID'],$_POST['categoryType']);
+        }
+        else
+        {
+            $categoryID = intval($_POST["categoryID"]);
+        
+            delete_Category($categoryID);
+        }
+    }
 ?>
+
