@@ -385,7 +385,7 @@
         <div class="row mb-3">
             <div class="col-md-6">
                 <div class="position-relative">
-                    <input type="text" class="form-control search-box" placeholder="Search...">
+                    <input type="text" class="form-control search-box" placeholder="Search..." id="searchInput">
                     <span class="fas fa-search form-control-feedback search-icon"></span>
                 </div>
             </div>
@@ -582,6 +582,32 @@
 
             xhr.send(data);
         }
+
+// ----------------------------------------- SEARCH ----------------------------------------- //
+
+        // For input field to detect changes in input value
+	    document.getElementById('searchInput').addEventListener('input', searchEmployee);
+
+        function searchEmployee() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const rows = document.querySelectorAll('.table-striped tbody tr');
+
+            rows.forEach(row => {
+                const rowData = row.textContent.toLowerCase();
+                if (rowData.includes(input)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            // If input is empty, show all rows
+            if (input === '') {
+                rows.forEach(row => {
+                    row.style.display = '';
+                });
+            }
+        }           
     </script>
 </body>
 </html>

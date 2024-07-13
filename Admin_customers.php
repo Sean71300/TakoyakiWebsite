@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee</title>
+    <title>Customers</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
 
@@ -413,17 +413,16 @@
     </nav>
 
 
-    <!-- Content Here For Employee -->
+    <!-- Content Here For Customer -->
     <div class="container-fluid mt-4">
         <!-- Search and Add Button Section -->
         <div class="search-and-add d-flex justify-content-between align-items-center">
             <form class="form-inline input-group">
                 <input class="form-control" type="search" placeholder="Search" aria-label="Search" id="searchInput">
                 <div class="input-group-append">
-                    <button class="btn btn-outline-light btn-search" type="button" onclick="searchEmployee()"><i class="fas fa-search"></i></button>
+                    <button class="btn btn-outline-light btn-search" type="button" onclick="searchCustomer()"><i class="fas fa-search"></i></button>
                 </div>
             </form>
-            <button class="btn btn-add-employee" id="addEmployeeBtn">Add Employee</button>
         </div>
 
         <!-- Employee Table -->
@@ -432,8 +431,7 @@
                 <thead>
                     <tr>
                         <th>IMG</th>
-                        <th>Employee ID</th>
-                        <th>Position</th>
+                        <th>Customer ID</th>
                         <th>Name</th>
                         <th>Age</th>
                         <th>Birthdate</th>
@@ -446,66 +444,12 @@
                 </thead>
                 <tbody>
                     <?php
-                        include_once 'employee_functions.php';
+                        include_once 'customer_functions.php';
 
-                        display_Employees();
+                        display_Customers();
                     ?>
                 </tbody>
             </table>
-        </div>
-
-        <!-- ADD EMPLOYEE MODAL -->
-        <div id="addEmployeeModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2 class="centered-text" id="title">Add New Employee</h2>
-                <form id="addEmployeeForm" method="post" action="employee_functions.php">
-                    <div class="mb-3">
-                        <label for="employeeID" class="form-label">Employee ID</label>
-                        <input type="text" class="form-control" id="EmployeeID" name="employeeID" placeholder="202405----" readonly>
-                    </div>
-                    <div class="mb-3">
-                        <label for="employeeName" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="EmployeeName" name="employeeName" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="employeePosition" class="form-label">Position</label>
-                        <input type="text" class="form-control" id="EmployeePosition" name="employeePosition" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="employeeEmail" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="EmployeeEmail" name="employeeEmail" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="employeePhone" class="form-label">Phone</label>
-                        <input type="tel" class="form-control" id="EmployeePhoneNum" name="employeePhone" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="employeeAddress" class="form-label">Address</label>
-                        <input type="text" class="form-control" id="EmployeeAddress" name="employeeAddress" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="employeeBirthdate" class="form-label">Birthdate</label>
-                        <input type="date" class="form-control" id="employeeBirthdate" name="EmployeeBday" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="employeeAge" class="form-label">Age</label>
-                        <input type="number" class="form-control" id="employeeAge" name="EmployeeAge" readonly>
-                    </div>
-                    <div class="mb-3">
-                        <label for="employeeGender" class="form-label">Gender</label>
-                        <select class="form-select" id="EmployeeGender" name="employeeGender" required>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                    <div class="form-group d-flex justify-content-center align-items-center">
-                        <button type="submit" class="btn btn-primary" id="updateBtn">Add Employee</button>
-                        <button type="button" class="btn btn-clear" id="clearFormBtn">Clear</button>
-                    </div>
-                </form>
-            </div>
         </div>
     </div>
     <!-- Bootstrap JS -->
@@ -519,104 +463,15 @@
             document.body.classList.toggle('sidebar-active');
         });
 
-// -------------------------------------------------- ADD EMPLOYEE MODAL JS -------------------------------------------------- //
-
-	    // Show Add Employee Modal
-	    document.getElementById('addEmployeeBtn').addEventListener('click', function() {
-        var modal = document.getElementById('addEmployeeModal');
-        modal.style.display = "block";
-        console.log('Add New Employee button clicked');
-	    });
-    
-	    // Close Modal
-	    var closeBtn = document.getElementsByClassName("close")[0];
-	    closeBtn.onclick = function() {
-        var modal = document.getElementById('addEmployeeModal');
-        modal.style.display = "none";
-        console.log('Modal closed');
-	    };
-	
-	    // Clear Form Button
-	    document.getElementById('clearFormBtn').addEventListener('click', function() {
-        document.getElementById('addEmployeeForm').reset();
-	    });
-
-// -------------------------------------------------- UPDATE EMPLOYEE MODAL JS -------------------------------------------------- //
-
-        // Function to fetch employee data and fill the fields
-        function getEmployee(employeeId) 
-        {
-            fetch(`getEmployee.php?employee_id=${employeeId}`)
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('EmployeeID').value = data.employee_id;
-                document.getElementById('EmployeeName').value = data.full_name;
-                document.getElementById('EmployeePosition').value = data.position;
-                document.getElementById('EmployeeEmail').value = data.email;
-                document.getElementById('EmployeePhoneNum').value = data.phone_number;
-                document.getElementById('EmployeeAddress').value = data.address;
-                document.getElementById('employeeBirthdate').value = data.birthdate;
-                document.getElementById('employeeAge').value = data.age;
-                document.getElementById('EmployeeGender').value = data.gender;
-            })
-            .catch(error => {
-                console.error('Error fetching employee data:', error);
-            });
-        }
-
-        function changeFormTitleAndButton(title, buttonText) 
-        {
-            // Change the modal title
-            document.getElementById('title').innerText = title;
-
-            // Change the button value
-            document.getElementById('updateBtn').innerText = buttonText;
-        }
-
-        // Function to open the modal and populate the fields
-        function updateEmployee(employeeId) 
-        {   
-            // Open the modal
-            const modal = document.getElementById('addEmployeeModal');
-            modal.style.display = 'block';
-
-            // Fetch the employee details
-            getEmployee(employeeId);
-
-            // Change the modal title and button text for updating employee
-            changeFormTitleAndButton('Update Employee', 'Update');
-        }
-         
-// -------------------------------------------------- DISPLAY AGE AUTOMATICALLY -------------------------------------------------- //
-
-        function calculateAge() 
-        {
-            var birthdate = document.getElementById('employeeBirthdate').value;
-            if (birthdate) {
-                var today = new Date();
-                var birthDate = new Date(birthdate);
-                var age = today.getFullYear() - birthDate.getFullYear();
-                var monthDifference = today.getMonth() - birthDate.getMonth();
-                if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
-                    age--;
-                }
-                document.getElementById('employeeAge').value = age;
-            }
-        }
-
-        window.onload = function() {
-            document.getElementById('employeeBirthdate').addEventListener('input', calculateAge);
-        }
-
 // -------------------------------------------------- DELETE EMPLOYEE JS -------------------------------------------------- //
 
-        function deleteEmployee(employeeId) 
+        function deleteCustomer(customerID) 
         {
-            if (confirm("Are you sure you want to delete Employee ID: " + employeeId + "?")) 
+            if (confirm("Are you sure you want to delete Customer ID: " + customerID + "?")) 
             {
                 // Create an XMLHttpRequest object
                 var xhr = new XMLHttpRequest();
-                xhr.open("POST", "employee_functions.php", true);
+                xhr.open("POST", "customer_functions.php", true);
                 xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
                 // Define what happens on successful data submission
@@ -630,74 +485,21 @@
                     } 
                     else 
                     {
-                        alert("Error deleting employee.");
+                        alert("Error deleting customer.");
                     }
                 };
 
                 // Send the request with the transaction ID
-                xhr.send("employeeID=" + employeeId);
+                xhr.send("customerID=" + customerID);
             }
         }
-
-// -------------------------------------------------- ADD EMPLOYEE JS -------------------------------------------------- //
-
-        function addEmployee() {
-        // Get form data
-        var fullName = document.getElementById('full_name').value;
-        var position = document.getElementById('position').value;
-        var age = document.getElementById('age').value;
-        var birthdate = document.getElementById('birthdate').value;
-        var gender = document.getElementById('gender').value;
-        var email = document.getElementById('email').value;
-        var phoneNumber = document.getElementById('phone_number').value;
-        var address = document.getElementById('address').value;
-
-        // Validate form data (you can add more validation as needed)
-        if (!fullName || !position || !age || !birthdate || !gender || !email || !phoneNumber || !address) {
-            alert("Please fill in all fields.");
-            return;
-        }
-
-        // Create an XMLHttpRequest object
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "employee_functions.php", true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-        // Define what happens on successful data submission
-        xhr.onload = function () {
-            if (xhr.status == 200) 
-            {
-                // Do something with the response
-                alert(xhr.responseText);
-                // Optionally, you can close the modal and refresh the page
-                closeModal();
-                location.reload();
-            } 
-            else 
-            {
-                alert("Error adding employee.");
-            }
-        };
-
-        // Send the request with the form data
-        var data = "full_name=" + encodeURIComponent(fullName) +
-                   "&position=" + encodeURIComponent(position) +
-                   "&age=" + encodeURIComponent(age) +
-                   "&birthdate=" + encodeURIComponent(birthdate) +
-                   "&gender=" + encodeURIComponent(gender) +
-                   "&email=" + encodeURIComponent(email) +
-                   "&phone_number=" + encodeURIComponent(phoneNumber) +
-                   "&address=" + encodeURIComponent(address);
-
-        xhr.send(data);
-        }        
 
 // ----------------------------------------- SEARCH ----------------------------------------- //
 
         // For input field to detect changes in input value
-	    document.getElementById('searchInput').addEventListener('input', searchEmployee);
+	    document.getElementById('searchInput').addEventListener('input', searchCustomer);
 
-        function searchEmployee() {
+        function searchCustomer() {
             const input = document.getElementById('searchInput').value.toLowerCase();
             const rows = document.querySelectorAll('.table-striped tbody tr');
 

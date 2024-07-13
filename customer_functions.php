@@ -1,93 +1,49 @@
 <?php
-    include_once 'setup.php';
+// --------------------------------------------------------- INCLUDE SETUP --------------------------------------------------------- //
 
-    function add_Customer($customer_name,$age,$birthdate,$gender,$email,$phone_num,$address,$password)
-    {
-        $conn = connect();
-        
-        $id = generate_CustomerID();
-        $hashed_pw = password_hash($password, PASSWORD_DEFAULT);
+    include 'setup.php';
 
-        $sql = "INSERT INTO customers
-                (customer_id,full_name,age,birthdate,gender,email,phone_number,address,password)
-                VALUES
-                ($id,'$customer_name',$age,'$birthdate','$gender','$email','$phone_num','$address','$hashed_pw')";
-
-        mysqli_query($conn, $sql);
-    }
-    function editdata()
-    {        
-        $customer_name = $_POST["custoname"];
-        $birthdate = $_POST["BirthD"];
-        $age = calculateAge($_POST["BirthD"]);    
-        $gender = $_POST["gender"];
-        $email = $_POST["email"];
-        $phone_num = $_POST["phone"];    
-        $address = $_POST["address"];
-        $customerID = htmlspecialchars($_SESSION["id"]);
-        
-        update_Customer($customer_name,$age,$birthdate,$gender,$email,$phone_num,$address,$customerID);      
-        $_SESSION["full_name"] = $customer_name;  
-    }
-    function update_Customer($customer_name,$age,$birthdate,$gender,$email,$phone_num,$address,$customerID)
-    {
-        $conn = connect();
-        
-        $stmt = $conn->prepare("UPDATE customers SET full_name = ?, age = ?, birthdate = ?, gender = ?, email = ?, phone_number = ?, address = ? WHERE customer_id = ?");
-        $stmt->bind_param("sisssssi", $customer_name, $age, $birthdate, $gender, $email, $phone_num, $address,$customerID);
-    
-        if ($stmt->execute()) 
-        {
-            echo "";            
-        }
-        else 
-        {
-            echo "Could not edit data: " . $stmt->error;
-        }
-    
-        $stmt->close();
-        $conn->close();
-    }
+// --------------------------------------------------------- DELETE CUSTOMER --------------------------------------------------------- //
 
     function delete_Customer($customerID)
     {
         $conn = connect();
 
-        $stmt = $conn->prepare("DELETE FROM customers WHERE customer_id = ?");
-        $stmt->bind_param("i", $cusomerID);
-    
-        if ($stmt->execute()) 
+        if ($_SERVER["REQUEST_METHOD"] == "POST") 
         {
-            echo "<h5>Record deleted successfully!</h5><br>";
+            $customerID = intval($_POST["customerID"]);
+        
+            // Prepare a delete statement
+            $sql = "DELETE FROM customers WHERE customer_id = ?";
+            if ($stmt = $conn->prepare($sql)) 
+            {
+                $stmt->bind_param("i", $customerID);
+        
+                // Attempt to execute the prepared statement
+                if ($stmt->execute()) 
+                {
+                    echo "Customer deleted successfully.";
+                } 
+                else 
+                {
+                    echo "Error: Could not execute the delete statement.";
+                }
+            } 
+            else 
+            {
+                echo "Error: Could not prepare the delete statement.";
+            }
         } 
         else 
         {
-            echo "Could not delete data: " . $stmt->error;
+            echo "Invalid request.";
         }
-    
-        $stmt->close();
+        
         $conn->close();
     }
+    
+// --------------------------------------------------------- DISPLAY CUSTOMER --------------------------------------------------------- //
 
-    function calculateAge($birthdate) 
-    {
-        $birthDate = new DateTime($birthdate);
-        $today = new DateTime();
-        $age = $today->diff($birthDate)->y;
-        return $age;
-    }
-    function retainInput($fieldName, $type = 'text', $radioValue = '') {
-        if (isset($_POST[$fieldName])) {
-            $value = htmlspecialchars($_POST[$fieldName]);
-            if ($type === 'radio') {
-                if ($_POST[$fieldName] === $radioValue) {
-                    echo 'checked';
-                }
-            } else {
-                echo $value;
-            }
-        }
-    }
     function display_Customers()
     {
         $conn = connect();
@@ -99,8 +55,11 @@
             echo "Error: " . $conn->error;
         } else {
             if ($retval->num_rows > 0) {
-                while ($row = $retval->fetch_assoc()) {
+                while ($row = $retval->fetch_assoc()) 
+                {    
+                    $customerID = $row["customer_id"];
                     echo "<tr>";
+                    echo "<td>" . $row["customer_img"] . "</td>";
                     echo "<td>" . $row["customer_id"] . "</td>";
                     echo "<td>" . $row["full_name"] . "</td>";
                     echo "<td>" . $row["age"] . "</td>";
@@ -109,37 +68,20 @@
                     echo "<td>" . $row["email"] . "</td>";
                     echo "<td>" . $row["phone_number"] . "</td>";
                     echo "<td>" . $row["address"] . "</td>";
+                    echo "<td><a href='#' class='btn-delete'><i class='fas fa-trash' onclick='deleteCustomer(" . $customerID . ")'></i></a></td>";
                     echo "</tr>";
                 }
             }
         }
         $conn->close();
     }
-    function display_Value($value,$id)
-    {
-        $conn = connect();
-        
-        $sql = "SELECT $value FROM customers WHERE customer_id=$id";
-        $result = $conn->query($sql);
 
-        if ($result->num_rows > 0) {
-            // Output data of each row
-            while($row = $result->fetch_assoc()) {
-                return $row["$value"];
-            }
-        } else {
-            echo "No results found";
-        }
-        $conn->close();
-    }
-    function gender_check($value,$gender)
-    {
-        if ($value==$gender){
-            echo 'Checked="Checked"';
-        }
-        else{
-            echo "";
-        }
-    }
+// --------------------------------------------------------- HANDLE FORM SUBMISSION --------------------------------------------------------- //
 
+    if ($_SERVER["REQUEST_METHOD"] == "POST") 
+    {
+        $customerID = intval($_POST["customerID"]);
+    
+        delete_Customer($customerID);
+    }
 ?>

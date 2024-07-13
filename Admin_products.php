@@ -3,158 +3,349 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Transaction</title>
-    
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Admin Products</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Custom CSS -->
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0; /* Page background */
-            margin: 0; 
-        }
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+    }
+    /* Sidebar Styles */
+    .sidebar {
+        background-color: white;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: -220px; /*hidden on larger screens */
+        width: 220px;
+        padding-top: 20px;
+        transition: left 0.3s ease; /* Transition for sidebar movement */
+        z-index: 1030;
+    }
+
+    .sidebar.active {
+        left: 0; /* Show sidebar on toggle */
+    }
+
+    .sidebar .admin-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        margin-bottom: 10px;
+        overflow: hidden;
+        margin-left: 55px;
+    }
+
+    .sidebar .admin-icon img {
+        width: 100%;
+        height: auto;
+    }
+    .sidebar ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .sidebar ul li {
+        margin-bottom: 20px;
+        margin-left: 15px;
+    }
+
+    .sidebar ul li a {
+        display: flex;
+        align-items: center; /* Center icon and text vertically */
+        color: black;
+        text-decoration: none;
+        padding: 10px;
+        transition: background-color 0.3s ease;
+        border-radius: 5px;
+    }
+
+    .sidebar ul li a .fa-fw {
+        margin-right: 10px;
+    }
+
+    .sidebar ul li a:hover {
+        background-color: #FFC10B;
+    }
+
+    .sidebar ul li a .nav-text {
+        display: block; /* Ensure text is displayed */
+        margin-left: 10px; /* Add margin between icon and text */
+    }
+    
+    body.sidebar-active { 
+        margin-left: 220px;
+    }
+    /*Smaller Screens */
+    @media (max-width: 992px) {
         .sidebar {
-            background-color: white;
-            height: 100vh; /* Full height sidebar */
-            position: fixed;
-            top: 0;
-            left: -220px; /* Start off-screen */
-            width: 220px;
-            padding-top: 20px;
-            transition: all 0.3s ease;
-            z-index: 1030; 
-        }
-        .sidebar.active {
-            left: 0; /* Slide in when active */
-        }
-        .sidebar .admin-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            margin-bottom: 10px;
-            overflow: hidden;
-            margin-left: 55px;
-        }
-        .sidebar .admin-icon img {
-            width: 100%;
-            height: auto;
-        }
-        .sidebar .admin-text {
-            font-size: 16px;
-            margin-bottom: 20px;
-            margin-left: 60px;
-            color: black;
-        }
-        .sidebar ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-        .sidebar ul li {
-            margin-bottom: 30px;
-            margin-left: 15px;
-        }
-        .sidebar ul li a {
-            display: flex;
-            color: black;
-            text-decoration: none;
-            padding: 10px;
-            transition: background-color 0.3s ease;
-            border-radius: 5px;
-        }
-        .sidebar ul li a .fa-fw {
-            margin-right: 10px; /* Adjust margin between icon and text */
-        }
-        .sidebar ul li a:hover {
-            background-color: #FFC10B;
-        }
-        .edit-icon,
-        .delete-icon {
-            cursor: pointer;
-            margin-left: 10px;
-            color: #FFC10B; 
-        }
-        .edit-icon:hover,
-        .delete-icon:hover {
-            color: #953728; 
-        }
-        .content {
-            padding: 20px;
-            margin-left: 0; 
-            transition: margin-left 0.3s ease; /* Smooth transition for content */
-            z-index: 1020; 
-            position: relative; 
-        }
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        .transaction-history {
-            margin-top: 20px;
-            overflow-x: auto; 
-        }
-        .transaction-table {
-            width: 100%;
-            border-collapse: collapse;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        .transaction-table th,
-        .transaction-table td {
-            padding: 12px;
-            text-align: left;
-            border-top: 1px solid gray; /* Border lines */
-        }
-        .transaction-table th {
-            font-weight: bold;
-            color: #953728;
-            text-transform: uppercase;
+            width: 60px; /* Adjust sidebar width for smaller screens */
+            left: -60px; /* Hide sidebar off-screen initially */
         }
 
-        /* Search Bar */
-        .search-bar {
-            margin-bottom: 20px;
-            text-align: right;
+        .sidebar.active {
+            left: 0; /* Show sidebar on toggle */
         }
-        .search-bar input[type="text"] {
-            width: 100%; 
-            max-width: 400px; 
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
+
+        .sidebar ul li a .nav-text {
+            display: none; /* Hide text on smaller screens */
         }
-        .search-bar button {
-            padding: 8px 15px;
-            background-color: #FFC10B;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
+
+        .sidebar ul li a .fa-fw {
+            margin-right: 0; /* Remove margin for icons on smaller screens */
         }
-        .search-bar button:hover {
-            background-color: #e0a800;
+
+        .sidebar .admin-icon {
+            margin-left: 0; /* Adjust icon margin for smaller screens */
         }
+        body.sidebar-active {
+            margin-left: 60px;
+        }
+		nav.navbar {
+		background-color: #e0a800; /* Change background color of navbar */
+        }
+        .container-fluid-custom {
+            background-color: #e0a800; /* Custom background color for container-fluid */
+        }
+	    .navbar-toggler {
+         border-color: black; /* Custom border color for navbar-toggler */
+        } 
+    }
+
+    /*Larger Screens */
+    @media (min-width: 992px) {
+        .sidebar {
+            left: -220px; /* Initially hidden on larger screens */
+            z-index: 1030; /* Ensure sidebar is above content */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: left 0.3s ease; 
+        }
+
+        .sidebar.active {
+            left: 0; /* Show sidebar on toggle */
+        }
+
+        .sidebar ul li a .nav-text {
+            display: block; /*text is displayed */
+        }
+
+        .sidebar .admin-icon {
+            margin-left: 55px; /* Adjust icon margin */
+        }
+		
+        body {
+            padding-top: 0; /* Adjust top padding */
+        }
+        body.sidebar-active {
+            margin-left: 220px; /* Adjust content margin when sidebar is active */
+        }
+	    nav.navbar {
+		background-color: #e0a800; /* Change background color of navbar */
+        }
+        .container-fluid-custom {
+            background-color: #e0a800; /* Custom background color for container-fluid */
+        }
+	    .navbar-toggler {
+         border-color: black; /* Custom border color for navbar-toggler */
+        } 
+		}
+		    .category-container {
+        margin-top: 20px;
+        padding: 20px;
+    }
+
+    .search-box {
+        margin-bottom: 10px;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 100%;
+        background-color: #fff;
+    }
+
+    .search-icon {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #666;
+        cursor: pointer;
+    }
+
+    .add-category-btn {
+        float: right;
+        background-color: #000;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .add-category-btn:hover {
+        background-color: #333;
+    }
+
+    .table-wrapper {
+        overflow-x: auto;
+    }
+
+    .category-table {
+        width: 100%;
+        background-color: white;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .category-table th, .category-table td {
+        border: none;
+        padding: 12px 15px;
+        text-align: left;
+    }
+
+    .category-table th {
+        background-color: #ffd700; /* Gold */
+        color: black;
+        font-weight: bold;
+    }
+
+    .category-table tbody tr:nth-child(odd) {
+        background-color: #dc3545; /* Red */
+        color: white;
+    }
+
+    .category-table tbody tr:nth-child(even) {
+        background-color: #ffffff; /* White */
+        color: black;
+    }
+
+    .category-actions {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    .category-actions a {
+        margin-left: 5px;
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .category-actions a:hover {
+        color: #666;
+    }
+    
+    /* Custom Modal Styles */
+    .modal {
+        display: none; 
+        position: fixed; /* Stay in place */
+        z-index: 1050; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgba(0,0,0,0.4); 
+    }
+
+    /* Modal Content */
+    .modal-content {
+        background-color: #fefefe;
+        margin: 5% auto; /* 5% from the top and centered */
+        padding: 30px;
+        border: none;
+        width: 80%; 
+        max-width: 500px; /* Limit maximum width */
+        border-radius: 10px;
+        position: relative;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); 
+    }
         
-        /* Media Queries */
-        @media (max-width: 992px) {
-            .sidebar {
-                left: -280px; 
-            }
-            .sidebar.active {
-                left: 0; /* Slide in when active */
-            }
-            .content {
-                margin-left: 0; /* Content area adjusts */
-            }
-            .container {
-                padding: 10px; /* Adjust padding for smaller screens */
-            }
+    .close {
+        color: #aaaaaa;
+        font-size: 30px;
+        font-weight: bold;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    /* Form Input Styling */
+    .form-label {
+        font-weight: bold;
+        color: #555;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 16px;
+    }
+
+    .btn-primary {
+        background-color: #FFC10B;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #953728;
+    }
+
+    /* Centered Text in Modal */
+    .centered-text {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 24px;
+        color: #953728;
+    }
+
+    .btn-primary, .btn-clear {
+        background-color: #FFC10B;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        width: 40%; 
+        margin: 4.5%;
+    }
+
+    .btn-clear {
+        background-color: #953728;
+    }
+
+    .btn-primary:hover, .btn-clear:hover {
+        background-color: #953728;
+    }
+
+    @media (max-width: 576px) {
+        .add-category-btn {
+            float: none;
+            margin-bottom: 10px;
         }
+    }
     </style>
 </head>
 <body>
@@ -164,87 +355,315 @@
             <div class="admin-icon">
                 <img src="https://via.placeholder.com/60" alt="Admin Image">
             </div>
-            <div class="admin-text">Admin</div>
         </div>
         <ul>
-            <li><a href="Admin_dashboard.php"><i class="fas fa-tachometer-alt fa-fw"></i> Dashboard</a></li>
-            <li><a href="Admin_transaction.php"><i class="fas fa-history fa-fw"></i> Transaction History</a></li>
-            <li><a href="Admin_employee.php"><i class="fas fa-user-tie fa-fw"></i> Employees</a></li>
-            <li><a href="#"><i class="fas fa-users fa-fw"></i> Customers</a></li>
-            <li><a href="#"><i class="fas fa-th fa-fw"></i> Categories</a></li>
-            <li><a href="Admin_products.php"><i class="fas fa-box-open fa-fw"></i> Products</a></li>
-			<li><a href="#"><i class="fas fa-star fa-fw"></i> Ratings</a></li>
-            <li><a href="#"><i class="fas fa-sign-out-alt fa-fw"></i> Sign Out</a></li>
-			<li><a href="#"><i class="fas fa-question-circle fa-fw"></i>Help</a></li>
+            <li><a href="Admin_dashboard.php"><i class="fas fa-tachometer-alt fa-fw"></i> <span class="nav-text">Dashboard</span></a></li>
+            <li><a href="Admin_transaction.php"><i class="fas fa-history fa-fw"></i> <span class="nav-text">Transaction History</span></a></li>
+            <li><a href="Admin_employee.php"><i class="fas fa-user-tie fa-fw"></i> <span class="nav-text">Employees</span></a></li>
+            <li><a href="Admin_customers.php"><i class="fas fa-users fa-fw"></i> <span class="nav-text">Customers</span></a></li>
+            <li><a href="Admin_category.php"><i class="fas fa-th fa-fw"></i> <span class="nav-text">Categories</span></a></li>
+            <li><a href="Admin_products.php"><i class="fas fa-box-open fa-fw"></i> <span class="nav-text">Products</span></a></li>
+            <li><a href="Admin_ratings.php"><i class="fas fa-star fa-fw"></i> <span class="nav-text">Ratings</span></a></li>
+            <li><a href="#"><i class="fas fa-sign-out-alt fa-fw"></i> <span class="nav-text">Sign Out</span></a></li>
+            <li><a href="#"><i class="fas fa-question-circle fa-fw"></i> <span class="nav-text">Help</span></a></li>
         </ul>
     </div>
 
-    <!-- Content -->
-    <div class="content" id="main-content">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container-fluid">
-                <!-- Hamburger icon -->
-                <button class="navbar-toggler" type="button" id="sidebarCollapseButton">
-                    <i class="fas fa-bars"></i> 
-                </button>
-                <div class="search-bar ms-auto">
-                    <input type="text" placeholder="Search transactions..." id="searchInput">
-                    <button type="button" class="btn" onclick="searchTransactions()"><i class="fas fa-search"></i></button>
+    <!-- Navbar -->  <!-- Hamburger icon -->
+    <nav class="navbar navbar-dark bg-custome">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" id="sidebarCollapseButton">
+                <i class="fas fa-bars text-black"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Content Here -->
+    <div class="container category-container">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <div class="position-relative">
+                    <input type="text" class="form-control search-box" placeholder="Search..." id="searchInput">
+                    <span class="fas fa-search form-control-feedback search-icon"></span>
                 </div>
             </div>
-        </nav>
-        
-        <div class="container">
-            <div class="transaction-history">
-                <table class="transaction-table">
-                    <thead>
-                        <tr>
-                            
-                            <th>Product ID</th>
-                            <th>Product Name</th>
-                            <th>Category ID</th>
-                            <th>Category Type</th>
-                            <th>Status</th>
-                            <th>Price</th>
-                            <th>Action</th>
+            <div class="col-md-6">
+                <button class="btn btn-success add-category-btn" id="addProductBtn">Add Product <i class="fas fa-plus"></i></button>
+            </div>
+        </div>
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php 
-                            include 'product_functions.php';
-                            display_Products();
-                        ?>
-                    </tbody>
-                </table>
+        <div class="table-wrapper">
+            <table class="table table-striped table-hover category-table">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Product ID</th>
+                        <th>Product Name</th>
+                        <th>Category ID</th>
+                        <th>Category Type</th>
+                        <th>Status</th>
+                        <th>Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                        include 'product_functions.php';
+
+                        display_Products();
+                    ?>
+                </tbody>
+            </table>
+        </div>
+
+        <!------- ADD PRODUCT MODAL ------->
+        <div id="addProductModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2 class="centered-text" id="title">Add New Product</h2>
+                <form id="addProductForm" method="post" action="product_functions.php">
+                    <div class="mb-3">
+                        <label for="categoryID" class="form-label">Product ID</label>
+                        <input type="text" class="form-control" id="ProductID" name="productID" placeholder="202416----" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="categoryType" class="form-label">Product Name</label>
+                        <input type="text" class="form-control" id="ProductName" name="productName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="categoryID" class="form-label">Category ID</label>
+                        <input type="text" class="form-control" id="CategoryID" name="categoryID" placeholder="202403----" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="categoryType" class="form-label">Category Type</label>
+                        <input type="text" class="form-control" id="CategoryType" name="categoryType" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="categoryType" class="form-label">Status</label>
+                        <input type="text" class="form-control" id="ProductStatus" name="productStatus" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="categoryType" class="form-label">Price</label>
+                        <input type="text" class="form-control" id="ProductPrice" name="productPrice" required>
+                    </div>
+                    <div  class="form-group d-flex justify-content-center align-items-center">
+                        <button type="submit" class="btn btn-primary" id="updateBtn">Add Product</button>
+                        <button type="button" class="btn btn-clear" id="clearFormBtn">Clear</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    <!-- Font Awesome -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/af468059ce.js" crossorigin="anonymous"></script>
+    <!-- Script -->
     <script>
         document.getElementById('sidebarCollapseButton').addEventListener('click', function() {
             document.getElementById('sidebar').classList.toggle('active');
-            document.getElementById('main-content').classList.toggle('active');
-            adjustContentMargin();
+            document.body.classList.toggle('sidebar-active');
         });
 
-        function adjustContentMargin() {
-            const sidebarWidth = document.getElementById('sidebar').offsetWidth;
-            const content = document.getElementById('main-content');
-            
-            if (document.getElementById('sidebar').classList.contains('active')) {
-                content.style.marginLeft = sidebarWidth + 'px';
-            } else {
-                content.style.marginLeft = '0';
+        // Toggle search input focus on search icon click
+        document.querySelector('.search-icon').addEventListener('click', function() {
+            document.querySelector('.search-box').focus();
+        });
+
+// ------------------------- ADD PRODUCT MODAL JS ------------------------- //
+
+        // Show Add Category Modal
+	    document.getElementById('addProductBtn').addEventListener('click', function() {
+        var modal = document.getElementById('addProductModal');
+        modal.style.display = "block";
+        console.log('Add New Product button clicked');
+	    });
+	
+	    // Close Modal
+	    var closeBtn = document.getElementsByClassName("close")[0];
+	    closeBtn.onclick = function() {
+        var modal = document.getElementById('addProductModal');
+        modal.style.display = "none";
+        console.log('Modal closed');
+	    };
+	
+	    // Clear Form Button
+	    document.getElementById('clearFormBtn').addEventListener('click', function() {
+        document.getElementById('addProductForm').reset();
+	    });  
+
+        categoryType = document.getElementById('CategoryType');
+
+        // ----- GET CATEGORY INFO ----- //
+        function getCategory() {
+            // Get the value of the CategoryType input field
+            var categoryType = document.getElementById('CategoryType').value;
+
+            // Check if the categoryType is not empty
+            if (categoryType) {
+                // Fetch the category ID from the server
+                fetch(`getCategoryID.php?category_type=${encodeURIComponent(categoryType)}`)
+                    .then(response => {
+                        // Ensure the response is in JSON format
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Check if the category_id exists in the returned data
+                        if (data.category_id !== undefined) {
+                            // Set the CategoryID input field to the fetched category ID
+                            document.getElementById('CategoryID').value = data.category_id;
+                        } else {
+                            console.error('Category ID not found in the response data');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching category data:', error);
+                    });
             }
         }
+
+        // Set up an event listener for the input event on the CategoryType field
+        window.onload = function() {
+            document.getElementById('CategoryType').addEventListener('input', getCategory);
+        }
         
-        function searchTransactions() {
+// ------------------------- UPDATE PRODUCT MODAL JS ------------------------- //        
+
+        // Function to fetch category data and fill the fields
+        function getProduct(productId) 
+        {
+            fetch(`getProduct.php?product_id=${productId}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('ProductID').value = data.product_id;
+                document.getElementById('ProductName').value = data.product_name;
+                document.getElementById('CategoryID').value = data.category_id;
+                document.getElementById('CategoryType').value = data.category_type;
+                document.getElementById('ProductStatus').value = data.status;
+                document.getElementById('ProductPrice').value = data.price;
+            })
+            .catch(error => {
+                console.error('Error fetching employee data:', error);
+            });
+        }
+
+        function changeFormTitleAndButton(title, buttonText) 
+        {
+            // Change the modal title
+            document.getElementById('title').innerText = title;
+
+            // Change the button value
+            document.getElementById('updateBtn').innerText = buttonText;
+        }
+
+        // Function to open the modal and populate the fields
+        function updateProduct(productID) 
+        {
+            // Open the modal
+            const modal = document.getElementById('addProductModal');
+            modal.style.display = 'block';
+
+            // Fetch the employee details
+            getProduct(productID);
+
+            // Change the modal title and button text for updating employee
+            changeFormTitleAndButton('Update Product', 'Update');
+        }
+
+// -------------------------------------------------- DELETE PRODUCT JS -------------------------------------------------- //
+
+        function deleteProduct(productID) 
+        {
+            if (confirm("Are you sure you want to delete Product ID: " + productID + "?")) 
+            {
+                // Create an XMLHttpRequest object
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "product_functions.php", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+                // Define what happens on successful data submission
+                xhr.onload = function () {
+                    if (xhr.status == 200) 
+                    {
+                        // Do something with the response
+                        alert(xhr.responseText);
+                        // Optionally, you can remove the row from the table or refresh the page
+                        location.reload();
+                    } 
+                    else 
+                    {
+                        alert("Error deleting product.");
+                    }
+                };
+
+                // Send the request with the transaction ID
+                xhr.send("productID=" + productID);
+            }
+        }
+
+// -------------------------------------------------- ADD PRODUCT JS -------------------------------------------------- //
+
+function addEmployee() {
+        // Get form data
+        var fullName = document.getElementById('full_name').value;
+        var position = document.getElementById('position').value;
+        var age = document.getElementById('age').value;
+        var birthdate = document.getElementById('birthdate').value;
+        var gender = document.getElementById('gender').value;
+        var email = document.getElementById('email').value;
+        var phoneNumber = document.getElementById('phone_number').value;
+        var address = document.getElementById('address').value;
+
+        // Validate form data (you can add more validation as needed)
+        if (!fullName || !position || !age || !birthdate || !gender || !email || !phoneNumber || !address) {
+            alert("Please fill in all fields.");
+            return;
+        }
+
+        // Create an XMLHttpRequest object
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "employee_functions.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+        // Define what happens on successful data submission
+        xhr.onload = function () {
+            if (xhr.status == 200) 
+            {
+                // Do something with the response
+                alert(xhr.responseText);
+                // Optionally, you can close the modal and refresh the page
+                closeModal();
+                location.reload();
+            } 
+            else 
+            {
+                alert("Error adding employee.");
+            }
+        };
+
+        // Send the request with the form data
+        var data = "full_name=" + encodeURIComponent(fullName) +
+                   "&position=" + encodeURIComponent(position) +
+                   "&age=" + encodeURIComponent(age) +
+                   "&birthdate=" + encodeURIComponent(birthdate) +
+                   "&gender=" + encodeURIComponent(gender) +
+                   "&email=" + encodeURIComponent(email) +
+                   "&phone_number=" + encodeURIComponent(phoneNumber) +
+                   "&address=" + encodeURIComponent(address);
+
+        xhr.send(data);
+        }    
+
+// ----------------------------------------- SEARCH ----------------------------------------- //
+
+        // For input field to detect changes in input value
+	    document.getElementById('searchInput').addEventListener('input', searchEmployee);
+
+        function searchEmployee() {
             const input = document.getElementById('searchInput').value.toLowerCase();
-            const rows = document.querySelectorAll('.transaction-table tbody tr');
+            const rows = document.querySelectorAll('.table-striped tbody tr');
 
             rows.forEach(row => {
                 const rowData = row.textContent.toLowerCase();
@@ -261,106 +680,8 @@
                     row.style.display = '';
                 });
             }
-        }
+        }        
 
-// EDIT-------------------------------------------------- UPDATE PRODUCT MODAL JS -------------------------------------------------- //
-
-    // Function to fetch employee data and fill the fields
-    function getEmployee(productId) 
-    {
-        fetch(`product_functions.php?product_id=${productId}`)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('product').value = data.full_name;
-            document.getElementById('employeeAge').value = data.age;
-            document.getElementById('EmployeeGender').value = data.gender;
-        })
-
-        .catch(error => {
-            console.error('Error fetching employee data:', error);
-        });
-    }
-
-    function changeFormTitleAndButton(title, buttonText) 
-    {
-        // Change the modal title
-        document.getElementById('title').innerText = title;
-
-        // Change the button value
-        document.getElementById('updateBtn').innerText = buttonText;
-    }
-
-    // Function to open the modal and populate the fields
-    function updateEmployee(employeeId) 
-    {
-        // Open the modal
-        const modal = document.getElementById('addEmployeeModal');
-        modal.style.display = 'block';
-
-        // Fetch the employee details
-        getEmployee(employeeId);
-
-        // Change the modal title and button text for updating employee
-        changeFormTitleAndButton('Update Employee', 'Update');
-    }
-
-    // Example saveUpdatedEmployee function to handle the form submission
-    function saveUpdatedEmployee() 
-    {
-        const form = document.getElementById('addEmployeeModal');
-        const formData = new FormData(form);
-
-        fetch('employee_functions.php', 
-        {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.text())
-        .then(data => 
-        {
-            alert('Employee updated successfully!');
-        })
-        .catch(error => 
-        {
-            console.error('Error updating employee:', error);
-        });
-    }
-
-
-// -------------------------------------------------- DELETE PRODUCT JS -------------------------------------------------- //
-
-    function deleteProduct(productID) 
-{
-    if (confirm("Are you sure you want to delete Product ID: " + productID + "?")) {
-        
-        // Create an XMLHttpRequest object
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "product_functions.php", true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-        // Define what happens on successful data submission
-        xhr.onload = function () {
-            if (xhr.status == 200) {
-                // Do something with the response
-                alert(xhr.responseText);
-                // Optionally, you can remove the row from the table or refresh the page
-                location.reload();
-            } else {
-                alert("Error deleting Product.");
-            }
-        };
-
-        // Send the request with the transaction ID
-        xhr.send("productID=" + productID);
-    }
-}
-        
-        // For input field to detect changes in input value
-        document.getElementById('searchInput').addEventListener('input', searchTransactions);
-
-        adjustContentMargin();
-
-        window.addEventListener('resize', adjustContentMargin);
     </script>
 </body>
 </html>

@@ -1,41 +1,51 @@
 <?php
+// --------------------------------------------------------- INCLUDE SETUP --------------------------------------------------------- //
+
     include 'setup.php';
 
-    function add_Product($product_name,$categoryID,$status,$price)
+// --------------------------------------------------------- ADD PRODUCT --------------------------------------------------------- //
+
+    function add_Product($product_name,$categoryID,$categoryType,$status,$price)
     {
         $conn = connect();
-        
-        $sql = "SELECT category_type FROM categories WHERE category_id = $categoryID";
-        $category = $conn->query($sql);
-        $row = $category->fetch_assoc();
 
-        $categoryType = $row["category_type"];
-        $id = generate_ProductID();
+        $checkQuery = "SELECT product_id FROM products WHERE product_id = ?";
+
+        $id = checkDuplication(generate_ProductID(),$checkQuery);
 
         $sql = "INSERT INTO products
                 (product_id,product_name,category_id,category_type,status,price)
                 VALUES
                 ($id,'$product_name',$categoryID,'$categoryType','$status',$price)";
 
-        mysqli_query($conn, $sql);
+        if (mysqli_query($conn, $sql))
+        {
+            $message = "Product added successfully!";
+            header("Refresh: 0; url=Admin_products.php");
+            echo "<script type='text/javascript'>alert('$message');</script>";
+        }
+        else 
+        {
+            echo "Error adding product: " . $stmt->error;
+        }
+
+        $conn->close();
     }
 
-    function update_Product($product_name,$categoryType,$status,$price,$productID)
+// --------------------------------------------------------- UPDATE PRODUCT --------------------------------------------------------- //
+
+    function update_Product($product_name,$categoryID,$categoryType,$status,$price,$productID)
     {
         $conn = connect();
-        
-        $sql = "SELECT category_id FROM categories WHERE category_type = $categoryType";
-        $category = $conn->query($sql);
-        $row = $category->fetch_assoc();
-
-        $categoryID = $row["category_id"];
     
         $stmt = $conn->prepare("UPDATE products SET product_name = ?, category_id = ?, category_type = ?, status = ?, price = ? WHERE product_id = ?");
-        $stmt->bind_param("sissfi", $product_name, $categoryID, $categoryType, $status, $price, $productID);
+        $stmt->bind_param("sissii", $product_name, $categoryID, $categoryType, $status, $price, $productID);
     
         if ($stmt->execute()) 
         {
-            echo "<h1>Record edited successfully!</h1><br>";
+            $message = "Updated successfully!";
+            header("Refresh: 0; url=Admin_products.php");
+            echo "<script type='text/javascript'>alert('$message');</script>";
         }
         else 
         {
@@ -46,6 +56,8 @@
         $conn->close();
     }
 
+// --------------------------------------------------------- DELETE PRODUCT --------------------------------------------------------- //
+
     function delete_Product($productID)
     {
         $conn = connect();
@@ -55,7 +67,7 @@
     
         if ($stmt->execute()) 
         {
-            echo "Record deleted successfully!";
+            echo "Product deleted successfully.";
         } 
         else 
         {
@@ -65,6 +77,8 @@
         $stmt->close();
         $conn->close();
     }
+
+// --------------------------------------------------------- DISPLAY PRODUCTS --------------------------------------------------------- //    
     
     function display_Products()
     {
@@ -77,65 +91,73 @@
             echo "Error: " . $conn->error;
         } else {
             if ($retval->num_rows > 0) {
-                while ($row = $retval->fetch_assoc()) {
-                    
-                    //Variable initialization for DELETE Functionality
-                    $product_id = $row["product_id"];
-
-                    //Variable initialization for EDIT Functionality
-                    $product_name = $row["product_name"];
-                    $category_Type = $row["category_type"];
-                    $status = $row["status"];
-                    $price = $row["status"];
-
+                while ($row = $retval->fetch_assoc()) 
+                {
+                    $productID = $row["product_id"];
                     echo "<tr>";
+                    echo "<td>" . $row["product_img"] . "</td>";
                     echo "<td>" . $row["product_id"] . "</td>";
                     echo "<td>" . $row["product_name"] . "</td>";
                     echo "<td>" . $row["category_id"] . "</td>";
                     echo "<td>" . $row["category_type"] . "</td>";
                     echo "<td>" . $row["status"] . "</td>";
                     echo "<td>" . $row["price"] . "</td>";
-                    echo "<td>
-                        <i class='fas fa-edit edit-icon' title='Edit' id='editBtn' onclick=' update_Product( " . $product_id . ")'  ></i>
-                        <i class='fas fa-trash delete-icon' title='Delete' id='deleteBtn' onclick='  deleteProduct(" . $product_id . ") ' ></i>";
-                    echo "<td>";
-                    echo "<tr>";
+                    echo "<td class='category-actions'>
+                            <a href='#' class='btn btn-sm btn-success'><i class='fas fa-edit' onclick='updateProduct(" . $productID . ")'></i></a>
+                            <a href='#' class='btn btn-sm btn-danger'><i class='fas fa-trash' onclick='deleteProduct(" . $productID . ")'></i></a>
+                        </td>";
+                    echo "</tr>";
                 }
             }
         }
         $conn->close();
     }
 
-// --------------------------------------------------------- GET SPECIFIC PRODUCT INFO --------------------------------------------------------- //
+// --------------------------------------------------------- CHECK FOR DUPLICATION ID --------------------------------------------------------- //
 
-function get_Employee($employee_id) 
-{
-    $conn = connect();
+    function checkDuplication($id, $checkQuery) 
+    {
+        $conn = connect();
+        // Function to check for duplicate ID
+        while (true) 
+        {
+            // Prepare the query to check for the duplicate ID
+            $stmt = $conn->prepare($checkQuery);
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+            $stmt->store_result();
 
-    $query = $conn->prepare("SELECT * FROM employees WHERE employee_id = ?");
-    $query->bind_param("i", $product_id);
-    $query->execute();
-    $result = $query->get_result();
-    $product = $result->fetch_assoc();
+            if ($stmt->num_rows == 0) 
+            {
+                break;
+            }
+            $id++;
 
-    echo json_encode($product);
+            $stmt->close();
+        }
+        $stmt->close();
+        $conn->close();
 
-    $query->close();
-    $conn->close();
-}
+        return $id;
+    }
 
-
-// --------------------------------------------------------- HANDLE AJAX REQUEST --------------------------------------------------------- //
+// --------------------------------------------------------- HANDLE FORM SUBMISSION --------------------------------------------------------- //
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") 
     {
-        // Check if productID is set and is a valid integer
-        if (isset($_POST["productID"]) && filter_var($_POST["productID"], FILTER_VALIDATE_INT, ["options" => ["min_range" => 1]])) 
+        if (isset($_POST['productName'], $_POST['categoryID'], $_POST['categoryType'], $_POST['productStatus'], $_POST['productPrice']) && empty($_POST["productID"])) 
+        {
+            add_Product($_POST['productName'],$_POST['categoryID'],$_POST['categoryType'],$_POST['productStatus'],$_POST['productPrice']);
+        }
+        else if(isset($_POST['productName'], $_POST['categoryID'], $_POST['categoryType'], $_POST['productStatus'], $_POST['productPrice'], $_POST["productID"]))
+        {
+            update_Product($_POST['productName'],$_POST['categoryID'],$_POST['categoryType'],$_POST['productStatus'],$_POST['productPrice'],$_POST["productID"]);
+        }
+        else
         {
             $productID = intval($_POST["productID"]);
-        
+    
             delete_Product($productID);
         }
     }
-
 ?>
