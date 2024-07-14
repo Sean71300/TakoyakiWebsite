@@ -94,7 +94,7 @@
 
         if (mysqli_query($conn, $sql))
         {
-            $img_path = "Images/id_picture.jpg";
+            $img_path = "Images/Logo.jpg";
             $img_clean= file_get_contents($img_path);
             $customer_pic = mysqli_real_escape_string($conn, $img_clean);
             $id = generate_CustomerID();
