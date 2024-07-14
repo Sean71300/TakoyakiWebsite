@@ -200,7 +200,7 @@
                     </div>                    
                     <div class="mb-3">
                         <label for="name" class="form-label">Full Name</label>
-                        <input type="text" id="custoname" onkeypress="return isLetter(event)" name="custoname" class="form-control" value="<?php echo search_Value("full_name",htmlspecialchars($_SESSION["id"]))?>" required>
+                        <input type="text" id="custoname" onkeypress="return isLetter(event)" onpaste="return false" name="custoname" class="form-control" value="<?php echo search_Value("full_name",htmlspecialchars($_SESSION["id"]))?>" required>
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
