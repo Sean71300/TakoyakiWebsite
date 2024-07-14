@@ -1,6 +1,6 @@
 <?php
     session_start();
-    include_once 'customer_functions.php';
+    include_once 'edit_functions.php';
     $Confirmation = "";
 
     if ($_SERVER["REQUEST_METHOD"] == "POST")
@@ -27,7 +27,11 @@
             border-radius: 50%;
             margin-left: 2%;
         }
-
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+        }
         .footer {
             display: inline-block;
             max-width: 50px;
@@ -190,42 +194,41 @@
         <div class="col-md-9">        
             <!-- Edit Profile Form -->
             <div class="profile-section">
-                <form action="<?php echo $_SERVER["PHP_SELF"]?>" method="POST" id="CustomerEdit">
-                
+                <form action="<?php echo $_SERVER["PHP_SELF"]?>" method="POST" id="CustomerEdit">                
                     <div class="mb-0">
                         <label for="name" class="form-label">User ID: <?php echo htmlspecialchars($_SESSION["id"])?></label>
                     </div>                    
                     <div class="mb-3">
                         <label for="name" class="form-label">Full Name</label>
-                        <input type="text" id="custoname" name="custoname" class="form-control" value="<?php echo display_Value("full_name",htmlspecialchars($_SESSION["id"]))?>" required>
+                        <input type="text" id="custoname" onkeypress="return isLetter(event)" name="custoname" class="form-control" value="<?php echo search_Value("full_name",htmlspecialchars($_SESSION["id"]))?>" required>
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
-                        <input type="email" id="email" name="email" class="form-control"  value="<?php echo display_Value("email",htmlspecialchars($_SESSION["id"]))?>"
+                        <input type="email" id="email" name="email" class="form-control"  value="<?php echo search_Value("email",htmlspecialchars($_SESSION["id"]))?>"
                                readonly>
                     </div>
                     <div class="mb-3">
                         <label for="phone" class="form-label">Phone Number</label>
-                        <input type="text" id="phone" name="phone" class="form-control"   value="<?php echo display_Value("phone_number",htmlspecialchars($_SESSION["id"]))?>"
+                        <input type="number" min="0"  onkeydown="return false" id="phone" name="phone" class="form-control"   value="<?php echo search_Value("phone_number",htmlspecialchars($_SESSION["id"]))?>"
                                required>
                     </div>
                     <div class="mb-3">
                         <label for="birthday" class="form-label">Birthdate:</label>
-                        <input type="date" id="BirthD" name="BirthD" class="form-control"  value="<?php echo display_Value("birthdate",htmlspecialchars($_SESSION["id"]))?>"
+                        <input type="date" id="BirthD" name="BirthD" class="form-control"  value="<?php echo search_Value("birthdate",htmlspecialchars($_SESSION["id"]))?>"
                                required>
                     </div>                    
                     <div class="mb-3">
                         <label for="address" class="form-label">Address</label>
-                        <textarea type="text" id="address" name="address" class="form-control" rows="" ><?php echo display_Value("address",htmlspecialchars($_SESSION["id"]))?></textarea>
+                        <textarea type="text" id="address" name="address" class="form-control" rows="" ><?php echo search_Value("address",htmlspecialchars($_SESSION["id"]))?></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="address" class="form-label">Gender:</label>
                         <br>
-                        <input type="radio" name="gender" value="Male" required <?php echo gender_check(display_Value("gender",htmlspecialchars($_SESSION["id"])),"Male")?>>
+                        <input type="radio" name="gender" value="Male" required <?php echo gender_check(search_Value("gender",htmlspecialchars($_SESSION["id"])),"Male")?>>
                         <label for="male">Male</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="gender" value="Female" required <?php echo gender_check(display_Value("gender",htmlspecialchars($_SESSION["id"])),"Female")?>>
+                        <input type="radio" name="gender" value="Female" required <?php echo gender_check(search_Value("gender",htmlspecialchars($_SESSION["id"])),"Female")?>>
                         <label for="female">Female</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="gender" value="Others" required <?php echo gender_check(display_Value("gender",htmlspecialchars($_SESSION["id"])),"Others")?>>
+                        <input type="radio" name="gender" value="Others" required <?php echo gender_check(search_Value("gender",htmlspecialchars($_SESSION["id"])),"Others")?>>
                         <label for="female">Others</label>
                     </div>        
                     <button type="submit" class="btn btn-primary save-changes-button">Save Changes</button>
@@ -240,5 +243,15 @@
     <?php include "Footer.php"?>      
 <!-- Bootstrap JS -->
 <script src="js/bootstrap.bundle.min.js"></script>
+<script>
+    function isLetter(evt) {
+      evt = (evt) ? evt : window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if (charCode > 31 && (charCode < 65 || charCode > 90) && (charCode < 97 || charCode > 122) && charCode !== 32) {
+        return false;
+      }
+      return true;
+    }
+  </script>
 </body>
 </html>
