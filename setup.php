@@ -46,15 +46,42 @@
 
         $conn->close();
     }
+
+// -------------------------------------- CHECK FOR ID DUPLICATION -------------------------------------- //
+
+    function checkDuplication($id, $checkQuery) {
+        $conn = connect();
+        // Function to check for duplicate ID
+        while (true) {
+            // Prepare the query to check for the duplicate ID
+            $stmt = $conn->prepare($checkQuery);
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+            $stmt->store_result();
+    
+            if ($stmt->num_rows == 0) {
+                break;
+            }
+            $id++;
+    
+            $stmt->close();
+        }
+        $stmt->close();
+        $conn->close();
+         echo $id;
+        return $id;
+    }
+
 // -------------------------------------- CUSTOMERS TABLE CREATION -------------------------------------- //
     function create_CustomersTable()
     {
         $conn = connect();
 
+
         $sql = "CREATE TABLE customers(
                 customer_id INT(10) PRIMARY KEY,
                 position VARCHAR(10),
-                customer_img BLOB,
+                customer_img LONGBLOB,
                 full_name VARCHAR(100),
                 age INT(3),
                 birthdate DATE,
@@ -67,6 +94,9 @@
 
         if (mysqli_query($conn, $sql))
         {
+            $img_path = "Images/id_picture.jpg";
+            $img_clean= file_get_contents($img_path);
+            $customer_pic = mysqli_real_escape_string($conn, $img_clean);
             $id = generate_CustomerID();
             $password = 12345;
             $email = "tamayoyvonne0007@gmail.com";
@@ -74,9 +104,9 @@
             $hashed_pw = password_hash($password, PASSWORD_DEFAULT);
 
             $sql = "INSERT INTO customers
-                    (customer_id,position,full_name,age,birthdate,gender,email,phone_number,address,password)
+                    (customer_id,position, customer_img, full_name,age,birthdate,gender,email,phone_number,address,password)
                     VALUES
-                    ($id,'Client','Maki',24,'','Male','$email','09123456789','Makati City','$hashed_pw')";
+                    ($id,'Client', '$customer_pic' ,'Maki',24,'','Male','$email','09123456789','Makati City','$hashed_pw')";
 
             mysqli_query($conn, $sql);
         }
@@ -108,7 +138,9 @@
 
         // Generate the ID
         $genID = (int)($currentYear . $currentMonth . str_pad($rowCount, 4, "0", STR_PAD_LEFT));
-
+        
+        $checkQuery = "SELECT customer_id FROM customers WHERE customer_id = ?";
+        $genID = checkDuplication($genID,$checkQuery);
         $conn->close();
         return $genID;
     }
@@ -119,7 +151,7 @@
 
         $sql = "CREATE TABLE employees(
                 employee_id INT(10) PRIMARY KEY,
-                employee_img BLOB,
+                employee_img LONGBLOB,
                 position VARCHAR(30),
                 full_name VARCHAR(100),
                 age INT(3),
@@ -133,6 +165,9 @@
 
         if (mysqli_query($conn, $sql))
         {
+            $img_path = "Images/id_picture.jpg";
+            $img_clean= file_get_contents($img_path);
+            $employee_pic = mysqli_real_escape_string($conn, $img_clean);
             $id = generate_EmployeeID();
             $password = 12345;
             $email = "myntchaos@gmail.com";
@@ -140,9 +175,9 @@
             $hashed_pw = password_hash($password, PASSWORD_DEFAULT);
 
             $sql = "INSERT INTO employees
-                    (employee_id,position,full_name,age,birthdate,gender,email,phone_number,address,password)
+                    (employee_id, employee_img, position,full_name,age,birthdate,gender,email,phone_number,address,password)
                     VALUES
-                    ($id,'Admin','Maloi',24,'','female','$email','09987654321','Makati City','$hashed_pw')";
+                    ($id,'$employee_pic','Admin','Maloi',24,'','female','$email','09987654321','Makati City','$hashed_pw')";
 
             mysqli_query($conn, $sql);
         }
@@ -168,7 +203,9 @@
 
         // Generate the ID
         $genID = (int)($currentYear . str_pad(5, 2, "0", STR_PAD_LEFT) . str_pad($rowCount, 4, "0", STR_PAD_LEFT));
-
+        
+        $checkQuery = "SELECT employee_id FROM employees WHERE employee_id = ?";
+        $genID = checkDuplication($genID,$checkQuery);
         $conn->close();
         return $genID;
     }
@@ -217,56 +254,84 @@
     
             // Generate the ID
             $genID = (int)($currentYear . str_pad(3, 2, "0", STR_PAD_LEFT) . str_pad($rowCount, 4, "0", STR_PAD_LEFT));
-    
+            
+            $checkQuery = "SELECT category_id FROM categories WHERE category_id = ?";
+            $genID = checkDuplication($genID,$checkQuery);
             $conn->close();
             return $genID;
         }
 // -------------------------------------- PRODUCTS TABLE CREATION -------------------------------------- //
-     function create_ProductTable()
+function create_ProductTable()
+{
+    $conn = connect();
+
+    $sql = "CREATE TABLE products(
+            product_id INT(10) PRIMARY KEY AUTO_INCREMENT,
+            product_img LONGBLOB,
+            product_name VARCHAR(50),
+            category_id INT(10),
+            category_type VARCHAR(100),
+            status VARCHAR(30),
+            price FLOAT(6),
+            FOREIGN KEY (category_id) REFERENCES categories(category_id))";
+
+    if (mysqli_query($conn, $sql))
     {
-        $conn = connect();
+        // Prepare image data
+        $imgArr = array(
+            "Images/octobits.png", "Images/crab bits.png", "Images/cheese bits.png", "Images/bacon bits.png",
+            "Images/assorted-barkada.png", "Images/cheesy-barkada.png", "Images/beef.png", "Images/pork.png"
+        );
 
-        $sql = "CREATE TABLE products(
-                product_id INT(10) PRIMARY KEY,
-                product_img BLOB,
-                product_name VARCHAR(50),
-                category_id INT(10),
-                category_type VARCHAR(100),
-                status VARCHAR(30),
-                price FLOAT(6),
-                FOREIGN KEY (category_id) REFERENCES categories(category_id))";
+        $escapedImgDataArr = array();
 
-        if (mysqli_query($conn, $sql))
-        {
-            $id = generate_ProductID();
-            $categoryID = generate_CategoryID();
-            $catID = $categoryID - 4;
-
-            $sql = "INSERT INTO products
-                (product_id, product_name, category_id, category_type, status, price)
-                VALUES
-                ($id, 'Octo Bits', $catID , 'Takoyaki', 'Available', 39),
-                (". (++$id) .", 'Crab Bits', $catID , 'Takoyaki', 'Available', 39),
-                (". (++$id) .", 'Cheese Bits', $catID, 'Takoyaki', 'Available', 39),
-                (". (++$id) .", 'Bacon Bits', $catID, 'Takoyaki', 'Available', 39),
-                (". (++$id) .", 'Octo Bits', ". (++$catID) .", '10+1', 'Available', 100),
-                (". (++$id) .", 'Crab Bits', $catID , '10+1', 'Available', 100),
-                (". (++$id) .", 'Cheese Bits', $catID , '10+1', 'Available', 100),
-                (". (++$id) .", 'Bacon Bits', $catID , '10+1', 'Available', 100),
-                (". (++$id) .", 'Assorted Barkada', ". (++$catID) .", 'Barkada Platter', 'Available', 400),
-                (". (++$id) .", 'Cheesey Barkada', $catID, 'Barkada Platter', 'Available', 320),
-                (". (++$id) .", 'Beef Gyudon', ". (++$catID) .", 'Rice Meals', 'Available', 85),
-                (". (++$id) .", 'Pork Tonkatsun', $catID, 'Rice Meals', 'Available', 75)";
-
-            mysqli_query($conn, $sql);
-        }
-        else
-        {
-            echo "<br>There is an error in creating the table: " . $conn->connect_error;
+        foreach ($imgArr as $imgPath) {
+            $imgData = file_get_contents($imgPath);
+            if ($imgData === false) {
+                echo "Failed to read image: $imgPath";
+                continue; 
+            }
+            $escapedImgDataArr[] = mysqli_real_escape_string($conn, $imgData);
         }
 
-        $conn->close();
+        // Generate IDs
+        $id = generate_ProductID();
+        $categoryID = generate_CategoryID();
+        $catID = $categoryID - 4;
+
+        // Insert products with image
+        $sql = "INSERT INTO products
+            (product_id, product_img, product_name, category_id, category_type, status, price)
+            VALUES
+            ($id, '{$escapedImgDataArr[0]}', 'Octo Bits', $catID , 'Takoyaki', 'Available', 39),
+            (". (++$id) .", '{$escapedImgDataArr[1]}', 'Crab Bits', $catID , 'Takoyaki', 'Available', 39),
+            (". (++$id) .", '{$escapedImgDataArr[2]}', 'Cheese Bits', $catID, 'Takoyaki', 'Available', 39),
+            (". (++$id) .", '{$escapedImgDataArr[3]}', 'Bacon Bits', $catID, 'Takoyaki', 'Available', 39),
+            (". (++$id) .", '{$escapedImgDataArr[0]}', 'Octo Bits', ". (++$catID) .", '10+1', 'Available', 100),
+            (". (++$id) .", '{$escapedImgDataArr[1]}', 'Crab Bits', $catID , '10+1', 'Available', 100),
+            (". (++$id) .", '{$escapedImgDataArr[2]}', 'Cheese Bits', $catID , '10+1', 'Available', 100),
+            (". (++$id) .", '{$escapedImgDataArr[3]}', 'Bacon Bits', $catID , '10+1', 'Available', 100),
+            (". (++$id) .", '{$escapedImgDataArr[4]}', 'Assorted Barkada', ". (++$catID) .", 'Barkada Platter', 'Available', 400),
+            (". (++$id) .", '{$escapedImgDataArr[5]}', 'Cheesey Barkada', $catID, 'Barkada Platter', 'Available', 320),
+            (". (++$id) .", '{$escapedImgDataArr[6]}', 'Beef Gyudon', ". (++$catID) .", 'Rice Meals', 'Available', 85),
+            (". (++$id) .", '{$escapedImgDataArr[7]}', 'Pork Tonkatsun', $catID, 'Rice Meals', 'Available', 75)";
+
+        mysqli_query($conn, $sql);
+
+        // Check for errors
+        if (mysqli_error($conn)) {
+            echo "Error inserting image: " . mysqli_error($conn);
+        }
     }
+    else
+    {
+        echo "<br>There is an error in creating the table: " . mysqli_error($conn);
+    }
+
+    $conn->close();
+}
+
+
 // -------------------------------------- PRODUCTS ID CREATION -------------------------------------- //  
     function generate_ProductID()
     {
@@ -283,6 +348,8 @@
         // Generate the ID
         $genID = (int)($currentYear . str_pad(6, 2, "1", STR_PAD_LEFT) . str_pad($rowCount, 4, "0", STR_PAD_LEFT));
 
+        $checkQuery = "SELECT product_id FROM products WHERE product_id = ?";
+        $genID = checkDuplication($genID,$checkQuery);
         $conn->close();
         return $genID;
     }   
@@ -299,7 +366,8 @@
                 product_id INT(10),
                 rating INT(2),
                 comment VARCHAR(550), 
-                rate_timedate TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+                visibility_stat varchar(30) DEFAULT NULL,
+                rate_timedate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (customer_id) REFERENCES customers(customer_id),
                 FOREIGN KEY (product_id) REFERENCES products(product_id))";
 
@@ -312,9 +380,9 @@
             $productID = --$prodID;
 
             $sql = "INSERT INTO ratings
-                    (rating_id,customer_id,full_name,product_id,rating,comment)
+                    (rating_id,customer_id,full_name,product_id,rating,comment, visibility_stat)
                     VALUES
-                    ($ratingID,$custID,'Maki',$productID,4,'Yummy takoyaki')";
+                    ($ratingID,$custID,'Maki',$productID,4,'Yummy takoyaki', 'replied')";
 
             mysqli_query($conn, $sql);
         }
@@ -340,11 +408,13 @@
 
         // Generate the ID
         $genID = (int)($currentYear . str_pad(8, 2, "1", STR_PAD_LEFT) . str_pad($rowCount, 4, "0", STR_PAD_LEFT));
-
+        $checkQuery = "SELECT rating_id FROM ratings WHERE rating_id = ?";
+        $genID = checkDuplication($genID,$checkQuery);
         $conn->close();
         return $genID;
     }
     
+
 // -------------------------------------- TRANSACTION TABLE CREATION -------------------------------------- //
     function create_TansactionTable()
     {
@@ -396,6 +466,8 @@
         // Generate the ID
         $genID = (int)($currentYear . str_pad(0, 2, "1", STR_PAD_LEFT) . str_pad($rowCount, 4, "0", STR_PAD_LEFT));
 
+        $checkQuery = "SELECT transaction_id FROM transaction_history WHERE transaction_id = ?";
+        $genID = checkDuplication($genID,$checkQuery);
         $conn->close();
         return $genID;
     }
@@ -432,6 +504,40 @@
 
         $conn->close();
     }
+// -------------------------------------- REPLY TO RATINGS TABLE CREATION -------------------------------------- //
+function create_ReplytoCustomer()
+{
+    $conn = connect();
+
+    $sql = "CREATE TABLE IF NOT EXISTS ReplytoCustomer (
+        rating_id INT(10), 
+        reply VARCHAR(550),
+        date_reply TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+        FOREIGN KEY (rating_id) REFERENCES ratings(rating_id) ON DELETE CASCADE
+    )";
+
+    if (mysqli_query($conn, $sql)) {
+        $reply = "Thank you for your review! Hope to see you again in Hentoki!";
+        $rate = generate_RatingID();
+        $ratingID = --$rate;
+
+        // Insert into the table
+        $sql = "INSERT INTO ReplytoCustomer (
+                rating_id, 
+                reply) VALUES 
+                ($ratingID, 'aus ang sarap')";
+
+        mysqli_query($conn, $sql);
+        
+    } else {
+        echo "<br>There is an error in creating the table: " . $conn->error;
+    }
+
+    $conn->close();
+}
+
+
+
 ?>
 
 <?php
@@ -511,6 +617,8 @@
     {
         create_ShippingAddressTable();
     }
+
+
 
     $conn->close();
 ?>
