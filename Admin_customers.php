@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -356,7 +359,8 @@
         .centered-text {
             text-align: center;
             margin-bottom: 20px;
-            font-size: 24px;
+            font-size: 30px;
+            font-weight: bold;
             color: #953728;
         }
 		
@@ -388,19 +392,21 @@
     <div class="sidebar" id="sidebar">
         <div class="text-center">
             <div class="admin-icon">
+            <a href="Admin_edit profile.html">
                 <img src="https://via.placeholder.com/60" alt="Admin Image">
+            </a>
             </div>
         </div>
         <ul>
-            <li><a href="Admin_dashboard.php"><i class="fas fa-tachometer-alt fa-fw"></i> Dashboard</a></li>
-            <li><a href="Admin_transaction.php"><i class="fas fa-history fa-fw"></i> Transaction History</a></li>
-            <li><a href="Admin_employee.php"><i class="fas fa-user-tie fa-fw"></i> Employees</a></li>
-            <li><a href="Admin_customers.php"><i class="fas fa-users fa-fw"></i> Customers</a></li>
-            <li><a href="Admin_category.php"><i class="fas fa-th fa-fw"></i> Categories</a></li>
-            <li><a href="Admin_products.php"><i class="fas fa-box-open fa-fw"></i> Products</a></li>
-			<li><a href="Admin_ratings.php"><i class="fas fa-star fa-fw"></i> Ratings</a></li>
-            <li><a href="#"><i class="fas fa-sign-out-alt fa-fw"></i> Sign Out</a></li>
-			<li><a href="#"><i class="fas fa-question-circle fa-fw"></i>Help</a></li>
+            <li><a href="Admin_dashboard.php"><i class="fas fa-tachometer-alt fa-fw"></i> <span class="nav-text">Dashboard</span></a></li>
+            <li><a href="Admin_transaction.php"><i class="fas fa-history fa-fw"></i> <span class="nav-text">Transaction History</span></a></li>
+            <li><a href="Admin_employee.php"><i class="fas fa-user-tie fa-fw"></i> <span class="nav-text">Employees</span></a></li>
+            <li><a href="Admin_customers.php"><i class="fas fa-users fa-fw"></i> <span class="nav-text">Customers</span></a></li>
+            <li><a href="Admin_category.php"><i class="fas fa-th fa-fw"></i> <span class="nav-text">Categories</span></a></li>
+            <li><a href="Admin_products.php"><i class="fas fa-box-open fa-fw"></i> <span class="nav-text">Products</span></a></li>
+            <li><a href="Admin_ratings.php"><i class="fas fa-star fa-fw"></i> <span class="nav-text">Ratings</span></a></li>
+            <li><a href="logout.php"><i class="fas fa-sign-out-alt fa-fw"></i> <span class="nav-text">Sign Out</span></a></li>
+            <li><a href="#" id="HelpLink"><i class="fas fa-question-circle fa-fw"></i> <span class="nav-text">Help</span></a></li>
         </ul>
     </div>
     <!-- Navbar -->
@@ -409,6 +415,7 @@
             <button class="navbar-toggler" type="button" id="sidebarCollapseButton">
                 <i class="fas fa-bars text-black"></i>
             </button>
+            <?php include 'nav.php'; ?>
         </div>
     </nav>
 
@@ -450,6 +457,69 @@
                     ?>
                 </tbody>
             </table>
+        </div>
+
+        <!------- HELP MODAL ------->
+        <div id="helpModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h1 class="centered-text" id="title">Help</h1>
+                <div>
+                    <h5><b>Dashboard</b></h5>
+                    <ul>
+                        <li>Shows the Sales of the business.</li>
+                        <li>Shows the Ratings of the products.</li>
+                        <li>Shows the Employees summarized information.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h5><b>Transaction History</b></h5>
+                    <ul>
+                        <li>Shows the overall Transaction of the business.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h5><b>Employees</b></h5>
+                    <ul>
+                        <li>Shows all the Employees.</li>
+                        <li>Can add new Employees.</li>
+                        <li>Can edit existing Employees' information.</li>
+                        <li>Can delete an Employee.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h5><b>Customers</b></h5>
+                    <ul>
+                        <li>Shows all the Customers.</li>
+                        <li>Can delete a Customer.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h5><b>Categories</b></h5>
+                    <ul>
+                        <li>Shows all the Categories.</li>
+                        <li>Can add new Category.</li>
+                        <li>Can edit existing Category.</li>
+                        <li>Can delete a Category.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h5><b>Products</b></h5>
+                    <ul>
+                        <li>Shows all the Products.</li>
+                        <li>Can add new Product.</li>
+                        <li>Can edit existing Product.</li>
+                        <li>Can delete a Product.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h5><b>Ratings</b></h5>
+                    <ul>
+                        <li>Shows all the Ratings.</li>
+                        <li>Can approve customers' Ratings.</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
     <!-- Bootstrap JS -->
@@ -519,6 +589,23 @@
                 });
             }
         }
+        
+// ----------------------------------------- HELP MODAL ----------------------------------------- //
+
+        // Show Help Modal
+	    document.getElementById('HelpLink').addEventListener('click', function() {
+        var modal = document.getElementById('helpModal');
+        modal.style.display = "block";
+        console.log('Help modal opened');
+	    });
+        
+        // Close Modal
+	    var closeBtn = document.getElementsByClassName("close")[0];
+	    closeBtn.onclick = function() {
+        var modal = document.getElementById('helpModal');
+        modal.style.display = "none";
+        console.log('Modal closed');
+	    };
     </script>
 </body>
 </html>
