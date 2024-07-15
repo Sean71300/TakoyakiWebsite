@@ -136,8 +136,9 @@
         $conn->close();
     }
 
-// --------------------------------------------------------- CHECK FOR DUPLICATION ID --------------------------------------------------------- //
+// --------------------------------------------------------- CHECK FOR DUPLICATION ID (already declared at setup)--------------------------------------------------------- //
 
+    /*
     function checkDuplication($id, $checkQuery) {
         $conn = connect();
         // Function to check for duplicate ID
@@ -162,7 +163,7 @@
 
         return $id;
     }
-
+    */
 // --------------------------------------------------------- HANDLE FORM SUBMISSION --------------------------------------------------------- //
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") 
