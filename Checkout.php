@@ -21,24 +21,70 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 
 <?php
 session_start();
-function connect()
-{
-    // Configuration
-    $db_host = 'localhost';
-    $db_username = 'root';
-    $db_password = '';
-    $db_name = 'registration_db';
 
-    $conn = new mysqli($db_host, $db_username, $db_password, $db_name);
+require_once "connect.php";
+require_once "setup.php";
 
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+$total = 0;
+?>
+
+<?php
+#Remove item from cart
+if (isset($_POST['remove_from_cart'])) {
+  $index = $_POST['remove_from_cart'];
+  unset($_SESSION['cart'][$index]);
+  $_SESSION['cart'] = array_values($_SESSION['cart']);
+}
+?>
+
+<?php
+    #Check for valid phone number:
+    function checkPhone($phone_number) {
+      $phone_number = preg_replace('/\D/', '', $phone_number);
+  
+      if (strlen($phone_number) != 10 && strlen($phone_number) != 11) {
+          return false;
+      }
+      $valid_area_codes = array('02', '032', '033', '034', '035', '036', '037', '038', '039', '041', '042', '043', '044', '045', '046', '047', '048', '049', '052', '053', '054', '055', '056', '057', '058', '059', '063', '064', '065', '066', '067', '068', '077', '078', '082', '083', '084', '085', '086', '087', '088', '089');
+      if (substr($phone_number, 0, 1) != '0' && substr($phone_number, 0, 2) != '9' && !in_array(substr($phone_number, 0, 2), $valid_area_codes)) {
+          return false;
+      }
+  
+      return true;
     }
 
-    return $conn;
-}
-$total = 0.00;
-?>
+    if (isset($_POST['pay'])) {
+      $errors = 0;
+      $phone_number = $_POST["phone_number"];
+
+        if(checkPhone($phone_number) == false){
+          $error_display = "Invalid phone number, please check or try again.";
+          $errors++;
+      }
+
+      /*
+      if ($errors == 0) {
+        if ($res["result"] == 0) {
+          $unique = $res['array'];
+          // Insert data into database
+          $conn = connect();
+          $sql = "INSERT INTO registered 
+                  (id, type, full_name, birthdate, age, gender, email, phone_number, address, password) 
+                  VALUES 
+                  ($gen_id, '$type', '$unique[0]', '$birthdate', $age, '$gender', '$unique[1]', '$unique[2]', '$unique[3]', '$hashed_password')";
+          if ($conn->query($sql) === TRUE) {
+              $message = "Payment success!";
+          } else {
+              echo "Error occured in connecting to the database, please try again.";
+          } 
+          $conn->close();
+      } else {
+          $errors++;
+      }
+          
+    }*/
+  }
+  ?>
 
 <html>
   <head>
@@ -92,30 +138,30 @@ $total = 0.00;
       .cart-item .remove-button {
         margin-left: 25px;
       }
-	  
-	  .loading-screen {
-		  position: fixed;
-		  top: 0;
-		  left: 0;
-		  width: 100%;
-		  height: 100%;
-		  display: flex;
-		  background-color:white;
-		  justify-content: center;
-		  align-items: center;
-		  opacity:1;
-		  transition: opacity 1s ease-in-out;
-		  z-index: 999;
-		}
 
-		.loading-screen img {
-		  animation: spin 1s linear forwards;
-		}
+      .loading-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        background-color:white;
+        justify-content: center;
+        align-items: center;
+        opacity:1;
+        transition: opacity 1s ease-in-out;
+        z-index: 999;
+      }
 
-		@keyframes spin {
-		  from { transform: rotate(0deg); }
-		  to { transform: rotate(1000deg); }
-		}
+      .loading-screen img {
+        animation: spin 1s linear forwards;
+      }
+
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(1000deg); }
+      }
     </style>
   </head>
 
@@ -175,7 +221,6 @@ $total = 0.00;
                     echo    '<li><a class="dropdown-item" href="logout.php">Sign Out</a></li>';
                     echo  '</ul>';
                     echo  '</div>';
-                    
                   }
                   ?>                                    
                 </ul>              
@@ -197,25 +242,63 @@ $total = 0.00;
             <h4>Cart:</h4>
             <div class="row">
                 <div class="container border border-black" style="height: 35vh; overflow-y: auto;" id="product-container">
-                <?php
-                $total = 0;
-                if (isset($_SESSION['cart'])) {
-                    foreach ($_SESSION['cart'] as $item) {
-                        $product_total = $item['price'];
-                        $total += $product_total;
-                        echo $item['product_name'] . " - " . $item['product_category'];
-                        echo " - ₱" . $item['price'];
-                        echo "<br>";
-                    }
-                }
-                ?>
+                  <table class="table m-0">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th> </th>
+                      </tr>
+                      <tbody>
+                                          
+                        <tr>
+                        <?php
+                          $total = 0;
+                          if (isset($_SESSION['cart'])) {
+                          foreach ($_SESSION['cart'] as $key => $item) {
+                            $product_id = $item['product_id'];   
+                            $product_total = $item['price'] * $item['quantity'];
+                            $total += $product_total;
+                        ?>
+                          <td><?php echo $item['product_id']; ?></td>
+                          <td><?php echo $item['product_name']; ?></td>
+                          <td><?php echo $item['product_category']; ?></td>
+                          <td>
+                            <form method="post" action="">
+                                <input type="hidden" name="product_id" value="<?php echo $product_id; ?>">
+                                <div class="input-group w-50">
+                                    <input type="number" class="form-control" name="quantity" value="<?php echo $item['quantity']; ?>" min="1">
+                                    <div class="input-group-append w-25">
+                                        <button type="submit" name="update_cart" class="btn btn-primary">Update</button>
+                                    </div>
+                                </div>
+                            </form>
+                          </td>
+                          <td>₱<?php echo $item['price'] * $item['quantity']; ?>.00</td>
+                          <td>
+                            <form method="post" action="">
+                                <input type="hidden" name="product_id" value="<?php echo $key; ?>">
+                                <button type="submit" name="remove_from_cart" class="btn btn-danger">Remove</button>
+                            </form>
+                          </td>                       
+                        </tr>
+                        <?php
+                        }
+                      }
+                      ?>
+                      </tbody>
+                    </thead>
+                  </table>
                 </div>
             </div>
     
             <div class="row">
                 <hr>
                 <div id="total-container">
-                  Total: ₱<?php echo $total; ?>
+                  <h5>Total: ₱<?php echo number_format($total, 2);?></h5>
                 </div>
             </div>
         </div>
@@ -224,61 +307,15 @@ $total = 0.00;
             <div id="shadow p-1 mb-5 bg-body-tertiary rounded">
                 <h5>Confirm Payment:</h5>
                 <h6 class="mt-4">Enter GCash Number:</h6>
-                <input type="text" class="w-100 mt-4 mb-4" style="height:50px"placeholder="+63">
-                <button class="btn btn-warning w-100"onclick="Pay()">Pay Now</button>
+                <form method="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" action="">
+                  <input type="text" class="w-100 mt-4 mb-4" style="height:50px"placeholder="+63">
+                  <input type="submit" name="pay" value="Pay"class="btn btn-warning w-100"></input>
+                </form>
             </div>
         </div>
     </div>
   </div>
 
-  <?php
-    #Check for valid phone number:
-    function checkPhone($phone_number) {
-      $phone_number = preg_replace('/\D/', '', $phone_number);
-  
-      if (strlen($phone_number) != 10 && strlen($phone_number) != 11) {
-          return false;
-      }
-      $valid_area_codes = array('02', '032', '033', '034', '035', '036', '037', '038', '039', '041', '042', '043', '044', '045', '046', '047', '048', '049', '052', '053', '054', '055', '056', '057', '058', '059', '063', '064', '065', '066', '067', '068', '077', '078', '082', '083', '084', '085', '086', '087', '088', '089');
-      if (substr($phone_number, 0, 1) != '0' && substr($phone_number, 0, 2) != '9' && !in_array(substr($phone_number, 0, 2), $valid_area_codes)) {
-          return false;
-      }
-  
-      return true;
-    }
-
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-      $errors = 0;
-      $phone_number = $_POST["phone_number"];
-
-        if(checkPhone($phone_number) == false){
-          $error_display = "Invalid phone number, please check or try again.";
-          $errors++;
-      }
-
-      /*
-      if ($errors == 0) {
-        if ($res["result"] == 0) {
-          $unique = $res['array'];
-          // Insert data into database
-          $conn = connect();
-          $sql = "INSERT INTO registered 
-                  (id, type, full_name, birthdate, age, gender, email, phone_number, address, password) 
-                  VALUES 
-                  ($gen_id, '$type', '$unique[0]', '$birthdate', $age, '$gender', '$unique[1]', '$unique[2]', '$unique[3]', '$hashed_password')";
-          if ($conn->query($sql) === TRUE) {
-              $message = "Payment success!";
-          } else {
-              echo "Error occured in connecting to the database, please try again.";
-          } 
-          $conn->close();
-      } else {
-          $errors++;
-      }
-          
-    }*/
-  }
-  ?>
       <!--                                             -->
       <div class="forfooter">
         <div class="container-fluid text-light bg-black mt-5">          
