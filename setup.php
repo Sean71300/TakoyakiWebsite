@@ -168,15 +168,15 @@
             $img_clean= file_get_contents($img_path);
             $employee_pic = mysqli_real_escape_string($conn, $img_clean);
             $id = generate_EmployeeID();
-            $password = 12345;
-            $email = "myntchaos@gmail.com";
+            $password = "Hentoki@123";
+            $email = "henotkitakoyaki.official@gmail.com";
 
             $hashed_pw = password_hash($password, PASSWORD_DEFAULT);
 
             $sql = "INSERT INTO employees
                     (employee_id, employee_img, position,full_name,age,birthdate,gender,email,phone_number,address,password)
                     VALUES
-                    ($id,'$employee_pic','Admin','Maloi',24,'','female','$email','09987654321','Makati City','$hashed_pw')";
+                    ($id,'$employee_pic','Admin','Hentoki Owner',28,'','Female','$email','09987654321','Malabon City','$hashed_pw')";
 
             mysqli_query($conn, $sql);
         }
