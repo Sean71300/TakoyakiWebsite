@@ -1,9 +1,12 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Products</title>
+    <title>Products</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <!-- Custom CSS -->
     <style>
@@ -214,7 +217,7 @@
     }
 
     .category-table tbody tr:nth-child(odd) {
-        background-color: #dc3545; /* Red */
+        background-color: #f2f2f2; /* Red */
         color: white;
     }
 
@@ -254,16 +257,28 @@
 
     /* Modal Content */
     .modal-content {
-        background-color: #fefefe;
-        margin: 5% auto; /* 5% from the top and centered */
-        padding: 30px;
-        border: none;
-        width: 80%; 
-        max-width: 500px; /* Limit maximum width */
-        border-radius: 10px;
-        position: relative;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); 
-    }
+            background-color: #fefefe;
+            margin: 5% auto; /* 5% from the top and centered */
+            padding: 30px;
+            border: none;
+            width: 80%; 
+            max-width: 500px; /* Limit maximum width */
+            border-radius: 10px;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); 
+        }
+
+        .modal-content-help {
+            background-color: #fefefe;
+            margin: 5% auto; /* 5% from the top and centered */
+            padding: 30px;
+            border: none;
+            width: 80%; 
+            max-width: 650px; /* Limit maximum width */
+            border-radius: 10px;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); 
+        }
         
     .close {
         color: #aaaaaa;
@@ -316,7 +331,8 @@
     .centered-text {
         text-align: center;
         margin-bottom: 20px;
-        font-size: 24px;
+        font-size: 30px;
+        font-weight: bold;
         color: #953728;
     }
 
@@ -353,7 +369,9 @@
     <div class="sidebar" id="sidebar">
         <div class="text-center">
             <div class="admin-icon">
+            <a href="Admin_edit profile.html">
                 <img src="https://via.placeholder.com/60" alt="Admin Image">
+            </a>
             </div>
         </div>
         <ul>
@@ -364,8 +382,8 @@
             <li><a href="Admin_category.php"><i class="fas fa-th fa-fw"></i> <span class="nav-text">Categories</span></a></li>
             <li><a href="Admin_products.php"><i class="fas fa-box-open fa-fw"></i> <span class="nav-text">Products</span></a></li>
             <li><a href="Admin_ratings.php"><i class="fas fa-star fa-fw"></i> <span class="nav-text">Ratings</span></a></li>
-            <li><a href="#"><i class="fas fa-sign-out-alt fa-fw"></i> <span class="nav-text">Sign Out</span></a></li>
-            <li><a href="#"><i class="fas fa-question-circle fa-fw"></i> <span class="nav-text">Help</span></a></li>
+            <li><a href="logout.php"><i class="fas fa-sign-out-alt fa-fw"></i> <span class="nav-text">Sign Out</span></a></li>
+            <li><a href="#" id="HelpLink"><i class="fas fa-question-circle fa-fw"></i> <span class="nav-text">Help</span></a></li>
         </ul>
     </div>
 
@@ -375,6 +393,7 @@
             <button class="navbar-toggler" type="button" id="sidebarCollapseButton">
                 <i class="fas fa-bars text-black"></i>
             </button>
+            <?php include_once 'nav.php'; ?>
         </div>
     </nav>
 
@@ -423,27 +442,27 @@
                 <h2 class="centered-text" id="title">Add New Product</h2>
                 <form id="addProductForm" method="post" action="product_functions.php">
                     <div class="mb-3">
-                        <label for="categoryID" class="form-label">Product ID</label>
+                        <label for="categoryID" class="form-label">Product ID <i style="color: lightgrey;">(automated)</i></label>
                         <input type="text" class="form-control" id="ProductID" name="productID" placeholder="202416----" readonly>
                     </div>
                     <div class="mb-3">
-                        <label for="categoryType" class="form-label">Product Name</label>
+                        <label for="categoryType" class="form-label"><b style="color: red;">*</b>Product Name</label>
                         <input type="text" class="form-control" id="ProductName" name="productName" required>
                     </div>
                     <div class="mb-3">
-                        <label for="categoryID" class="form-label">Category ID</label>
+                        <label for="categoryID" class="form-label">Category ID <i style="color: lightgrey;">(automated)</i></label>
                         <input type="text" class="form-control" id="CategoryID" name="categoryID" placeholder="202403----" readonly>
                     </div>
                     <div class="mb-3">
-                        <label for="categoryType" class="form-label">Category Type</label>
+                        <label for="categoryType" class="form-label"><b style="color: red;">*</b>Category Type</label>
                         <input type="text" class="form-control" id="CategoryType" name="categoryType" required>
                     </div>
                     <div class="mb-3">
-                        <label for="categoryType" class="form-label">Status</label>
+                        <label for="categoryType" class="form-label"><b style="color: red;">*</b>Status</label>
                         <input type="text" class="form-control" id="ProductStatus" name="productStatus" required>
                     </div>
                     <div class="mb-3">
-                        <label for="categoryType" class="form-label">Price</label>
+                        <label for="categoryType" class="form-label"><b style="color: red;">*</b>Price</label>
                         <input type="text" class="form-control" id="ProductPrice" name="productPrice" required>
                     </div>
                     <div  class="form-group d-flex justify-content-center align-items-center">
@@ -451,6 +470,79 @@
                         <button type="button" class="btn btn-clear" id="clearFormBtn">Clear</button>
                     </div>
                 </form>
+            </div>
+        </div>
+
+        <!------- HELP MODAL ------->
+        <div id="helpModal" class="modal">
+            <div class="modal-content-help">
+                <span class="close">&times;</span>
+                <h1 class="centered-text" id="title">Help</h1>
+                <table>
+                    <tr>
+                        <td>
+                            <h5><b>Dashboard</b></h5>
+                            <ul>
+                                <li>Shows the Sales of the business.</li>
+                                <li>Shows the Ratings of the products.</li>
+                                <li>Shows the Employees summarized information.</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <h5><b>Categories</b></h5>
+                            <ul>
+                                <li>Shows all the Categories.</li>
+                                <li>Can add new Category.</li>
+                                <li>Can edit existing Category.</li>
+                                <li>Can delete a Category.</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h5><b>Transaction History</b></h5>
+                            <ul>
+                                <li>Shows the overall Transaction of the business.</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <h5><b>Products</b></h5>
+                            <ul>
+                                <li>Shows all the Products.</li>
+                                <li>Can add new Product.</li>
+                                <li>Can edit existing Product.</li>
+                                <li>Can delete a Product.</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h5><b>Employees</b></h5>
+                            <ul>
+                                <li>Shows all the Employees.</li>
+                                <li>Can add new Employees.</li>
+                                <li>Can edit existing Employees' information.</li>
+                                <li>Can delete an Employee.</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <h5><b>Ratings</b></h5>
+                            <ul>
+                                <li>Shows all the Ratings.</li>
+                                <li>Can approve customers' Ratings.</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h5><b>Customers</b></h5>
+                            <ul>
+                                <li>Shows all the Customers.</li>
+                                <li>Can delete a Customer.</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>
@@ -469,12 +561,55 @@
             document.querySelector('.search-box').focus();
         });
 
+        // Check if the URL has the success query parameter
+        var urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('success')) 
+        {
+            // Retrieve the successType value
+            var successType = urlParams.get('success');
+
+            // Check the value of successType
+            if (successType === 'add') 
+            {
+                alert("Category added successfully.");
+            } 
+            else if (successType === 'update') 
+            {
+                alert("Category updated successfully.");
+            }
+
+            // Reset successType and urlParams
+            successType = null;
+            urlParams = null;
+        }
+
 // ------------------------- ADD PRODUCT MODAL JS ------------------------- //
+
+        function changeFormTitleAndButton(title, buttonText) 
+        {
+            // Change the modal title
+            document.getElementById('title').innerText = title;
+
+            // Change the button value
+            document.getElementById('updateBtn').innerText = buttonText;
+        }
+
+        function blank()
+        {
+            document.getElementById('ProductID').value = "";
+            document.getElementById('ProductName').value = "";
+            document.getElementById('CategoryID').value = "";
+            document.getElementById('CategoryType').value = "";
+            document.getElementById('ProductStatus').value = "";
+            document.getElementById('ProductPrice').value = "";
+        }
 
         // Show Add Category Modal
 	    document.getElementById('addProductBtn').addEventListener('click', function() {
         var modal = document.getElementById('addProductModal');
         modal.style.display = "block";
+        changeFormTitleAndButton('Add Product', 'Add Product');
+        blank();
         console.log('Add New Product button clicked');
 	    });
 	
@@ -531,7 +666,7 @@
         
 // ------------------------- UPDATE PRODUCT MODAL JS ------------------------- //        
 
-        // Function to fetch category data and fill the fields
+        // Function to fetch product data and fill the fields
         function getProduct(productId) 
         {
             fetch(`getProduct.php?product_id=${productId}`)
@@ -545,7 +680,8 @@
                 document.getElementById('ProductPrice').value = data.price;
             })
             .catch(error => {
-                console.error('Error fetching employee data:', error);
+                console.error('Error fetching product data:', error);
+                alert('Failed to fetch product data. Please try again.');
             });
         }
 
@@ -559,18 +695,38 @@
         }
 
         // Function to open the modal and populate the fields
-        function updateProduct(productID) 
+        function updateProduct(productId) 
         {
             // Open the modal
             const modal = document.getElementById('addProductModal');
             modal.style.display = 'block';
 
-            // Fetch the employee details
-            getProduct(productID);
+            // Fetch the product details
+            getProduct(productId);
 
-            // Change the modal title and button text for updating employee
+            // Change the modal title and button text for updating product
             changeFormTitleAndButton('Update Product', 'Update');
         }
+
+        // Close the modal when clicking outside of it
+        window.onclick = function(event) 
+        {
+            const modal = document.getElementById('addProductModal');
+            if (event.target === modal) 
+            {
+                modal.style.display = 'none';
+            }
+        };
+
+        // Close the modal when pressing the escape key
+        window.onkeydown = function(event) 
+        {
+            const modal = document.getElementById('addProductModal');
+            if (event.key === 'Escape') 
+            {
+                modal.style.display = 'none';
+            }
+        };
 
 // -------------------------------------------------- DELETE PRODUCT JS -------------------------------------------------- //
 
@@ -603,59 +759,6 @@
             }
         }
 
-// -------------------------------------------------- ADD PRODUCT JS -------------------------------------------------- //
-
-function addEmployee() {
-        // Get form data
-        var fullName = document.getElementById('full_name').value;
-        var position = document.getElementById('position').value;
-        var age = document.getElementById('age').value;
-        var birthdate = document.getElementById('birthdate').value;
-        var gender = document.getElementById('gender').value;
-        var email = document.getElementById('email').value;
-        var phoneNumber = document.getElementById('phone_number').value;
-        var address = document.getElementById('address').value;
-
-        // Validate form data (you can add more validation as needed)
-        if (!fullName || !position || !age || !birthdate || !gender || !email || !phoneNumber || !address) {
-            alert("Please fill in all fields.");
-            return;
-        }
-
-        // Create an XMLHttpRequest object
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "employee_functions.php", true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-        // Define what happens on successful data submission
-        xhr.onload = function () {
-            if (xhr.status == 200) 
-            {
-                // Do something with the response
-                alert(xhr.responseText);
-                // Optionally, you can close the modal and refresh the page
-                closeModal();
-                location.reload();
-            } 
-            else 
-            {
-                alert("Error adding employee.");
-            }
-        };
-
-        // Send the request with the form data
-        var data = "full_name=" + encodeURIComponent(fullName) +
-                   "&position=" + encodeURIComponent(position) +
-                   "&age=" + encodeURIComponent(age) +
-                   "&birthdate=" + encodeURIComponent(birthdate) +
-                   "&gender=" + encodeURIComponent(gender) +
-                   "&email=" + encodeURIComponent(email) +
-                   "&phone_number=" + encodeURIComponent(phoneNumber) +
-                   "&address=" + encodeURIComponent(address);
-
-        xhr.send(data);
-        }    
-
 // ----------------------------------------- SEARCH ----------------------------------------- //
 
         // For input field to detect changes in input value
@@ -681,7 +784,23 @@ function addEmployee() {
                 });
             }
         }        
+        
+// ----------------------------------------- HELP MODAL ----------------------------------------- //
 
+        // Show Help Modal
+	    document.getElementById('HelpLink').addEventListener('click', function() {
+        var modal = document.getElementById('helpModal');
+        modal.style.display = "block";
+        console.log('Help modal opened');
+	    });
+        
+        // Close Modal
+	    var closeBtn = document.getElementsByClassName("close")[1];
+	    closeBtn.onclick = function() {
+        var modal = document.getElementById('helpModal');
+        modal.style.display = "none";
+        console.log('Modal closed');
+	    };
     </script>
 </body>
 </html>

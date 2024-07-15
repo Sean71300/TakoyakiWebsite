@@ -20,9 +20,8 @@
 
         if (mysqli_query($conn, $sql))
         {
-            $message = "Product added successfully!";
-            header("Refresh: 0; url=Admin_products.php");
-            echo "<script type='text/javascript'>alert('$message');</script>";
+            // Redirect to Admin_category.php with a success query parameter
+            header("Location: Admin_products.php?success=add");
         }
         else 
         {
@@ -43,9 +42,8 @@
     
         if ($stmt->execute()) 
         {
-            $message = "Updated successfully!";
-            header("Refresh: 0; url=Admin_products.php");
-            echo "<script type='text/javascript'>alert('$message');</script>";
+            // Redirect to Admin_category.php with a success query parameter
+            header("Location: Admin_products.php?success=update");
         }
         else 
         {
@@ -94,18 +92,19 @@
                 while ($row = $retval->fetch_assoc()) 
                 {
                     $productID = $row["product_id"];
+                    $productImg = base64_encode($row["product_img"]);
                     echo "<tr>";
-                    echo "<td>" . $row["product_img"] . "</td>";
+                    echo "<td><img src='data:image/jpeg;base64," . $productImg . "' height=60></td>";
                     echo "<td>" . $row["product_id"] . "</td>";
                     echo "<td>" . $row["product_name"] . "</td>";
                     echo "<td>" . $row["category_id"] . "</td>";
                     echo "<td>" . $row["category_type"] . "</td>";
                     echo "<td>" . $row["status"] . "</td>";
                     echo "<td>" . $row["price"] . "</td>";
-                    echo "<td class='category-actions'>
+                    echo "<td>
                             <a href='#' class='btn btn-sm btn-success'><i class='fas fa-edit' onclick='updateProduct(" . $productID . ")'></i></a>
                             <a href='#' class='btn btn-sm btn-danger'><i class='fas fa-trash' onclick='deleteProduct(" . $productID . ")'></i></a>
-                        </td>";
+                          </td>";
                     echo "</tr>";
                 }
             }
