@@ -189,6 +189,7 @@
         $conn->close();
     }
 // -------------------------------------- EMPLOYEE ID CREATION -------------------------------------- //
+
     function generate_EmployeeID()
     {
         $conn = connect();
@@ -209,36 +210,39 @@
         $conn->close();
         return $genID;
     }
-    // -------------------------------------- CATEGORIES TABLE CREATION -------------------------------------- //
-        function create_CategoryTable()
+
+// -------------------------------------- CATEGORIES TABLE CREATION -------------------------------------- //
+    
+    function create_CategoryTable()
+    {
+        $conn = connect();
+    
+        $sql = "CREATE TABLE categories(
+                category_id INT(10) PRIMARY KEY,
+                category_type VARCHAR(100))";
+    
+        if (mysqli_query($conn, $sql))
         {
-            $conn = connect();
+            $categoryID = generate_CategoryID();
     
-            $sql = "CREATE TABLE categories(
-                    category_id INT(10) PRIMARY KEY,
-                    category_type VARCHAR(100))";
+            $sql = "INSERT INTO categories
+                    (category_id,category_type)
+                    VALUES
+                    ($categoryID,'Takoyaki'),
+                    (". (++$categoryID) .",'10+1'),
+                    (". (++$categoryID) .",'Barkada Platters'),
+                    (". (++$categoryID) .",'Rice Meals')";
     
-            if (mysqli_query($conn, $sql))
-            {
-                $categoryID = generate_CategoryID();
-    
-                $sql = "INSERT INTO categories
-                        (category_id,category_type)
-                        VALUES
-                        ($categoryID,'Takoyaki'),
-                        (". (++$categoryID) .",'10+1'),
-                        (". (++$categoryID) .",'Barkada Platters'),
-                        (". (++$categoryID) .",'Rice Meals')";
-    
-                mysqli_query($conn, $sql);
-            }
-            else
-            {
-                echo "<br>There is an error in creating the table: " . $conn->connect_error;
-            }
-    
-            $conn->close();
+            mysqli_query($conn, $sql);
         }
+        else
+        {
+            echo "<br>There is an error in creating the table: " . $conn->connect_error;
+        }
+    
+        $conn->close();
+    }
+
 // -------------------------------------- CATEGORY ID CREATION -------------------------------------- //
         function generate_CategoryID()
         {
@@ -261,78 +265,78 @@
             return $genID;
         }
 // -------------------------------------- PRODUCTS TABLE CREATION -------------------------------------- //
-function create_ProductTable()
-{
-    $conn = connect();
+        function create_ProductTable()
+        {
+            $conn = connect();
 
-    $sql = "CREATE TABLE products(
-            product_id INT(10) PRIMARY KEY AUTO_INCREMENT,
-            product_img LONGBLOB,
-            product_name VARCHAR(50),
-            category_id INT(10),
-            category_type VARCHAR(100),
-            status VARCHAR(30),
-            price FLOAT(6),
-            FOREIGN KEY (category_id) REFERENCES categories(category_id))";
+            $sql = "CREATE TABLE products(
+                    product_id INT(10) PRIMARY KEY AUTO_INCREMENT,
+                    product_img LONGBLOB,
+                    product_name VARCHAR(50),
+                    category_id INT(10),
+                    category_type VARCHAR(100),
+                    status VARCHAR(30),
+                    price FLOAT(6),
+                    FOREIGN KEY (category_id) REFERENCES categories(category_id))";
 
-    if (mysqli_query($conn, $sql))
-    {
-        // Prepare image data
-        $imgArr = array(
-            "Images/octobits.png", "Images/crab bits.png", "Images/cheese bits.png", "Images/bacon bits.png",
-            "Images/assorted-barkada.png", "Images/cheesy-barkada.png", "Images/beef.png", "Images/pork.png"
-        );
+            if (mysqli_query($conn, $sql))
+            {
+                // Prepare image data
+                $imgArr = array(
+                    "Images/octobits.png", "Images/crab bits.png", "Images/cheese bits.png", "Images/bacon bits.png",
+                    "Images/assorted-barkada.png", "Images/cheesy-barkada.png", "Images/beef.png", "Images/pork.png"
+                );
 
-        $escapedImgDataArr = array();
+                $escapedImgDataArr = array();
 
-        foreach ($imgArr as $imgPath) {
-            $imgData = file_get_contents($imgPath);
-            if ($imgData === false) {
-                echo "Failed to read image: $imgPath";
-                continue; 
+                foreach ($imgArr as $imgPath) {
+                    $imgData = file_get_contents($imgPath);
+                    if ($imgData === false) {
+                        echo "Failed to read image: $imgPath";
+                        continue; 
+                    }
+                    $escapedImgDataArr[] = mysqli_real_escape_string($conn, $imgData);
+                }
+
+                // Generate IDs
+                $id = generate_ProductID();
+                $categoryID = generate_CategoryID();
+                $catID = $categoryID - 4;
+
+                // Insert products with image
+                $sql = "INSERT INTO products
+                    (product_id, product_img, product_name, category_id, category_type, status, price)
+                    VALUES
+                    ($id, '{$escapedImgDataArr[0]}', 'Octo Bits', $catID , 'Takoyaki', 'Available', 39),
+                    (". (++$id) .", '{$escapedImgDataArr[1]}', 'Crab Bits', $catID , 'Takoyaki', 'Available', 39),
+                    (". (++$id) .", '{$escapedImgDataArr[2]}', 'Cheese Bits', $catID, 'Takoyaki', 'Available', 39),
+                    (". (++$id) .", '{$escapedImgDataArr[3]}', 'Bacon Bits', $catID, 'Takoyaki', 'Available', 39),
+                    (". (++$id) .", '{$escapedImgDataArr[0]}', 'Octo Bits', ". (++$catID) .", '10+1', 'Available', 100),
+                    (". (++$id) .", '{$escapedImgDataArr[1]}', 'Crab Bits', $catID , '10+1', 'Available', 100),
+                    (". (++$id) .", '{$escapedImgDataArr[2]}', 'Cheese Bits', $catID , '10+1', 'Available', 100),
+                    (". (++$id) .", '{$escapedImgDataArr[3]}', 'Bacon Bits', $catID , '10+1', 'Available', 100),
+                    (". (++$id) .", '{$escapedImgDataArr[4]}', 'Assorted Barkada', ". (++$catID) .", 'Barkada Platter', 'Available', 400),
+                    (". (++$id) .", '{$escapedImgDataArr[5]}', 'Cheesey Barkada', $catID, 'Barkada Platter', 'Available', 320),
+                    (". (++$id) .", '{$escapedImgDataArr[6]}', 'Beef Gyudon', ". (++$catID) .", 'Rice Meals', 'Available', 85),
+                    (". (++$id) .", '{$escapedImgDataArr[7]}', 'Pork Tonkatsun', $catID, 'Rice Meals', 'Available', 75)";
+
+                mysqli_query($conn, $sql);
+
+                // Check for errors
+                if (mysqli_error($conn)) {
+                    echo "Error inserting image: " . mysqli_error($conn);
+                }
             }
-            $escapedImgDataArr[] = mysqli_real_escape_string($conn, $imgData);
+            else
+            {
+                echo "<br>There is an error in creating the table: " . mysqli_error($conn);
+            }
+
+            $conn->close();
         }
-
-        // Generate IDs
-        $id = generate_ProductID();
-        $categoryID = generate_CategoryID();
-        $catID = $categoryID - 4;
-
-        // Insert products with image
-        $sql = "INSERT INTO products
-            (product_id, product_img, product_name, category_id, category_type, status, price)
-            VALUES
-            ($id, '{$escapedImgDataArr[0]}', 'Octo Bits', $catID , 'Takoyaki', 'Available', 39),
-            (". (++$id) .", '{$escapedImgDataArr[1]}', 'Crab Bits', $catID , 'Takoyaki', 'Available', 39),
-            (". (++$id) .", '{$escapedImgDataArr[2]}', 'Cheese Bits', $catID, 'Takoyaki', 'Available', 39),
-            (". (++$id) .", '{$escapedImgDataArr[3]}', 'Bacon Bits', $catID, 'Takoyaki', 'Available', 39),
-            (". (++$id) .", '{$escapedImgDataArr[0]}', 'Octo Bits', ". (++$catID) .", '10+1', 'Available', 100),
-            (". (++$id) .", '{$escapedImgDataArr[1]}', 'Crab Bits', $catID , '10+1', 'Available', 100),
-            (". (++$id) .", '{$escapedImgDataArr[2]}', 'Cheese Bits', $catID , '10+1', 'Available', 100),
-            (". (++$id) .", '{$escapedImgDataArr[3]}', 'Bacon Bits', $catID , '10+1', 'Available', 100),
-            (". (++$id) .", '{$escapedImgDataArr[4]}', 'Assorted Barkada', ". (++$catID) .", 'Barkada Platter', 'Available', 400),
-            (". (++$id) .", '{$escapedImgDataArr[5]}', 'Cheesey Barkada', $catID, 'Barkada Platter', 'Available', 320),
-            (". (++$id) .", '{$escapedImgDataArr[6]}', 'Beef Gyudon', ". (++$catID) .", 'Rice Meals', 'Available', 85),
-            (". (++$id) .", '{$escapedImgDataArr[7]}', 'Pork Tonkatsun', $catID, 'Rice Meals', 'Available', 75)";
-
-        mysqli_query($conn, $sql);
-
-        // Check for errors
-        if (mysqli_error($conn)) {
-            echo "Error inserting image: " . mysqli_error($conn);
-        }
-    }
-    else
-    {
-        echo "<br>There is an error in creating the table: " . mysqli_error($conn);
-    }
-
-    $conn->close();
-}
-
 
 // -------------------------------------- PRODUCTS ID CREATION -------------------------------------- //  
+    
     function generate_ProductID()
     {
         $conn = connect();
@@ -355,6 +359,7 @@ function create_ProductTable()
     }   
 
 // -------------------------------------- RATINGS TABLE CREATION -------------------------------------- //
+
     function create_RatingsTable()
     {
         $conn = connect();
@@ -394,6 +399,7 @@ function create_ProductTable()
         $conn->close();
     }
 // -------------------------------------- RATING ID CREATION -------------------------------------- //
+
     function generate_RatingID()
     {
         $conn = connect();
@@ -414,8 +420,8 @@ function create_ProductTable()
         return $genID;
     }
     
-
 // -------------------------------------- TRANSACTION TABLE CREATION -------------------------------------- //
+
     function create_TansactionTable()
     {
         $conn = connect();
@@ -424,24 +430,44 @@ function create_ProductTable()
                 transaction_id INT(10) PRIMARY KEY,
                 customer_id INT(10),
                 full_name VARCHAR(100),
+                phone_number VARCHAR(11),
+                product_id INT(10),
+                product_name VARCHAR(50),
+                quantity INT(5),
                 total_price FLOAT(6),
                 transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (customer_id) REFERENCES customers(customer_id))";
+                FOREIGN KEY (customer_id) REFERENCES customers(customer_id),
+                FOREIGN KEY (product_id) REFERENCES products(product_id))";
 
         if (mysqli_query($conn, $sql))
         {
-            $id = generate_CustomerID();
-            $custID = --$id;
+            $sql = "SELECT customer_id,full_name,phone_number FROM customers WHERE customer_id = 2024070000";
+
+            $category = $conn->query($sql);
+            $row = $category->fetch_assoc();
+
+            $id = $row["customer_id"];
+            $name = $row["full_name"];
+            $phone_num = $row["phone_number"];
+
+            $sql = "SELECT product_name FROM products WHERE product_id = 2024160000";
+
+            $category = $conn->query($sql);
+            $row = $category->fetch_assoc();
+
+            $prod_name = $row["product_name"];
             $transacID = generate_TransactionID();
             $prodID = generate_ProductID();
             $productID = --$prodID;
 
             $sql = "INSERT INTO transaction_history
-                    (transaction_id,customer_id,full_name,total_price)
+                    (transaction_id,customer_id,full_name,phone_number,product_id,product_name,quantity,total_price)
                     VALUES
-                    ($transacID,$custID,'Maki',300.00)";
+                    ($transacID,$id,'$name','$phone_num',$productID,'$prod_name',3,320.00)";
 
             mysqli_query($conn, $sql);
+
+            echo "<br>The table transaction_history is created successfully.";
         }
         else
         {
@@ -450,7 +476,9 @@ function create_ProductTable()
 
         $conn->close();
     }
+
 // -------------------------------------- TRANSACTION ID CREATION -------------------------------------- //
+
     function generate_TransactionID()
     {
         $conn = connect();
@@ -473,6 +501,7 @@ function create_ProductTable()
     }
 
 // -------------------------------------- SHIPPING ADDRESS TABLE CREATION -------------------------------------- //
+
     function create_ShippingAddressTable()
     {
         $conn = connect();
@@ -504,40 +533,39 @@ function create_ProductTable()
 
         $conn->close();
     }
+
 // -------------------------------------- REPLY TO RATINGS TABLE CREATION -------------------------------------- //
-function create_ReplytoCustomer()
-{
-    $conn = connect();
 
-    $sql = "CREATE TABLE IF NOT EXISTS ReplytoCustomer (
-        rating_id INT(10), 
-        reply VARCHAR(550),
-        date_reply TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
-        FOREIGN KEY (rating_id) REFERENCES ratings(rating_id) ON DELETE CASCADE
-    )";
+    function create_ReplytoCustomer()
+    {
+        $conn = connect();
 
-    if (mysqli_query($conn, $sql)) {
-        $reply = "Thank you for your review! Hope to see you again in Hentoki!";
-        $rate = generate_RatingID();
-        $ratingID = --$rate;
+        $sql = "CREATE TABLE IF NOT EXISTS ReplytoCustomer (
+            rating_id INT(10), 
+            reply VARCHAR(550),
+            date_reply TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+            FOREIGN KEY (rating_id) REFERENCES ratings(rating_id) ON DELETE CASCADE
+        )"; 
 
-        // Insert into the table
-        $sql = "INSERT INTO ReplytoCustomer (
-                rating_id, 
-                reply) VALUES 
-                ($ratingID, 'aus ang sarap')";
+        if (mysqli_query($conn, $sql)) {
+            $reply = "Thank you for your review! Hope to see you again in Hentoki!";
+            $rate = generate_RatingID();
+            $ratingID = --$rate;
+            
+            // Insert into the table
+            $sql = "INSERT INTO ReplytoCustomer (
+                    rating_id, 
+                    reply) VALUES 
+                    ($ratingID, 'aus ang sarap')";
 
-        mysqli_query($conn, $sql);
-        
-    } else {
-        echo "<br>There is an error in creating the table: " . $conn->error;
+            mysqli_query($conn, $sql);
+            
+        } else {
+            echo "<br>There is an error in creating the table: " . $conn->error;
+        }
+
+        $conn->close();
     }
-
-    $conn->close();
-}
-
-
-
 ?>
 
 <?php
@@ -617,8 +645,6 @@ function create_ReplytoCustomer()
     {
         create_ShippingAddressTable();
     }
-
-
 
     $conn->close();
 ?>
