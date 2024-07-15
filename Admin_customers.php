@@ -286,13 +286,14 @@ session_start();
         }
 
         /* Modal Content */
-        .modal-content {
+
+        .modal-content-help {
             background-color: #fefefe;
             margin: 5% auto; /* 5% from the top and centered */
             padding: 30px;
             border: none;
             width: 80%; 
-            max-width: 500px; /* Limit maximum width */
+            max-width: 650px; /* Limit maximum width */
             border-radius: 10px;
             position: relative;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); 
@@ -461,64 +462,74 @@ session_start();
 
         <!------- HELP MODAL ------->
         <div id="helpModal" class="modal">
-            <div class="modal-content">
+            <div class="modal-content-help">
                 <span class="close">&times;</span>
                 <h1 class="centered-text" id="title">Help</h1>
-                <div>
-                    <h5><b>Dashboard</b></h5>
-                    <ul>
-                        <li>Shows the Sales of the business.</li>
-                        <li>Shows the Ratings of the products.</li>
-                        <li>Shows the Employees summarized information.</li>
-                    </ul>
-                </div>
-                <div>
-                    <h5><b>Transaction History</b></h5>
-                    <ul>
-                        <li>Shows the overall Transaction of the business.</li>
-                    </ul>
-                </div>
-                <div>
-                    <h5><b>Employees</b></h5>
-                    <ul>
-                        <li>Shows all the Employees.</li>
-                        <li>Can add new Employees.</li>
-                        <li>Can edit existing Employees' information.</li>
-                        <li>Can delete an Employee.</li>
-                    </ul>
-                </div>
-                <div>
-                    <h5><b>Customers</b></h5>
-                    <ul>
-                        <li>Shows all the Customers.</li>
-                        <li>Can delete a Customer.</li>
-                    </ul>
-                </div>
-                <div>
-                    <h5><b>Categories</b></h5>
-                    <ul>
-                        <li>Shows all the Categories.</li>
-                        <li>Can add new Category.</li>
-                        <li>Can edit existing Category.</li>
-                        <li>Can delete a Category.</li>
-                    </ul>
-                </div>
-                <div>
-                    <h5><b>Products</b></h5>
-                    <ul>
-                        <li>Shows all the Products.</li>
-                        <li>Can add new Product.</li>
-                        <li>Can edit existing Product.</li>
-                        <li>Can delete a Product.</li>
-                    </ul>
-                </div>
-                <div>
-                    <h5><b>Ratings</b></h5>
-                    <ul>
-                        <li>Shows all the Ratings.</li>
-                        <li>Can approve customers' Ratings.</li>
-                    </ul>
-                </div>
+                <table>
+                    <tr>
+                        <td>
+                            <h5><b>Dashboard</b></h5>
+                            <ul>
+                                <li>Shows the Sales of the business.</li>
+                                <li>Shows the Ratings of the products.</li>
+                                <li>Shows the Employees summarized information.</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <h5><b>Categories</b></h5>
+                            <ul>
+                                <li>Shows all the Categories.</li>
+                                <li>Can add new Category.</li>
+                                <li>Can edit existing Category.</li>
+                                <li>Can delete a Category.</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h5><b>Transaction History</b></h5>
+                            <ul>
+                                <li>Shows the overall Transaction of the business.</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <h5><b>Products</b></h5>
+                            <ul>
+                                <li>Shows all the Products.</li>
+                                <li>Can add new Product.</li>
+                                <li>Can edit existing Product.</li>
+                                <li>Can delete a Product.</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h5><b>Employees</b></h5>
+                            <ul>
+                                <li>Shows all the Employees.</li>
+                                <li>Can add new Employees.</li>
+                                <li>Can edit existing Employees' information.</li>
+                                <li>Can delete an Employee.</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <h5><b>Ratings</b></h5>
+                            <ul>
+                                <li>Shows all the Ratings.</li>
+                                <li>Can approve customers' Ratings.</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h5><b>Customers</b></h5>
+                            <ul>
+                                <li>Shows all the Customers.</li>
+                                <li>Can delete a Customer.</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>
