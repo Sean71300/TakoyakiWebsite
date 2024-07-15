@@ -169,7 +169,7 @@
             $employee_pic = mysqli_real_escape_string($conn, $img_clean);
             $id = generate_EmployeeID();
             $password = "Hentoki@123";
-            $email = "henotkitakoyaki.official@gmail.com";
+            $email = "hentokitakoyaki.official@gmail.com";
 
             $hashed_pw = password_hash($password, PASSWORD_DEFAULT);
 
