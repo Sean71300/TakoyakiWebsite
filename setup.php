@@ -68,7 +68,6 @@
         }
         $stmt->close();
         $conn->close();
-         echo $id;
         return $id;
     }
 
@@ -165,7 +164,7 @@
 
         if (mysqli_query($conn, $sql))
         {
-            $img_path = "Images/id_picture.jpg";
+            $img_path = "Images/logo.jpg";
             $img_clean= file_get_contents($img_path);
             $employee_pic = mysqli_real_escape_string($conn, $img_clean);
             $id = generate_EmployeeID();
@@ -466,8 +465,6 @@
                     ($transacID,$id,'$name','$phone_num',$productID,'$prod_name',3,320.00)";
 
             mysqli_query($conn, $sql);
-
-            echo "<br>The table transaction_history is created successfully.";
         }
         else
         {
