@@ -26,9 +26,6 @@ require_once "connect.php";
 require_once "setup.php";
 ?>
 
-<<<<<<< HEAD
-<?php
-=======
 <html>
   <head>
     <title>Checkout</title>
@@ -174,7 +171,6 @@ require_once "setup.php";
   </div>
 
   <?php
->>>>>>> dd204e5c20d28066fa42651b1f3210d8809595a8
     #Check for valid phone number:
     function checkPhone($phone_number) {
       $phone_number = preg_replace('/\D/', '', $phone_number);
@@ -208,7 +204,6 @@ require_once "setup.php";
         <script src="https://kit.fontawesome.com/af468059ce.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="css/bootstrap.css">
 
-<<<<<<< HEAD
         <style>
             a {
                 text-decoration: inherit;
@@ -487,33 +482,5 @@ require_once "setup.php";
                 </div>          
             </div>
         </div>
-=======
-      /*
-      if ($errors == 0) {
-        if ($res["result"] == 0) {
-          $unique = $res['array'];
-          // Insert data into database
-          $conn = connect();
-          $sql = "INSERT INTO registered 
-                  (id, type, full_name, birthdate, age, gender, email, phone_number, address, password) 
-                  VALUES 
-                  ($gen_id, '$type', '$unique[0]', '$birthdate', $age, '$gender', '$unique[1]', '$unique[2]', '$unique[3]', '$hashed_password')";
-          if ($conn->query($sql) === TRUE) {
-              $message = "Payment success!";
-          } else {
-              echo "Error occured in connecting to the database, please try again.";
-          } 
-          $conn->close();
-      } else {
-          $errors++;
-      }
-          
-    }*/
-  }
-  ?>
-      <!--                                             -->
-      <!-- Footer -->
-    <?php include "Footer.php"?>      
->>>>>>> dd204e5c20d28066fa42651b1f3210d8809595a8
     </body>
 </html>
