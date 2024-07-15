@@ -229,7 +229,6 @@ function retrieveProductsByCategory($categoryId) {
   </head>
 
   <body class="bg-body-tertiary">
-<<<<<<< HEAD
     <script>
       window.onload = function() {
         const loadingScreen = document.querySelector('.loading-screen');
@@ -293,10 +292,6 @@ function retrieveProductsByCategory($categoryId) {
         </div>
       </nav>
     </div>
-=======
-    <!-- Navbar -->
-    <?php include "Navigation.php"?>      
->>>>>>> dd204e5c20d28066fa42651b1f3210d8809595a8
 
     <!--                                             -->
     <div class="container">
@@ -344,37 +339,10 @@ function retrieveProductsByCategory($categoryId) {
         retrieveProductsByCategory($categoryID);
         ?>
       </div>
-<<<<<<< HEAD
     </div>
 		                                         
     <!--- FOOTER --->
-    <div class="forfooter">
-      <div class="container-fluid text-light bg-black mt-5">          
-        <div class="row ">
-          <div class="col-12 text-center">
-            <a href="index.html"><img src="Images/Logo.jpg" class="footer image-fluid my-4"></a>
-          </div>           
-          <div class="col-12">
-            <div class="row">
-              <div class="col-lg-3 col-md-1 col-sm-0"></div>
-              <div class="col-lg-6 col-md-10 col-sm-12 d-flex justify-content-around pe-4">
-                <a href="index.html" class="text-decoration-none text-reset">Home</a>
-                <a href="About.html" class="text-decoration-none text-reset">About us</a>
-                <a href="Menu.php" class="text-decoration-none text-reset">Menu</a>
-                <a href="Contact.html" class="text-decoration-none text-reset">Contact</a>
-                <a href="Pages.html" class="text-decoration-none text-reset">Personnel</a>
-              </div>
-              <div class="col-lg-3 col-md-1 col-sm-0"></div>
-            </div>              
-          </div> 
-          <div class="col-12 text-center my-3">
-            <a href="https://www.facebook.com/hentokitakoyaki"><img src="Images/facebook.png" class="img-fluid footer1 m-2"></a>
-            <a href="https://www.instagram.com/hentokitakoyaki/"><img src="Images/instagram.png" class="img-fluid footer1 m-2"></a> <br>  
-            <span class="text-white-50">@copyright 2023 - hentoki</span>
-          </div> 
-        </div>          
-      </div>
-    </div>
+    <?php include "footer.php"?>   
 
     <script>
       let qty = 1;
@@ -404,27 +372,5 @@ function retrieveProductsByCategory($categoryId) {
         quantityInput.value = quantitySpan.textContent;
       }
     </script>
-=======
-		
-      <div class="modal fade" id="input" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="quantityInput">Order Successful</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-              <p class="text-center p-3">Order Added!</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Okay</button>
-            </div>
-          </div>
-        </div>
-      </div>                                           
-
-      <!-- Footer -->
-    <?php include "Footer.php"?>      
->>>>>>> dd204e5c20d28066fa42651b1f3210d8809595a8
     </body>
 </html>
