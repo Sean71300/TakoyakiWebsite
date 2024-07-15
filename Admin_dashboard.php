@@ -1,6 +1,10 @@
 <?php
 require_once 'connect.php'; 
 require_once 'setup.php';
+include 'modal.html';
+
+ob_start();
+
 
 
 // ------------ QUERIES FOR CHART -------------------------
@@ -35,10 +39,45 @@ $chart_data = [
 $chart_data_json = json_encode($chart_data);
 
 // ------------------------------ TOP AND BOTTOM PRODUCTS------------------------
-    $sql = "SELECT *
-        FROM transaction_history
-        ORDER BY transaction_date DESC
-        LIMIT 3";
+function getTopOrLeastBoughtProducts($query, $conn) {
+    $productRow = [];
+
+    // Execute the query
+    $result = $conn->query($query);
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $product_img = $row['product_img'];
+            $product_name = $row['product_name'];
+            $price = $row['price'];
+            $total_sold = $row['total_sold'];
+            $rating = $row['rating'];
+            $product_id = $row['product_id'];
+            $category_type = $row['category_type'];
+
+            $productRow[] = [
+                "product_img" => $product_img, 
+                "product_name" => $product_name,
+                "price" => $price,
+                "total_sold" => $total_sold,
+                "rating" => $rating,
+                "product_id" => $product_id,
+                "category_type" => $category_type,
+            ];
+        }
+        $result->free_result();
+        return $productRow;
+    } else {
+        return null;
+    }
+}
+
+    // functions unavailableStock($conn){
+    //     $query = "SELECT * FROM "
+    // }
+
+
+
 
 // ------------------------------ 5 RECENT RATINGS-------------------------------
     $conn = connect();
@@ -46,12 +85,13 @@ $chart_data_json = json_encode($chart_data);
 
         $rateRow = [];
     
-        $query = "SELECT c.full_name AS customer_name, r.rating, r.rating_id, p.product_name
-                FROM ratings r
-                INNER JOIN customers c ON r.customer_id = c.customer_id
-                INNER JOIN products p ON r.product_id = p.product_id
-                ORDER BY r.rate_timedate DESC
-                LIMIT 5";
+        $query = "SELECT c.full_name AS customer_name, r.rating, r.rating_id, r.visibility_stat, p.product_name
+                    FROM ratings r
+                    INNER JOIN customers c ON r.customer_id = c.customer_id
+                    INNER JOIN products p ON r.product_id = p.product_id
+                    WHERE r.visibility_stat IS NULL
+                    ORDER BY r.rate_timedate ASC
+                    LIMIT 5;";
     
         $result = $conn->query($query);
     
@@ -465,7 +505,7 @@ $chart_data_json = json_encode($chart_data);
 <body>
     <!-- Sidebar -->
 	<div class="sidebar" id="sidebar">
-    <div class="text-center">
+        <div class="text-center">
         <div class="admin-icon">
             <a href="Admin_edit profile.html">
                 <img src="https://via.placeholder.com/60" alt="Admin Image">
@@ -473,21 +513,21 @@ $chart_data_json = json_encode($chart_data);
         </div>
 		</div>
         <ul>
-            <li><a href="Admin_dashboard.html"><i class="fas fa-tachometer-alt fa-fw"></i> <span class="nav-text">Dashboard</span></a></li>
-            <li><a href="Admin_transaction.html"><i class="fas fa-history fa-fw"></i> <span class="nav-text">Transaction History</span></a></li>
-            <li><a href="#"><i class="fas fa-users fa-fw"></i> <span class="nav-text">Customers</span></a></li>
-            <li><a href="#"><i class="fas fa-box-open fa-fw"></i> <span class="nav-text">Products</span></a></li>
-            <li><a href="Admin_employee.html"><i class="fas fa-user-tie fa-fw"></i> <span class="nav-text">Employees</span></a></li>
-            <li><a href="Admin_category"><i class="fas fa-th fa-fw"></i> <span class="nav-text">Categories</span></a></li>
-            <li><a href="Admin_ratings.html"><i class="fas fa-star fa-fw"></i> <span class="nav-text">Ratings</span></a></li>
+            <li><a href="Admin_dashboard.php"><i class="fas fa-tachometer-alt fa-fw"></i> <span class="nav-text">Dashboard</span></a></li>
+            <li><a href="Admin_transaction.php"><i class="fas fa-history fa-fw"></i> <span class="nav-text">Transaction History</span></a></li>
+            <li><a href="Admin_customer.php"><i class="fas fa-users fa-fw"></i> <span class="nav-text">Customers</span></a></li>
+            <li><a href="Admin_ratings.php"><i class="fas fa-box-open fa-fw"></i> <span class="nav-text">Products</span></a></li>
+            <li><a href="Admin_employee.php"><i class="fas fa-user-tie fa-fw"></i> <span class="nav-text">Employees</span></a></li>
+            <li><a href="Admin_category.php"><i class="fas fa-th fa-fw"></i> <span class="nav-text">Categories</span></a></li>
+            <li><a href="Admin_ratings.php"><i class="fas fa-star fa-fw"></i> <span class="nav-text">Ratings</span></a></li>
             <li><a href="#"><i class="fas fa-sign-out-alt fa-fw"></i> <span class="nav-text">Sign Out</span></a></li>
             <li><a href="#"><i class="fas fa-question-circle fa-fw"></i> <span class="nav-text">Help</span></a></li>
         </ul>
-    </div>
+        </div>
 
-    <!-- Page Content -->
-	<nav class="navbar navbar-dark bg-custome">
-    <div class="container-fluid">
+        <!-- Page Content -->
+	    <nav class="navbar navbar-dark bg-custome">
+        <div class="container-fluid">
         <button class="navbar-toggler" type="button" id="sidebarCollapseButton">
             <i class="fas fa-bars text-black"></i>
         </button>
@@ -502,12 +542,18 @@ $chart_data_json = json_encode($chart_data);
 		</div>
 		</nav>
 		
-		<div class="container-fluid-custom">
+	<div class="container-fluid-custom">
 		<div class="row">
         <div class="col-lg-8">
             <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Sales Overview</h3>
+                <div class="card-header justify-content-start mx-1">
+                    <h3 class="card-title ">Overview</h3>
+                    <form method="post" action="">
+                    <button type="submit" name="interval" value="<?php echo (isset($_POST['interval']) && $_POST['interval'] === 'sales') ? 'transaction' : 'sales'; ?>">
+                        <?php echo (isset($_POST['interval']) && $_POST['interval'] === 'sales') ? 'Transaction' : 'Sales'; ?>
+                    </button>
+                </form>
+
                 </div>
                 <div class="card-body">
                     <div id="chart-container">
@@ -516,9 +562,9 @@ $chart_data_json = json_encode($chart_data);
                 </div>
             </div>
         </div>
-<?php
+        <?php
 
-    function getTodaysEarnings($conn) {
+        function getTodaysEarnings($conn) {
         // SQL query to get and total the earnings of the current day
         $sql = "SELECT SUM(total_price) AS total_earnings 
                 FROM transaction_history 
@@ -533,15 +579,33 @@ $chart_data_json = json_encode($chart_data);
         } else {
             return "0.00";
         }
-    }
+        }
 
-?>
+        function getMonthlyEarnings($conn) {
+        // SQL query to get and total the earnings of the Month
+        $sql = "SELECT SUM(total_price * quantity) AS total_earnings 
+                FROM transaction_history 
+                WHERE MONTH(transaction_date) = MONTH(CURDATE()) 
+                AND YEAR(transaction_date) = YEAR(CURDATE());
+                ";
 
-	<div class="col-lg-4">
-		<div class="card card-right">
+        $result = $conn->query($sql);
+
+            if ($result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                $totalEarnings = $row['total_earnings'] ? $row['total_earnings'] : 0; // Handle null result
+                return number_format($totalEarnings, 2);
+            } else {
+                return "0.00";
+            }
+            }
+            ?>
+
+	        <div class="col-lg-4">
+		    <div class="card card-right">
             <?php
                 $conn = connect();
-                $earnings = getTodaysEarnings($conn);
+                $earnings = getMonthlyEarnings($conn);
                 $month = date('F');
             echo ' <div class="card-header">
                     <h3 class="card-title" style="text-align: center;">Total Sales  This <b> '. $month .' </b> </h3>
@@ -551,130 +615,159 @@ $chart_data_json = json_encode($chart_data);
                 </div>';
            ?>
 
-        </div>
+            </div>
 
-        <!-- Unavailable Product Section -->
-        <div class="card card-right">
+            <!-- Unavailable Product Section -->
+            <div class="card card-right">
             <div class="card-header">
                 <h3 class="card-title">Unavailable Product</h3>
             </div>
+            <?php
+                // $conn = connect();
+                // $stock = unavailableStock($conn);
+
+            ?>
             <div class="card-body">
                 <p class="card-text">$100,000.00</p>
             </div>
-        </div>
+            </div>
 
-        <!-- Total Earn Section -->
-        <div class="card card-right">
+            <!-- Total Earn Section -->
+            <div class="card card-right">
             <?php
+            $conn = connect();
+            $today = date('F j, Y'); 
+            $totalToday = getTodaysEarnings($conn);
             echo    '<div class="card-header">
-                        <h3 class="card-title">Total Earn (Today)</h3>
+                        <h3 class="card-title">Total for: <b> '. $today .' </b></h3>
                     </div>
                     <div class="card-body">
-                    <p class="card-text " style= "font-size: 30px; text-align: center;">' . 'PHP '. $earnings .'</p>
+                    <p class="card-text " style= "font-size: 30px; text-align: center;">' . 'PHP '. $totalToday .'</p>
                     </div>';
-            ?>
-        </div>
 
-    </div>
-	<!-- Popular Products Section -->
+             $conn->close();
+            ?>
+            </div>
+
+            </div>
+	            <!-- Popular Products Section -->
                 <div class="col-lg-6">
-                    <div class="card top-products">
-                        <div class="card-header">
-                            <h4 class="card-title">Top Products</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-4 product">
-                                    <img src="https://via.placeholder.com/150" alt="Product 1">
-                                    <h4>Product 1</h4>
-                                    <p>Description of Product 1</p>
-                                    <div class="ratings">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                        <span class="rating-value">(4.0)</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 product">
-                                    <img src="https://via.placeholder.com/150" alt="Product 2">
-                                    <h4>Product 2</h4>
-                                    <p>Description of Product 2</p>
-                                    <div class="ratings">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star-half-alt"></i>
-                                        <i class="far fa-star"></i>
-                                        <span class="rating-value">(3.5)</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 product">
-                                    <img src="https://via.placeholder.com/150" alt="Product 3">
-                                    <h4>Product 3</h4>
-                                    <p>Description of Product 3</p>
-                                    <div class="ratings">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                        <span class="rating-value">(4.0)</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        <div class="card top-products">
+            <div class="card-header">
+                <h4 class="card-title"> 
+                <?php
+                    if (isset($_POST['order'])) {
+                        echo $_POST['order'] === 'top' ? 'TOP ' : 'LEAST ';
+                    } else {
+                        echo 'TOP';
+                    }
+                    ?>  
+                        PRODUCTS  
+                </h4>
+                <form method="post">
+                    <button type="submit" name="order" value="<?php echo (isset($_POST['order']) && $_POST['order'] === 'top') ? 'least' : 'top'; ?>">
+                        <?php
+                        if (isset($_POST['order'])) {
+                            echo $_POST['order'] === 'top' ? '▼' : '▲';
+                        } else {
+                            echo '▼';
+                        }
+                        ?>
+                    </button>
+                </form>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <?php 
+                        $conn = connect();
+                        $order = isset($_POST['order']) ? $_POST['order'] : 'top';
+
+                        $query = "
+                            SELECT p.product_img, p.product_name, p.price, p.product_id, p.category_type, SUM(th.quantity) AS total_sold, r.rating
+                            FROM transaction_history th
+                            INNER JOIN products p ON th.product_id = p.product_id
+                            LEFT JOIN ratings r ON p.product_id = r.product_id
+                            GROUP BY p.product_id
+                            ORDER BY total_sold " . ($order === 'top' ? 'DESC' : 'ASC') . "
+                            LIMIT 3;";
+
+                        $products = getTopOrLeastBoughtProducts($query, $conn);
+                        if ($products) {
+                            foreach ($products as $product) {
+                                $averageRating = getAverageRating($conn, $product['product_id']);
+                                echo '<div class="col-md-4 product">
+                                    <p class="badge badge-info" style="color: #FFFFFF;">'.$product['category_type'] .'</p>
+                                    <img src="data:image/jpeg;base64,' . base64_encode($product['product_img']) . '" alt="' . $product['product_name'] . '">
+                                    <p>'. generateStars($averageRating)  .'</p>
+                                    <h4>' . $product['product_name'] . '</h4>
+                                    <p>Php ' . number_format($product['price'], 2) . '</p>
+                                    <p>
+                                </div>';
+                            }
+                        } else {
+                            echo '<p>No products found</p>';
+                        }
+
+                     
+                     ?>
                 </div>
+            </div>
+        </div>
+    </div>
                 <!-- Ratings Section -->
                 <div class="col-lg-6">
                     <div class="card ratings-section">
                         <div class="card-header">
                             <h4 class="card-title">Customer Ratings</h4>
-                            <a href="#" class="see-more-link">See more</a>
+                            <a href="Admin_ratings.php" class="see-more-link">See more</a>
                         </div>
                         <div class="card-body">
                             <ul class="list-group">
                             <?php
+                            $conn = connect();
                             $ratings = getRatingsWithDetails($conn);
                             if ($ratings !== null) {
-                            foreach ($ratings as $rateRow) {
-                                echo '<li class="list-group-item d-flex justify-content-around  p-1">
-                                        <span m-1>' . htmlspecialchars($rateRow["customer_name"]) . '</span>
-                                        <span>' . generateStars($rateRow["rating"]) . ' <p class="badge badge-warning badge-pill">' . htmlspecialchars($rateRow["rating"]) . '</p></span>
-                                        <span class="justify-content-center m-0 p-0">
-                                        <form  action="Admin_dashboard.php" method="post" style="display:inline;">
-                                            <input type="hidden" name="rating_id" value="'. $rateRow["rating_id"] .'">
-                                            <input type="hidden" name="new_visibility_stat" value="approved">
-                                            <button type="submit" class="btn btn-success mx-1" name="approveBTN">✔</button>
-                                        </form>
-                                        <form action="Admin_dashboard.php" method="post" style="display:inline;">
+                                foreach ($ratings as $rateRow) {
+                                    echo '<li class="list-group-item d-flex justify-content-around  p-1">
+                                            <span m-1>' . htmlspecialchars($rateRow["customer_name"]) . '</span>
+                                            <span>' . generateStars($rateRow["rating"]) . ' <p class="badge badge-warning badge-pill">' . htmlspecialchars($rateRow["rating"]) . '</p></span>
+                                            <span class="justify-content-center m-0 p-0">
+                                            <form  action="Admin_dashboard.php" method="post" style="display:inline;">
                                                 <input type="hidden" name="rating_id" value="'. $rateRow["rating_id"] .'">
-                                                <input type="hidden" name="new_visibility_stat" value="archived"  >
-                                                <button type="submit" class="btn btn-danger mx-1" name="deleteBTN" onclick="openConfirmModal()">⊘</button>
-                                        </form>
-                                        </span>
-                                        </li>';
+                                                <input type="hidden" name="new_visibility_stat" value="approved">
+                                                <button type="submit" class="btn btn-success mx-1" name="approveBTN">✔</button>
+                                            </form>
+                                            <form action="Admin_dashboard.php" method="post" style="display:inline;">
+                                                    <input type="hidden" name="rating_id" value="'. $rateRow["rating_id"] .'">
+                                                    <input type="hidden" name="new_visibility_stat" value="archived"  >
+                                                    <button type="submit" class="btn btn-danger mx-1" name="deleteBTN" onclick="openConfirmModal()">⊘</button>
+                                            </form>
+                                            </span>
+                                            </li>';
+                                }
                             }
-                        } else {
-                            echo "No ratings found.";
-                        }       
+                            $conn->close();
                             ?>
                             </ul>
                         </div>
                     </div>
                 </div>
+                </div>
             </div>
-        </div>
+                    </div>
 		</div>
         <?php
-        function getAverageRating($conn) {
+        function getAverageRating($conn, $product_id) {
             $sql = "SELECT AVG(rating) AS average_rating 
                     FROM ratings 
-                    WHERE visibility_stat IS NOT NULL";
-                    $result = $conn->query($sql);
-
+                    WHERE product_id = ? 
+                    AND visibility_stat IS NOT NULL";
+                    
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $product_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+        
             if ($result->num_rows > 0) {
                 $row = $result->fetch_assoc();
                 return $row['average_rating'];
@@ -682,6 +775,7 @@ $chart_data_json = json_encode($chart_data);
                 return 0;
             }
         }
+        
 
         function generateStars($averageRating) {
             // Round the average rating to the nearest half-star
@@ -698,18 +792,106 @@ $chart_data_json = json_encode($chart_data);
             return $stars;
         }
 
+        function approveComment($new_visi_stat, $id) {
+            $conn = connect();
+            $rateID = $id;
+            $sql = "UPDATE ratings 
+                    SET visibility_stat = ?
+                    WHERE rating_id = ?";
+            $stmt = $conn->prepare($sql);
+            
+            if ($stmt === false) {
+                die("Prepare failed: " . $conn->error);
+            }
+        
+            $stmt->bind_param('si', $new_visi_stat, $rateID);
+            
+            if ($stmt->execute()) {
+                $message = "Rating has been successfully approved!";
+                $title = "Hentoki Customer Ratings";
+                echo "<script type='text/javascript'>
+                    showModal('$message', '$title');
+                    setTimeout(function() {
+                        window.location.href = 'Admin_dashboard.php';
+                    }, 2000); 
+                </script>";
 
+            } else {
+                $message = "Error:'. $stmt->error .' ";
+                echo "<script type='text/javascript'>alert('$message');</script>";
 
-?>
-	    <!-- Recent Transactions -->
-        <div class="row recent-transactions">
-            <div class="col-lg-12">
+            }
+            $stmt->close();
+            $conn->close();
+        
+            return $rateID;
+        }
+
+        function deleteComment($id) {
+            $conn = connect();
+            
+            $sql = "DELETE FROM ratings WHERE rating_id = ?";
+            $stmt = $conn->prepare($sql);
+            
+            if ($stmt === false) {
+                die("Prepare failed: " . $conn->error);
+            }
+            
+            $stmt->bind_param('i', $id);
+            
+            if ($stmt->execute()) {
+                $message = "Rating has been successfully deleted!";
+                $title = "Hentoki Customer Ratings";
+                echo "<script type='text/javascript'>
+                    showModal('$message', '$title');
+                    setTimeout(function() {
+                        window.location.href = 'Admin_dashboard.php';
+                    }, 2000); 
+                </script>";
+            } else {
+                echo "Error deleting record: " . $stmt->error;
+            }
+            
+            $stmt->close();
+            $conn->close();
+            
+            return $id;
+        }
+        
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (isset($_POST['approveBTN'])) {
+                $new_visi_stat = $_POST['new_visibility_stat'];
+                $rateID = intval($_POST['rating_id']);
+                approveComment($new_visi_stat, $rateID);
+            } elseif (isset($_POST['deleteBTN'])) {
+                $id = intval($_POST['rating_id']);
+                deleteComment($id);
+            } elseif (isset($_POST['replyBTN'])){
+                $rateID = intval($_POST['rating_id']);
+                if(isset($_POST['adminReplyBTN']))
+                echo "hello";
+
+                $adminReply = $_POST['adminReply'];
+                replyComment($adminReply, $rateID);
+            }
+            
+        }
+
+        ?>
+	        <!-- Recent Transactions -->
+            <div class="row ">        
+                <div class="col-12">
+
+                    
+                </div>
+            </div>
+        <!-- <div class="row ">
+            <div class="col-12">
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Recent Transactions</h3>
                     </div>
                     <div class="card-body">
-                        <!-- Transaction Table -->
                         <table class="transaction-table">
                             <thead>
                                 <tr>
@@ -728,20 +910,12 @@ $chart_data_json = json_encode($chart_data);
                                     <td>July 12, 2024</td>
                                     <td>$250.00</td>
                                 </tr>
-                                <tr>
-                                    <td>Jane Smith</td>
-                                    <td>Product B</td>
-                                    <td>1</td>
-                                    <td>July 11, 2024</td>
-                                    <td>$150.00</td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </div> -->
     </div>
     <!-- Bootstrap JavaScript -->
     <!-- Bootstrap JS and other scripts -->
@@ -750,6 +924,8 @@ $chart_data_json = json_encode($chart_data);
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Your custom script -->
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="modal.html"></script>
     <script>
             document.getElementById('sidebarCollapseButton').addEventListener('click', function() {
                 document.getElementById('sidebar').classList.toggle('active');
