@@ -20,9 +20,8 @@
 
         if ($stmt->execute()) 
         {
-            $message = "Employee added successfully!";
-            header("Refresh: 0; url=Admin_employee.php");
-            echo "<script type='text/javascript'>alert('$message');</script>";
+            // Redirect to Admin_category.php with a success query parameter
+            header("Location: Admin_employee.php?success=add");
         } 
         else 
         {
@@ -44,9 +43,8 @@
     
         if ($stmt->execute()) 
         {
-            $message = "Updated successfully!";
-            header("Refresh: 0; url=Admin_employee.php");
-            echo "<script type='text/javascript'>alert('$message');</script>";
+            // Redirect to Admin_category.php with a success query parameter
+            header("Location: Admin_employee.php?success=update");
         }
         else 
         {
@@ -116,8 +114,9 @@
                 while ($row = $retval->fetch_assoc()) 
                 {
                     $employeeID = $row["employee_id"];
+                    $employeeImg = base64_encode($row["employee_img"]);
                     echo "<tr>";
-                    echo "<td>" . $row["employee_img"] . "</td>";
+                    echo "<td><img src='data:image/jpeg;base64," . $employeeImg . "' height=60></td>";
                     echo "<td>" . $row["employee_id"] . "</td>";
                     echo "<td>" . $row["position"] . "</td>";
                     echo "<td>" . $row["full_name"] . "</td>";
@@ -136,9 +135,8 @@
         $conn->close();
     }
 
-// --------------------------------------------------------- CHECK FOR DUPLICATION ID (already declared at setup)--------------------------------------------------------- //
+// --------------------------------------------------------- CHECK FOR DUPLICATION ID --------------------------------------------------------- //
 
-    /*
     function checkDuplication($id, $checkQuery) {
         $conn = connect();
         // Function to check for duplicate ID
@@ -163,7 +161,7 @@
 
         return $id;
     }
-    */
+
 // --------------------------------------------------------- HANDLE FORM SUBMISSION --------------------------------------------------------- //
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") 

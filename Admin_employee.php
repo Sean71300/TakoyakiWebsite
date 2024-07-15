@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -294,6 +298,18 @@
             position: relative;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); 
         }
+
+        .modal-content-help {
+            background-color: #fefefe;
+            margin: 5% auto; /* 5% from the top and centered */
+            padding: 30px;
+            border: none;
+            width: 80%; 
+            max-width: 650px; /* Limit maximum width */
+            border-radius: 10px;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); 
+        }
         
         .close {
             color: #aaaaaa;
@@ -356,7 +372,8 @@
         .centered-text {
             text-align: center;
             margin-bottom: 20px;
-            font-size: 24px;
+            font-size: 30px;
+            font-weight: bold;
             color: #953728;
         }
 		
@@ -381,6 +398,20 @@
             background-color: #953728;
         }
 
+        .notification {
+            background-color: #4CAF50; /* Green */
+            color: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            display: inline-block;
+        }
+        .hidden {
+            display: none;
+        }
+
     </style>
 </head>
 <body>
@@ -388,19 +419,21 @@
     <div class="sidebar" id="sidebar">
         <div class="text-center">
             <div class="admin-icon">
+            <a href="Admin_edit profile.html">
                 <img src="https://via.placeholder.com/60" alt="Admin Image">
+            </a>
             </div>
         </div>
         <ul>
-            <li><a href="Admin_dashboard.php"><i class="fas fa-tachometer-alt fa-fw"></i> Dashboard</a></li>
-            <li><a href="Admin_transaction.php"><i class="fas fa-history fa-fw"></i> Transaction History</a></li>
-            <li><a href="Admin_employee.php"><i class="fas fa-user-tie fa-fw"></i> Employees</a></li>
-            <li><a href="Admin_customers.php"><i class="fas fa-users fa-fw"></i> Customers</a></li>
-            <li><a href="Admin_category.php"><i class="fas fa-th fa-fw"></i> Categories</a></li>
-            <li><a href="Admin_products.php"><i class="fas fa-box-open fa-fw"></i> Products</a></li>
-			<li><a href="Admin_ratings.php"><i class="fas fa-star fa-fw"></i> Ratings</a></li>
-            <li><a href="#"><i class="fas fa-sign-out-alt fa-fw"></i> Sign Out</a></li>
-			<li><a href="#"><i class="fas fa-question-circle fa-fw"></i>Help</a></li>
+            <li><a href="Admin_dashboard.php"><i class="fas fa-tachometer-alt fa-fw"></i> <span class="nav-text">Dashboard</span></a></li>
+            <li><a href="Admin_transaction.php"><i class="fas fa-history fa-fw"></i> <span class="nav-text">Transaction History</span></a></li>
+            <li><a href="Admin_employee.php"><i class="fas fa-user-tie fa-fw"></i> <span class="nav-text">Employees</span></a></li>
+            <li><a href="Admin_customers.php"><i class="fas fa-users fa-fw"></i> <span class="nav-text">Customers</span></a></li>
+            <li><a href="Admin_category.php"><i class="fas fa-th fa-fw"></i> <span class="nav-text">Categories</span></a></li>
+            <li><a href="Admin_products.php"><i class="fas fa-box-open fa-fw"></i> <span class="nav-text">Products</span></a></li>
+            <li><a href="Admin_ratings.php"><i class="fas fa-star fa-fw"></i> <span class="nav-text">Ratings</span></a></li>
+            <li><a href="logout.php"><i class="fas fa-sign-out-alt fa-fw"></i> <span class="nav-text">Sign Out</span></a></li>
+            <li><a href="#" id="HelpLink"><i class="fas fa-question-circle fa-fw"></i> <span class="nav-text">Help</span></a></li>
         </ul>
     </div>
     <!-- Navbar -->
@@ -409,9 +442,9 @@
             <button class="navbar-toggler" type="button" id="sidebarCollapseButton">
                 <i class="fas fa-bars text-black"></i>
             </button>
+            <?php include 'nav.php'; ?>
         </div>
     </nav>
-
 
     <!-- Content Here For Employee -->
     <div class="container-fluid mt-4">
@@ -507,6 +540,79 @@
                 </form>
             </div>
         </div>
+
+        <!------- HELP MODAL ------->
+        <div id="helpModal" class="modal">
+            <div class="modal-content-help">
+                <span class="close">&times;</span>
+                <h1 class="centered-text" id="title">Help</h1>
+                <table>
+                    <tr>
+                        <td>
+                            <h5><b>Dashboard</b></h5>
+                            <ul>
+                                <li>Shows the Sales of the business.</li>
+                                <li>Shows the Ratings of the products.</li>
+                                <li>Shows the Employees summarized information.</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <h5><b>Categories</b></h5>
+                            <ul>
+                                <li>Shows all the Categories.</li>
+                                <li>Can add new Category.</li>
+                                <li>Can edit existing Category.</li>
+                                <li>Can delete a Category.</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h5><b>Transaction History</b></h5>
+                            <ul>
+                                <li>Shows the overall Transaction of the business.</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <h5><b>Products</b></h5>
+                            <ul>
+                                <li>Shows all the Products.</li>
+                                <li>Can add new Product.</li>
+                                <li>Can edit existing Product.</li>
+                                <li>Can delete a Product.</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h5><b>Employees</b></h5>
+                            <ul>
+                                <li>Shows all the Employees.</li>
+                                <li>Can add new Employees.</li>
+                                <li>Can edit existing Employees' information.</li>
+                                <li>Can delete an Employee.</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <h5><b>Ratings</b></h5>
+                            <ul>
+                                <li>Shows all the Ratings.</li>
+                                <li>Can approve customers' Ratings.</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h5><b>Customers</b></h5>
+                            <ul>
+                                <li>Shows all the Customers.</li>
+                                <li>Can delete a Customer.</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
     </div>
     <!-- Bootstrap JS -->
     <script src="js/bootstrap.bundle.min.js"></script>
@@ -519,12 +625,58 @@
             document.body.classList.toggle('sidebar-active');
         });
 
+        // Check if the URL has the success query parameter
+        var urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('success')) 
+        {
+            // Retrieve the successType value
+            var successType = urlParams.get('success');
+
+            // Check the value of successType
+            if (successType === 'add') 
+            {
+                alert("Employee added successfully.");
+            } 
+            else if (successType === 'update') 
+            {
+                alert("Employee updated successfully.");
+            }
+
+            // Reset successType and urlParams
+            successType = null;
+            urlParams = null;
+        }
+
 // -------------------------------------------------- ADD EMPLOYEE MODAL JS -------------------------------------------------- //
+
+        function changeFormTitleAndButton(title, buttonText) 
+        {
+            // Change the modal title
+            document.getElementById('title').innerText = title;
+
+            // Change the button value
+            document.getElementById('updateBtn').innerText = buttonText;
+        }
+
+        function blank()
+        {
+                document.getElementById('EmployeeID').value = "";
+                document.getElementById('EmployeeName').value = "";
+                document.getElementById('EmployeePosition').value = "";
+                document.getElementById('EmployeeEmail').value = "";
+                document.getElementById('EmployeePhoneNum').value = "";
+                document.getElementById('EmployeeAddress').value = "";
+                document.getElementById('employeeBirthdate').value = "";
+                document.getElementById('employeeAge').value = "";
+                document.getElementById('EmployeeGender').value = "";
+        }
 
 	    // Show Add Employee Modal
 	    document.getElementById('addEmployeeBtn').addEventListener('click', function() {
         var modal = document.getElementById('addEmployeeModal');
         modal.style.display = "block";
+        changeFormTitleAndButton('Add Employee', 'Add Employee');
+        blank();
         console.log('Add New Employee button clicked');
 	    });
     
@@ -637,60 +789,7 @@
                 // Send the request with the transaction ID
                 xhr.send("employeeID=" + employeeId);
             }
-        }
-
-// -------------------------------------------------- ADD EMPLOYEE JS -------------------------------------------------- //
-
-        function addEmployee() {
-        // Get form data
-        var fullName = document.getElementById('full_name').value;
-        var position = document.getElementById('position').value;
-        var age = document.getElementById('age').value;
-        var birthdate = document.getElementById('birthdate').value;
-        var gender = document.getElementById('gender').value;
-        var email = document.getElementById('email').value;
-        var phoneNumber = document.getElementById('phone_number').value;
-        var address = document.getElementById('address').value;
-
-        // Validate form data (you can add more validation as needed)
-        if (!fullName || !position || !age || !birthdate || !gender || !email || !phoneNumber || !address) {
-            alert("Please fill in all fields.");
-            return;
-        }
-
-        // Create an XMLHttpRequest object
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "employee_functions.php", true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-        // Define what happens on successful data submission
-        xhr.onload = function () {
-            if (xhr.status == 200) 
-            {
-                // Do something with the response
-                alert(xhr.responseText);
-                // Optionally, you can close the modal and refresh the page
-                closeModal();
-                location.reload();
-            } 
-            else 
-            {
-                alert("Error adding employee.");
-            }
-        };
-
-        // Send the request with the form data
-        var data = "full_name=" + encodeURIComponent(fullName) +
-                   "&position=" + encodeURIComponent(position) +
-                   "&age=" + encodeURIComponent(age) +
-                   "&birthdate=" + encodeURIComponent(birthdate) +
-                   "&gender=" + encodeURIComponent(gender) +
-                   "&email=" + encodeURIComponent(email) +
-                   "&phone_number=" + encodeURIComponent(phoneNumber) +
-                   "&address=" + encodeURIComponent(address);
-
-        xhr.send(data);
-        }        
+        }  
 
 // ----------------------------------------- SEARCH ----------------------------------------- //
 
@@ -717,6 +816,23 @@
                 });
             }
         }
+        
+// ----------------------------------------- HELP MODAL ----------------------------------------- //
+
+        // Show Help Modal
+	    document.getElementById('HelpLink').addEventListener('click', function() {
+        var modal = document.getElementById('helpModal');
+        modal.style.display = "block";
+        console.log('Help modal opened');
+	    });
+        
+        // Close Modal
+	    var closeBtn = document.getElementsByClassName("close")[1];
+	    closeBtn.onclick = function() {
+        var modal = document.getElementById('helpModal');
+        modal.style.display = "none";
+        console.log('Modal closed');
+	    };
     </script>
 </body>
 </html>
