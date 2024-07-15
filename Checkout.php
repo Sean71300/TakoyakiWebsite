@@ -44,6 +44,7 @@ $total = 0.00;
   <head>
     <title>Checkout</title>
     <script src="js/bootstrap.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
     <script src="https://kit.fontawesome.com/af468059ce.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="css/bootstrap.css">
     <style>
