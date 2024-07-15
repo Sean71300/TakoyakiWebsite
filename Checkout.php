@@ -26,7 +26,155 @@ require_once "connect.php";
 require_once "setup.php";
 ?>
 
+<<<<<<< HEAD
 <?php
+=======
+<html>
+  <head>
+    <title>Checkout</title>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/af468059ce.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <style>
+      a {
+        text-decoration: inherit;
+        color: inherit;
+      }
+
+      .logo {
+            display: inline-block;
+            max-width: 50px;
+            width: auto;
+            height: auto;
+            border-radius: 50%;
+            margin-left: 2%;
+          } 
+      .footer{
+        display: inline-block;
+        max-width: 50px;
+        width: auto;
+        height: auto;
+        border-radius: 50%;
+      } 
+      .footer1{
+        display: inline-block;
+        max-width: 35px;
+        width: auto;
+        height: auto;
+      }
+      .category-icon {
+        width: 75px;
+        height: 56px;
+      }
+      .category-card {
+        margin-left: 25px;
+        margin-right: 25px;
+        padding: 0px 30px 0px 30px;
+      }
+      
+      .cart-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+      }
+      .cart-item .remove-button {
+        margin-left: 25px;
+      }
+	  
+	  .loading-screen {
+		  position: fixed;
+		  top: 0;
+		  left: 0;
+		  width: 100%;
+		  height: 100%;
+		  display: flex;
+		  background-color:white;
+		  justify-content: center;
+		  align-items: center;
+		  opacity:1;
+		  transition: opacity 1s ease-in-out;
+		  z-index: 999;
+		}
+
+		.loading-screen img {
+		  animation: spin 1s linear forwards;
+		}
+
+		@keyframes spin {
+		  from { transform: rotate(0deg); }
+		  to { transform: rotate(1000deg); }
+		}
+    </style>
+  </head>
+
+  <body class="bg-body-tertiary">
+  <script>
+		window.onload = function() {
+		  const loadingScreen = document.querySelector('.loading-screen');
+		  loadingScreen.style.opacity = 0;
+		  setTimeout(() => {
+		    loadingScreen.remove();
+			document.body.style.display = 'block';
+		  }, 1000);
+		}
+	  </script>
+	  <div class="loading-screen">
+		<img src="Images/loading.png" alt="Loading...">
+	  </div>
+    <!-- Navbar -->
+    <?php include "Navigation.php"?>      
+
+      <!--                                             -->
+    <div class="container" style="height: 70vh;">
+      <div class="container">
+      <div class="row">
+        <h2 class="text-center fw-bold">Your Order Summary</h2>
+      </div>
+    </div>
+    
+    <div class="container d-flex mt-5">
+        <div class="container">
+            <h4>Cart:</h4>
+            <div class="row">
+                <div class="container border border-black" style="height: 35vh; overflow-y: auto;" id="product-container">
+                <?php
+                $total = 0;
+                if (isset($_SESSION['cart'])) {
+                    foreach ($_SESSION['cart'] as $item) {
+                        $product_total = $item['price'];
+                        $total += $product_total;
+                        echo $item['product_name'] . " - " . $item['product_category'];
+                        echo " - ₱" . $item['price'];
+                        echo "<br>";
+                    }
+                }
+                ?>
+                </div>
+            </div>
+    
+            <div class="row">
+                <hr>
+                <div id="total-container">
+                  Total: ₱<?php echo $total; ?>
+                </div>
+            </div>
+        </div>
+    
+        <div class="container">
+            <div id="shadow p-1 mb-5 bg-body-tertiary rounded">
+                <h5>Confirm Payment:</h5>
+                <h6 class="mt-4">Enter GCash Number:</h6>
+                <input type="text" class="w-100 mt-4 mb-4" style="height:50px"placeholder="+63">
+                <button class="btn btn-warning w-100"onclick="Pay()">Pay Now</button>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <?php
+>>>>>>> dd204e5c20d28066fa42651b1f3210d8809595a8
     #Check for valid phone number:
     function checkPhone($phone_number) {
       $phone_number = preg_replace('/\D/', '', $phone_number);
@@ -60,6 +208,7 @@ require_once "setup.php";
         <script src="https://kit.fontawesome.com/af468059ce.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="css/bootstrap.css">
 
+<<<<<<< HEAD
         <style>
             a {
                 text-decoration: inherit;
@@ -338,5 +487,33 @@ require_once "setup.php";
                 </div>          
             </div>
         </div>
+=======
+      /*
+      if ($errors == 0) {
+        if ($res["result"] == 0) {
+          $unique = $res['array'];
+          // Insert data into database
+          $conn = connect();
+          $sql = "INSERT INTO registered 
+                  (id, type, full_name, birthdate, age, gender, email, phone_number, address, password) 
+                  VALUES 
+                  ($gen_id, '$type', '$unique[0]', '$birthdate', $age, '$gender', '$unique[1]', '$unique[2]', '$unique[3]', '$hashed_password')";
+          if ($conn->query($sql) === TRUE) {
+              $message = "Payment success!";
+          } else {
+              echo "Error occured in connecting to the database, please try again.";
+          } 
+          $conn->close();
+      } else {
+          $errors++;
+      }
+          
+    }*/
+  }
+  ?>
+      <!--                                             -->
+      <!-- Footer -->
+    <?php include "Footer.php"?>      
+>>>>>>> dd204e5c20d28066fa42651b1f3210d8809595a8
     </body>
 </html>

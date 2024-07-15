@@ -229,6 +229,7 @@ function retrieveProductsByCategory($categoryId) {
   </head>
 
   <body class="bg-body-tertiary">
+<<<<<<< HEAD
     <script>
       window.onload = function() {
         const loadingScreen = document.querySelector('.loading-screen');
@@ -292,6 +293,10 @@ function retrieveProductsByCategory($categoryId) {
         </div>
       </nav>
     </div>
+=======
+    <!-- Navbar -->
+    <?php include "Navigation.php"?>      
+>>>>>>> dd204e5c20d28066fa42651b1f3210d8809595a8
 
     <!--                                             -->
     <div class="container">
@@ -339,6 +344,7 @@ function retrieveProductsByCategory($categoryId) {
         retrieveProductsByCategory($categoryID);
         ?>
       </div>
+<<<<<<< HEAD
     </div>
 		                                         
     <!--- FOOTER --->
@@ -398,5 +404,27 @@ function retrieveProductsByCategory($categoryId) {
         quantityInput.value = quantitySpan.textContent;
       }
     </script>
+=======
+		
+      <div class="modal fade" id="input" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="quantityInput">Order Successful</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+              <p class="text-center p-3">Order Added!</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Okay</button>
+            </div>
+          </div>
+        </div>
+      </div>                                           
+
+      <!-- Footer -->
+    <?php include "Footer.php"?>      
+>>>>>>> dd204e5c20d28066fa42651b1f3210d8809595a8
     </body>
 </html>

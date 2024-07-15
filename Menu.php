@@ -74,6 +74,7 @@ if (isset($_POST['add_to_cart'])) {
       $_SESSION['cart'] = array();
   }
 
+<<<<<<< HEAD
 #Put items in cart
   $_SESSION['cart'][] = array(
       'product_id' => $product_id,
@@ -82,6 +83,30 @@ if (isset($_POST['add_to_cart'])) {
       'price' => $_SESSION["price"],
       'quantity' => $quantity,
   );
+=======
+    $_SESSION['cart'][] = array(
+        'product_name' => $_SESSION["product_name"],
+        'product_category' => $_SESSION["category_type"],
+        'price' => $_SESSION["price"],
+    );
+
+    echo '<div class="modal fade" id="input" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="quantityInput">Order Successful</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-center p-3">Order Added!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Okay</button>
+            </div>
+        </div>
+    </div>
+</div>';
+>>>>>>> dd204e5c20d28066fa42651b1f3210d8809595a8
 }
 ?>
 
@@ -254,6 +279,7 @@ function retrieveProductsByCategory($categoryId) {
 	  <div class="loading-screen">
 		<img src="Images/loading.png" alt="Loading...">
 	  </div>
+<<<<<<< HEAD
     <!-- Navbar -->
     <div class="forNavigationbar sticky-top">
       <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -307,6 +333,10 @@ function retrieveProductsByCategory($categoryId) {
         </div>
       </nav>
     </div>
+=======
+      <!-- Navbar -->
+    <?php include "Navigation.php"?>      
+>>>>>>> dd204e5c20d28066fa42651b1f3210d8809595a8
 
       <!--                                             -->
         <div class="container">
@@ -344,6 +374,27 @@ function retrieveProductsByCategory($categoryId) {
               </a>
             </div>
           </div>
+<<<<<<< HEAD
+=======
+          <div class="row d-flex flex-row justify-content-evenly mt-5">
+            <!-- Octo Bits -->
+            <div class="card border-0 col" style="width: 15rem">
+              <div class="card-body">
+                <img src="Images/ribbon.png" alt="" style="display:inline; margin-left: -28px; margin-top: -17px;">
+                <img src="Images/octobits.png" class="card-img-top" alt="">            
+              </div>
+              <img src="Images/rate.png" style="display:inline; margin-left: -5px; width: 50%" alt="">
+              <p class="card-title getProduct">Octo Bits</p>
+              <div class="d-flex justify-content-evenly">
+                <p id="price" class="card-title fw-bold w-100" style="display:inline-block"><span class="text-warning" style="display:inline-block">₱</span>39.00</p>
+                <?php #set product_id for database connection ?>
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+                  <input type="hidden" name="product_id" value="2024160000">
+                  <input type="submit" name="add_to_cart" value="+" class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" data-bs-toggle="modal" data-bs-target="#input"></input>
+                </form>
+              </div>
+            </div>
+>>>>>>> dd204e5c20d28066fa42651b1f3210d8809595a8
 
           <div class="container">
             <div class="row d-flex flex-row w-100 mt-5">
@@ -372,6 +423,7 @@ function retrieveProductsByCategory($categoryId) {
           </div>
       </div>
 
+<<<<<<< HEAD
       <!-- Footer -->
       <div class="forfooter">
         <div class="container-fluid text-light bg-black mt-5">          
@@ -430,5 +482,49 @@ function retrieveProductsByCategory($categoryId) {
         quantityInput.value = quantitySpan.textContent;
       }
     </script>
+=======
+          <div class="row" style="margin-top: 150px;">
+            <h4 class="fw-bold">Barkada Platters</h4>
+          </div>
+          <div class="row mt-5" style="margin-bottom: 150px;">
+            <div class="card border-0 col-12" style="width: 20rem">
+              <div class="card-body">
+                <img src="Images/ribbon-special.png" alt="" style="display:inline; margin-left: -28px; margin-top: -17px;">
+                <img src="Images/assorted-barkada.png" class="card-img-top" alt="">            
+              </div>
+              <img src="Images/rate.png" style="display:inline; margin-left: -5px; width: 50%" alt="">
+              <p class="card-title getProduct">Assorted Barkada</p>
+              <div class="d-flex justify-content-evenly">
+                <p id="price" class="card-title fw-bold w-100" style="display:inline-block"><span class="text-warning" style="display:inline-block">₱</span>400.00</p>
+                <?php #set product_id for database connection ?>
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+                  <input type="hidden" name="product_id" value="2024160008">
+                  <input type="submit" name="add_to_cart" value="+" class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" ></input>
+                </form>
+              </div>
+            </div>
+            <div class="card border-0 col-12" style="width: 20rem; margin-left: 1rem;">
+              <div class="card-body">
+                <img src="Images/ribbon-special.png" alt="" style="display:inline; margin-left: -28px; margin-top: -17px;">
+                <img src="Images/cheesy-barkada.png" class="card-img-top" alt="">               
+              </div>
+              <img src="Images/rate.png" style="display:inline; margin-left: -5px; width: 50%" alt="">
+              <p class="card-title getProduct">Cheesy Barkada</p>
+              <div class="d-flex justify-content-evenly">
+                <p id="price" class="card-title fw-bold w-100" style="display:inline-block"><span class="text-warning" style="display:inline-block">₱</span>320.00</p>
+                <?php #set product_id for database connection ?>
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+                  <input type="hidden" name="product_id" value="2024160009">
+                  <input type="submit" name="add_to_cart" value="+" class="bg-warning border-0 rounded text-white fw-bold" id="scale" style="transition: transform 0.2s ease-in-out; width: 3.5rem; height: 2.75rem; display: inline; margin-top: -18px; margin-right: 20px;" ></input>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      <!--                                             -->
+
+      <!-- Footer -->
+    <?php include "Footer.php"?>      
+>>>>>>> dd204e5c20d28066fa42651b1f3210d8809595a8
     </body>
 </html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- Modal Structure -->
+    <div class="modal fade" id="customModal" tabindex="-1" aria-labelledby="customModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="customModalLabel">Modal Title</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            <p id="modalMessage">Default Message</p>
+            </div>
+            <div class="modal-footer">
+            <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+            <!-- <button type="button" class="btn btn-primary">OK</button> -->
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <script>
+function showModal(message, title = "Modal Title") {
+    // Set modal content dynamically
+    document.getElementById('modalMessage').innerText = message;
+    document.getElementById('customModalLabel').innerText = title;
+    
+    // Show the modal
+    var myModal = new bootstrap.Modal(document.getElementById('customModal'));
+    myModal.show();
+}
+
+    </script>
+<!-- 
+$message= 'hello';
+$title= 'gumana ka';
+echo "<script>showModal('$message', '$title');</script>"; -->
+</body>
+</html>
