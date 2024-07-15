@@ -1,7 +1,7 @@
 <div class="forNavigationbar sticky-top">
     <nav class="navbar navbar-expand-lg bg-custome ">
         <div class="container-fluid ">
-        <a href="Admin_dashboard.php"><img src="Images/Logo.png" class="logo ms-4 ms-lg-5" height=50></a>&nbsp;&nbsp;
+        <a href="Admin_dashboard.php"><img src="Images/Logo.jpg" class="logo ms-4 ms-lg-5 rounded-circle" height=50></a>&nbsp;&nbsp;
         <a class="navbar-brand " href="Admin_dashboard.php"><b>Hentoki</b></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
