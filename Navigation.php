@@ -37,6 +37,7 @@
                 echo  '<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
                 echo    '<li><a class="dropdown-item" href="posted-rate.php">Rate</a></li>';
                 echo    '<li><a class="dropdown-item" href="edit.php">Account Settings</a></li>';
+                echo    '<li><a class="dropdown-item" href="Client_Gallery.php">Gallery</a></li>';
                 echo    '<li><a class="dropdown-item" href="logout.php">Sign Out</a></li>';
                 echo  '</ul>';
                 echo  '</div>';
