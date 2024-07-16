@@ -536,18 +536,18 @@ function getTopOrLeastBoughtProducts($query, $conn) {
             }
         }
     
-    /* Custom Modal Styles */
-    .modal {
-        display: none; 
-        position: fixed; /* Stay in place */
-        z-index: 1050; /* Sit on top */
-        left: 0;
-        top: 0;
-        width: 100%; /* Full width */
-        height: 100%; /* Full height */
-        overflow: auto; /* Enable scroll if needed */
-        background-color: rgba(0,0,0,0.4); 
-    }
+        /* Custom Modal Styles */
+        .modal {
+            display: none; 
+            position: fixed; /* Stay in place */
+            z-index: 1050; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); 
+        }
 
         /* Modal Content */
         .modal-content {
@@ -626,7 +626,6 @@ function getTopOrLeastBoughtProducts($query, $conn) {
             color: #953728;
         }
 		
-
         .btn-clear {
             background-color: #FFC10B;
             border: none;
@@ -678,11 +677,8 @@ function getTopOrLeastBoughtProducts($query, $conn) {
         </div>
         <div class="ml-auto">
             <button class="btn btn-success mx-2" id="addCategoryBtn">Add Category</button>
-            <?php include 'dashboard_addCategory.php'; ?>
             <button class="btn btn-primary mx-2" id="addProductBtn">Add Product</button>
-            <?php include 'dashboard_addProduct.php'; ?>
             <button class="btn btn-info mx-2" id="addEmployeeBtn">Add Employee</button>
-            <?php include 'dashboard_addEmployee.php'; ?>
         </div>
 		</div>
 		</nav>
@@ -868,7 +864,7 @@ function getTopOrLeastBoughtProducts($query, $conn) {
                 <h2 class="centered-text" id="title">Add New Category</h2>
                 <form id="addCategoryForm" method="post" action="category_functions.php">
                     <div class="mb-3">
-                        <label for="categoryID" class="form-label">Category ID <i style="color: lightgrey;">(automated)</i></label>
+                        <label for="categoryID" class="form-label"><b style="color: red;">*</b>Category ID <i style="color: lightgrey;">(automated)</i></label>
                         <input type="text" class="form-control" id="CategoryID" name="categoryID" placeholder="202403----" readonly>
                     </div>
                     <div class="mb-3">
@@ -877,7 +873,7 @@ function getTopOrLeastBoughtProducts($query, $conn) {
                     </div>
                     <div  class="form-group d-flex justify-content-center align-items-center">
                         <button type="submit" class="btn btn-primary" id="updateBtn">Add Category</button>
-                        <button type="button" class="btn btn-clear" id="clearFormBtn">Clear</button>
+                        <button type="button" class="btn btn-clear" id="clearFormBtnCategory">Clear</button>
                     </div>
                 </form>
             </div>
@@ -890,7 +886,7 @@ function getTopOrLeastBoughtProducts($query, $conn) {
                 <h2 class="centered-text" id="title">Add New Product</h2>
                 <form id="addProductForm" method="post" action="product_functions.php">
                     <div class="mb-3">
-                        <label for="categoryID" class="form-label">Product ID <i style="color: lightgrey;">(automated)</i></label>
+                        <label for="productID" class="form-label"><b style="color: red;">*</b>Product ID <i style="color: lightgrey;">(automated)</i></label>
                         <input type="text" class="form-control" id="ProductID" name="productID" placeholder="202416----" readonly>
                     </div>
                     <div class="mb-3">
@@ -898,24 +894,24 @@ function getTopOrLeastBoughtProducts($query, $conn) {
                         <input type="text" class="form-control" id="ProductName" name="productName" required>
                     </div>
                     <div class="mb-3">
-                        <label for="categoryID" class="form-label">Category ID <i style="color: lightgrey;">(automated)</i></label>
-                        <input type="text" class="form-control" id="CategoryID" name="categoryID" placeholder="202403----" readonly>
+                        <label for="categoryIDProd" class="form-label"><b style="color: red;">*</b>Category ID <i style="color: lightgrey;">(automated)</i></label>
+                        <input type="text" class="form-control" id="CategoryIDProd" name="categoryIDProd" placeholder="202403----" readonly>
                     </div>
                     <div class="mb-3">
-                        <label for="categoryType" class="form-label"><b style="color: red;">*</b>Category Type</label>
-                        <input type="text" class="form-control" id="CategoryType" name="categoryType" required>
+                        <label for="categoryTypeProd" class="form-label"><b style="color: red;">*</b>Category Type</label>
+                        <input type="text" class="form-control" id="CategoryTypeProd" name="categoryTypeProd" required>
                     </div>
                     <div class="mb-3">
-                        <label for="categoryType" class="form-label"><b style="color: red;">*</b>Status</label>
+                        <label for="productStatus" class="form-label"><b style="color: red;">*</b>Status</label>
                         <input type="text" class="form-control" id="ProductStatus" name="productStatus" required>
                     </div>
                     <div class="mb-3">
-                        <label for="categoryType" class="form-label"><b style="color: red;">*</b>Price</label>
+                        <label for="productPrice" class="form-label"><b style="color: red;">*</b>Price</label>
                         <input type="text" class="form-control" id="ProductPrice" name="productPrice" required>
                     </div>
                     <div  class="form-group d-flex justify-content-center align-items-center">
                         <button type="submit" class="btn btn-primary" id="updateBtn">Add Product</button>
-                        <button type="button" class="btn btn-clear" id="clearFormBtn">Clear</button>
+                        <button type="button" class="btn btn-clear" id="clearFormBtnProduct">Clear</button>
                     </div>
                 </form>
             </div>
@@ -928,7 +924,7 @@ function getTopOrLeastBoughtProducts($query, $conn) {
                 <h2 class="centered-text" id="title">Add New Employee</h2>
                 <form id="addEmployeeForm" method="post" action="employee_functions.php">
                     <div class="mb-3">
-                        <label for="employeeID" class="form-label">Employee ID <i style="color: lightgrey;">(automated)</i></label>
+                        <label for="employeeID" class="form-label"><b style="color: red;">*</b>Employee ID <i style="color: lightgrey;">(automated)</i></label>
                         <input type="text" class="form-control" id="EmployeeID" name="employeeID" placeholder="202405----" readonly>
                     </div>
                     <div class="mb-3">
@@ -942,6 +938,22 @@ function getTopOrLeastBoughtProducts($query, $conn) {
                     <div class="mb-3">
                         <label for="employeeEmail" class="form-label"><b style="color: red;">*</b>Email</label>
                         <input type="email" class="form-control" id="EmployeeEmail" name="employeeEmail" required>
+                        <?php 
+                            if (isset($_POST["employeeEmail"]))
+                            {
+                                $email = $_POST["employeeEmail"];
+                                $email_pattern = "/^[a-zA-Z0-0._%+-]+@[a-zA-Z0-9.-]+\\.com$/";
+    
+                                $errors = 0;
+                                $error_display = "";
+                
+                                if (!preg_match($email_pattern, $email) ) 
+                                {
+                                    $error_display = "Please enter a valid email address with a .com extension.";
+                                    echo $error_display;
+                                }
+                            }
+                        ?>
                     </div>
                     <div class="mb-3">
                         <label for="employeePhone" class="form-label"><b style="color: red;">*</b>Phone</label>
@@ -953,10 +965,13 @@ function getTopOrLeastBoughtProducts($query, $conn) {
                     </div>
                     <div class="mb-3">
                         <label for="employeeBirthdate" class="form-label"><b style="color: red;">*</b>Birthdate</label>
-                        <input type="date" class="form-control" id="employeeBirthdate" name="EmployeeBday" required>
+                        <input type="date" class="form-control" id="employeeBirthdate" name="EmployeeBday"
+                            value="<?php echo isset($_POST['EmployeeBday']) ? htmlspecialchars($_POST['EmployeeBdat']) : ''; ?>"
+                            min="<?php echo date('Y-m-d', strtotime('-50 years')); ?>"
+                            max="<?php echo date('Y-m-d', strtotime('-18 years')); ?>"  required>
                     </div>
                     <div class="mb-3">
-                        <label for="employeeAge" class="form-label"><b style="color: red;">*</b>Age</label>
+                        <label for="employeeAge" class="form-label"><b style="color: red;">*</b>Age <i style="color: lightgrey;">(automated)</i></label>
                         <input type="number" class="form-control" id="employeeAge" name="EmployeeAge" readonly>
                     </div>
                     <div class="mb-3">
@@ -967,17 +982,9 @@ function getTopOrLeastBoughtProducts($query, $conn) {
                             <option value="Other">Other</option>
                         </select>
                     </div>
-                    <div class="mb-3">
-                        <label for="employeeGender" class="form-label">Gender</label>
-                        <select class="form-select" id="EmployeeGender" name="employeeGender" required>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
                     <div class="form-group d-flex justify-content-center align-items-center">
                         <button type="submit" class="btn btn-primary" id="updateBtn">Add Employee</button>
-                        <button type="button" class="btn btn-clear" id="clearFormBtn">Clear</button>
+                        <button type="button" class="btn btn-clear" id="clearFormBtnEmployee">Clear</button>
                     </div>
                 </form>
             </div>
@@ -1328,10 +1335,6 @@ var myChart = new Chart(ctx, {
             {
                 alert("Added successfully.");
             } 
-            else if (successType === 'update') 
-            {
-                alert("Updated successfully.");
-            }
 
             // Reset successType and urlParams
             successType = null;
@@ -1356,17 +1359,16 @@ var myChart = new Chart(ctx, {
 	    };
 	
 	    // Clear Form Button
-	    document.getElementById('clearFormBtn').addEventListener('click', function() {
+	    document.getElementById('clearFormBtnCategory').addEventListener('click', function() {
         document.getElementById('addCategoryForm').reset();
 	    });
         
 // ----------------------------------------- ADD PRODUCT MODAL ----------------------------------------- //
 
-        // Show Add Product Modal
+        // Show Add Category Modal
 	    document.getElementById('addProductBtn').addEventListener('click', function() {
         var modal = document.getElementById('addProductModal');
         modal.style.display = "block";
-        changeFormTitleAndButton('Add Product', 'Add Product');
         blank();
         console.log('Add New Product button clicked');
 	    });
@@ -1380,50 +1382,48 @@ var myChart = new Chart(ctx, {
 	    };
 	
 	    // Clear Form Button
-	    document.getElementById('clearFormBtn').addEventListener('click', function() {
+	    document.getElementById('clearFormBtnProduct').addEventListener('click', function() {
         document.getElementById('addProductForm').reset();
-	    });  // ----- GET CATEGORY INFO ----- //
-function getCategory() {
-    // Get the value of the CategoryType input field
-    var categoryType = document.getElementById('CategoryType').value;
+	    });  
 
-    // Check if the categoryType is not empty
-    if (categoryType) {
-        // Fetch the category ID from the server
-        fetch(`getCategoryID.php?category_type=${encodeURIComponent(categoryType)}`)
-            .then(response => {
-                // Ensure the response is in JSON format
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Check if the category_id exists in the returned data
-                if (data.category_id !== undefined) {
-                    // Set the CategoryID input field to the fetched category ID
-                    document.getElementById('CategoryID').value = data.category_id;
-                } else {
-                    console.error('Category ID not found in the response data');
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching category data:', error);
-            });
-    }
-}
+        categoryTypeProd = document.getElementById('CategoryTypeProd');
 
-// Set up an event listener for the input event on the CategoryType field
-window.onload = function() {
-    var categoryTypeInput = document.getElementById('CategoryType');
-    if (categoryTypeInput) {
-        categoryTypeInput.addEventListener('input', getCategory);
-    } else {
-        console.error('CategoryType input field not found');
-    }
-};
+        // ----- GET CATEGORY INFO ----- //
+        function getCategoryID() {
+            // Get the value of the CategoryType input field
+            var categoryTypeProd = document.getElementById('CategoryTypeProd').value;
 
-        
+            // Check if the categoryType is not empty
+            if (categoryType) {
+                // Fetch the category ID from the server
+                fetch(`getCategoryID.php?category_type=${encodeURIComponent(categoryTypeProd)}`)
+                    .then(response => {
+                        // Ensure the response is in JSON format
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Check if the category_id exists in the returned data
+                        if (data.category_id !== undefined) {
+                            // Set the CategoryID input field to the fetched category ID
+                            document.getElementById('CategoryIDProd').value = data.category_id;
+                        } else {
+                            console.error('Category ID not found in the response data');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching category data:', error);
+                    });
+            }
+        }
+
+        // Set up an event listener for the input event on the CategoryType field
+        window.onload = function() {
+            document.getElementById('CategoryTypeProd').addEventListener('input', getCategoryID);
+        }
+
 // ----------------------------------------- ADD EMPLOYEE MODAL ----------------------------------------- //
 
 	    // Show Add Employee Modal
@@ -1442,11 +1442,30 @@ window.onload = function() {
 	    };
 	
 	    // Clear Form Button
-	    document.getElementById('clearFormBtn').addEventListener('click', function() {
+	    document.getElementById('clearFormBtnEmployee').addEventListener('click', function() {
         document.getElementById('addEmployeeForm').reset();
 	    });
+         
+// -------------------------------------------------- DISPLAY AGE AUTOMATICALLY -------------------------------------------------- //
 
-        categoryType = document.getElementById('CategoryType');
+        function calculateAge() 
+        {
+            var birthdate = document.getElementById('employeeBirthdate').value;
+            if (birthdate) {
+                var today = new Date();
+                var birthDate = new Date(birthdate);
+                var age = today.getFullYear() - birthDate.getFullYear();
+                var monthDifference = today.getMonth() - birthDate.getMonth();
+                if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+                    age--;
+                }
+                document.getElementById('employeeAge').value = age;
+            }
+        }
+
+        window.onload = function() {
+            document.getElementById('employeeBirthdate').addEventListener('input', calculateAge);
+        }
         
 // ----------------------------------------- HELP MODAL ----------------------------------------- //
 

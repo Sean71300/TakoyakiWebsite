@@ -420,11 +420,11 @@
                 <h2 class="centered-text" id="title">Add New Category</h2>
                 <form id="addCategoryForm" method="post" action="category_functions.php">
                     <div class="mb-3">
-                        <label for="categoryID" class="form-label">Category ID</label>
+                        <label for="categoryID" class="form-label"><b style="color: red;">*</b>Category ID</label>
                         <input type="text" class="form-control" id="CategoryID" name="categoryID" placeholder="202403----" readonly>
                     </div>
                     <div class="mb-3">
-                        <label for="categoryType" class="form-label">Category Type</label>
+                        <label for="categoryType" class="form-label"><b style="color: red;">*</b>Category Type</label>
                         <input type="text" class="form-control" id="CategoryType" name="categoryType" required>
                     </div>
                     <div  class="form-group d-flex justify-content-center align-items-center">

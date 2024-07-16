@@ -494,7 +494,7 @@ session_start();
                 <h2 class="centered-text" id="title">Add New Employee</h2>
                 <form id="addEmployeeForm" method="post" action="employee_functions.php">
                     <div class="mb-3">
-                        <label for="employeeID" class="form-label">Employee ID <i style="color: lightgrey;">(automated)</i></label>
+                        <label for="employeeID" class="form-label"><b style="color: red;">*</b>Employee ID <i style="color: lightgrey;">(automated)</i></label>
                         <input type="text" class="form-control" id="EmployeeID" name="employeeID" placeholder="202405----" readonly>
                     </div>
                     <div class="mb-3">
@@ -519,10 +519,13 @@ session_start();
                     </div>
                     <div class="mb-3">
                         <label for="employeeBirthdate" class="form-label"><b style="color: red;">*</b>Birthdate</label>
-                        <input type="date" class="form-control" id="employeeBirthdate" name="EmployeeBday" required>
+                        <input type="date" class="form-control" id="employeeBirthdate" name="EmployeeBday"
+                            value="<?php echo isset($_POST['EmployeeBday']) ? htmlspecialchars($_POST['EmployeeBdat']) : ''; ?>"
+                            min="<?php echo date('Y-m-d', strtotime('-50 years')); ?>"
+                            max="<?php echo date('Y-m-d', strtotime('-18 years')); ?>" required>
                     </div>
                     <div class="mb-3">
-                        <label for="employeeAge" class="form-label"><b style="color: red;">*</b>Age</label>
+                        <label for="employeeAge" class="form-label"><b style="color: red;">*</b>Age <i style="color: lightgrey;">(automated)</i></label>
                         <input type="number" class="form-control" id="employeeAge" name="EmployeeAge" readonly>
                     </div>
                     <div class="mb-3">
@@ -627,10 +630,11 @@ session_start();
 
         // Check if the URL has the success query parameter
         var urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.has('success')) 
+        if (urlParams.has('success') || urlParams.has('fail')) 
         {
             // Retrieve the successType value
             var successType = urlParams.get('success');
+            var failType = urlParams.get('fail');
 
             // Check the value of successType
             if (successType === 'add') 
@@ -641,6 +645,11 @@ session_start();
             {
                 alert("Employee updated successfully.");
             }
+            else if (failType === 'add') 
+            {
+                alert("Failed adding employee.");
+            }
+            
 
             // Reset successType and urlParams
             successType = null;

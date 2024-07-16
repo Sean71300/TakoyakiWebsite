@@ -143,13 +143,78 @@
         {
             $position = $_POST['employeePosition'];
             $employee_name = $_POST['employeeName'];
-            // Retrieve other form fields similarly
+            $age = $_POST['EmployeeAge'];
+            $bday = $_POST['EmployeeBday'];
+            $gender = $_POST['employeeGender'];
+            $email = $_POST['employeeEmail'];
+            $phone = $_POST['employeePhone'];
+            $address = $_POST['employeeAddress'];
+            $email_pattern = "/^[a-zA-Z0-0._%+-]+@[a-zA-Z0-9.-]+\\.com$/";
 
-            add_Employee($position, $employee_name, $_POST['EmployeeAge'], $_POST['EmployeeBday'], $_POST['employeeGender'], $_POST['employeeEmail'], $_POST['employeePhone'], $_POST['employeeAddress']);
+            $errors = 0;
+            $error_display = "";
+
+            if (!preg_match($email_pattern, $email) ) 
+            {
+                $error_display = "Please enter a valid email address with a .com extension.";
+                $errors++;
+            }
+            if (checkPhone($phone) == false)
+            {
+                $error_display = "Invalid phone number, please check or try again.";
+                $errors++;
+            }
+            if ($age < 18)
+            {
+                $error_display = "Applicant is underaged.";
+                $errors++;
+            }
+
+            if ($errors == 0)
+            {
+                add_Employee($position, $employee_name, $age, $bday, $gender, $email, $phone, $address);
+            }
+            else
+            {
+                echo "$error_display";
+                // Redirect to Admin_category.php with a success query parameter
+                header("Location: Admin_employee.php?fail=add");
+            }
         }
         else if(isset($_POST['employeePosition'], $_POST['employeeName'], $_POST['EmployeeAge'], $_POST['EmployeeBday'], $_POST['employeeGender'], $_POST['employeeEmail'], $_POST['employeePhone'], $_POST['employeeAddress'], $_POST["employeeID"]))
         {
-            update_Employee($_POST['employeeID'],$_POST['employeePosition'], $_POST['employeeName'], $_POST['EmployeeAge'], $_POST['EmployeeBday'], $_POST['employeeGender'], $_POST['employeeEmail'], $_POST['employeePhone'], $_POST['employeeAddress']);
+            $position = $_POST['employeePosition'];
+            $employee_name = $_POST['employeeName'];
+            $age = $_POST['EmployeeAge'];
+            $bday = $_POST['EmployeeBday'];
+            $gender = $_POST['employeeGender'];
+            $email = $_POST['employeeEmail'];
+            $phone = $_POST['employeePhone'];
+            $address = $_POST['employeeAddress'];
+            $email_pattern = "/^[a-zA-Z0-0._%+-]+@[a-zA-Z0-9.-]+\\.com$/";
+
+            $errors = 0;
+            $error_display = "";
+
+            if (!preg_match($email_pattern, $email) ) 
+            {
+                $error_display = "Please enter a valid email address with a .com extension.";
+                $errors++;
+            }
+            if (checkPhone($phone) == false)
+            {
+                $error_display = "Invalid phone number, please check or try again.";
+                $errors++;
+            }
+
+            if ($errors == 0)
+            {
+                update_Employee($_POST['employeeID'],$position, $employee_name, $age, $bday, $gender, $email, $phone, $address);
+            }
+            else
+            {
+                echo "$error_display";
+            }
         }
         else
         {
@@ -157,5 +222,26 @@
         
             delete_Employee($employeeID);
         }
+    }
+
+// --------------------------------------------------------- PHONE VALIDATION --------------------------------------------------------- //
+
+    function checkPhone($phone_number) 
+    {
+        $phone_number = preg_replace('/\D/', '', $phone_number);
+
+        if (strlen($phone_number) != 10 && strlen($phone_number) != 11) 
+        {
+            return false;
+        }
+
+        $valid_area_codes = array('02', '032', '033', '034', '035', '036', '037', '038', '039', '041', '042', '043', '044', '045', '046', '047', '048', '049', '052', '053', '054', '055', '056', '057', '058', '059', '063', '064', '065', '066', '067', '068', '077', '078', '082', '083', '084', '085', '086', '087', '088', '089');
+
+        if (substr($phone_number, 0, 1) != '0' && substr($phone_number, 0, 2) != '9' && !in_array(substr($phone_number, 0, 2), $valid_area_codes)) 
+        {
+            return false;
+        }
+
+        return true;
     }
 ?>

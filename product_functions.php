@@ -4,30 +4,39 @@
     include 'setup.php';
 
 // --------------------------------------------------------- ADD PRODUCT --------------------------------------------------------- //
-
-    function add_Product($product_name,$categoryID,$categoryType,$status,$price)
+    function add_Product($product_name, $categoryID, $categoryType, $status, $price)
     {
         $conn = connect();
+        if (!$conn) 
+        {
+            die("Connection failed: " . mysqli_connect_error());
+        }
 
         $checkQuery = "SELECT product_id FROM products WHERE product_id = ?";
+        $id = checkDuplication(generate_ProductID(), $checkQuery);
 
-        $id = checkDuplication(generate_ProductID(),$checkQuery);
+        $sql = "INSERT INTO products (product_id, product_name, category_id, category_type, status, price) VALUES (?, ?, ?, ?, ?, ?)";
 
-        $sql = "INSERT INTO products
-                (product_id,product_name,category_id,category_type,status,price)
-                VALUES
-                ($id,'$product_name',$categoryID,'$categoryType','$status',$price)";
-
-        if (mysqli_query($conn, $sql))
+        $stmt = $conn->prepare($sql);
+        if ($stmt === false) 
         {
-            // Redirect to Admin_category.php with a success query parameter
+            die("Error preparing statement: " . $conn->error);
+        }
+
+        $stmt->bind_param("isiisd", $id, $product_name, $categoryID, $categoryType, $status, $price);
+
+        if ($stmt->execute()) 
+        {
+            // Redirect to Admin_products.php with a success query parameter
             header("Location: Admin_products.php?success=add");
+            exit();
         }
         else 
         {
             echo "Error adding product: " . $stmt->error;
         }
 
+        $stmt->close();
         $conn->close();
     }
 
@@ -93,6 +102,7 @@
                 {
                     $productID = $row["product_id"];
                     $productImg = base64_encode($row["product_img"]);
+                    $F_price = number_format($row["price"], 2);
                     echo "<tr>";
                     echo "<td><img src='data:image/jpeg;base64," . $productImg . "' height=60></td>";
                     echo "<td>" . $row["product_id"] . "</td>";
@@ -100,7 +110,7 @@
                     echo "<td>" . $row["category_id"] . "</td>";
                     echo "<td>" . $row["category_type"] . "</td>";
                     echo "<td>" . $row["status"] . "</td>";
-                    echo "<td>" . $row["price"] . "</td>";
+                    echo "<td>" . $F_price . "</td>";
                     echo "<td>
                             <a href='#' class='btn btn-sm btn-success'><i class='fas fa-edit' onclick='updateProduct(" . $productID . ")'></i></a>
                             <a href='#' class='btn btn-sm btn-danger'><i class='fas fa-trash' onclick='deleteProduct(" . $productID . ")'></i></a>
