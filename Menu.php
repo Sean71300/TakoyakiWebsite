@@ -1,8 +1,6 @@
 <?php
-# Tododo:
-# Fix modal for message confirmation
-# Add transaction record to database
-# Fix ui for customer information for delivery
+#If item status if available for purchase or not
+#Fix modal for message confirmation
 
 #Connect to Database
 session_start();

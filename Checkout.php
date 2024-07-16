@@ -1,4 +1,8 @@
 <?php
+#Connect to database
+#Insert transaction to db
+#Automatic insert customer info to textfields   
+
 /*
 session_start();
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
@@ -155,7 +159,7 @@ require_once "setup.php";
         <!-- [NAVIGATION BAR] -->
 
         <!-- [BODY] -->       
-        <div class="container" style="height: 70vh;">
+        <div class="container">
             <div class="container mt-5">
                 <div class="row">
                     <h2 class="text-center fw-bold">
@@ -168,8 +172,9 @@ require_once "setup.php";
             <div class="container d-flex mt-5">
                 <div class="container">
                     <h4>Cart:</h4>
+                    <hr>
                     <div class="row">
-                        <div class="container border border-black" style="height: 50vh; overflow-y: auto;" id="product-container">
+                        <div class="container border border-black" style="height: 43.5rem; max-height: 100%; overflow-y: auto;" id="product-container">
                             <table class="table m-0">
                                 <thead>
                                     <tr>
@@ -236,8 +241,15 @@ require_once "setup.php";
                 
                     <div class="row">
                         <hr style="margin-top: 25px;">
-                        <div class="total-container">
-                            <h5>Total: ₱<?php echo number_format($total, 2);?></h5>
+                        <div class="d-flex">
+                            <div class="total-container w-50">
+                                <h5>Total: ₱<?php echo number_format($total, 2);?></h5>
+                            </div>
+                            <div stlye="overflow: auto;" class="container w-50">
+                                <div style="float:right">    
+                                    <h5>Clear Cart</h5>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -245,10 +257,31 @@ require_once "setup.php";
 
                 <div class="container">
                     <div class="total-container">
-                        <h5>Confirm Payment:</h5>
-                        <h6 class="mt-4">Enter GCash Number:</h6>
+                        <h4>Customer Info</h4>
+                        <hr>
+                        <div class="form-group">
+                            <p>Name:</p>
+                            <p name="name" class="form-control">Lorem</p>
+                            <p>Phone Number:</p>
+                            <p name="number" class="form-control">Lorem</p>
+                            <p>Address:</p>
+                            <p class="form-control" name="address">Lorem</p>
+                        </div>
+                    </div>
+                    <div class="total-container mt-5">
+                        <h4>Shipping Address</h4>
+                        <hr>
+                        <div class="form-group">
+                            <p>Address:</p>
+                            <p class="form-control" name="shipping-address">Lorem</p>
+                        </div>
+                    </div>
+                    <div class="total-container mt-5">
+                        <h4>Confirm Payment:</h4>
+                        <hr>
+                        <h6 class="mt-2">Enter GCash Number:</h6>
                         <form method="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" action="">
-                            <input type="text" class="w-100 mt-4 mb-4" style="height:50px"placeholder=" +63">
+                            <input type="text" class="w-100 mt-2 mb-4" style="height:50px"placeholder=" 09XXXXXXXXX">
                             <input type="submit" name="pay" value="Pay"class="btn btn-warning w-100"></input>
                         </form>
                     </div>
