@@ -1,7 +1,6 @@
 <?php
 #Connect to database
 #Insert transaction to db
-#Automatic insert customer info to textfields   
 
 /*
 session_start();
