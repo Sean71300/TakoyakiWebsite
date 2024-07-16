@@ -886,7 +886,7 @@ function getTopOrLeastBoughtProducts($query, $conn) {
                 <h2 class="centered-text" id="title">Add New Product</h2>
                 <form id="addProductForm" method="post" action="product_functions.php">
                     <div class="mb-3">
-                        <label for="categoryID" class="form-label"><b style="color: red;">*</b>Product ID <i style="color: lightgrey;">(automated)</i></label>
+                        <label for="productID" class="form-label"><b style="color: red;">*</b>Product ID <i style="color: lightgrey;">(automated)</i></label>
                         <input type="text" class="form-control" id="ProductID" name="productID" placeholder="202416----" readonly>
                     </div>
                     <div class="mb-3">
@@ -894,19 +894,19 @@ function getTopOrLeastBoughtProducts($query, $conn) {
                         <input type="text" class="form-control" id="ProductName" name="productName" required>
                     </div>
                     <div class="mb-3">
-                        <label for="categoryID" class="form-label"><b style="color: red;">*</b>Category ID <i style="color: lightgrey;">(automated)</i></label>
-                        <input type="text" class="form-control" id="CategoryID" name="categoryID" placeholder="202403----" readonly>
+                        <label for="categoryIDProd" class="form-label"><b style="color: red;">*</b>Category ID <i style="color: lightgrey;">(automated)</i></label>
+                        <input type="text" class="form-control" id="CategoryIDProd" name="categoryIDProd" placeholder="202403----" readonly>
                     </div>
                     <div class="mb-3">
-                        <label for="categoryType" class="form-label"><b style="color: red;">*</b>Category Type</label>
-                        <input type="text" class="form-control" id="CategoryType" name="categoryType" required>
+                        <label for="categoryTypeProd" class="form-label"><b style="color: red;">*</b>Category Type</label>
+                        <input type="text" class="form-control" id="CategoryTypeProd" name="categoryTypeProd" required>
                     </div>
                     <div class="mb-3">
-                        <label for="categoryType" class="form-label"><b style="color: red;">*</b>Status</label>
+                        <label for="productStatus" class="form-label"><b style="color: red;">*</b>Status</label>
                         <input type="text" class="form-control" id="ProductStatus" name="productStatus" required>
                     </div>
                     <div class="mb-3">
-                        <label for="categoryType" class="form-label"><b style="color: red;">*</b>Price</label>
+                        <label for="productPrice" class="form-label"><b style="color: red;">*</b>Price</label>
                         <input type="text" class="form-control" id="ProductPrice" name="productPrice" required>
                     </div>
                     <div  class="form-group d-flex justify-content-center align-items-center">
@@ -1367,17 +1367,17 @@ var myChart = new Chart(ctx, {
         document.getElementById('addProductForm').reset();
 	    });  
 
-        categoryType = document.getElementById('CategoryType');
+        categoryTypeProd = document.getElementById('CategoryTypeProd');
 
         // ----- GET CATEGORY INFO ----- //
         function getCategory() {
             // Get the value of the CategoryType input field
-            var categoryType = document.getElementById('CategoryType').value;
+            var categoryTypeProd = document.getElementById('CategoryTypeProd').value;
 
             // Check if the categoryType is not empty
             if (categoryType) {
                 // Fetch the category ID from the server
-                fetch(`getCategoryID.php?category_type=${encodeURIComponent(categoryType)}`)
+                fetch(`getCategoryID.php?category_type=${encodeURIComponent(categoryTypeProd)}`)
                     .then(response => {
                         // Ensure the response is in JSON format
                         if (!response.ok) {
@@ -1389,7 +1389,7 @@ var myChart = new Chart(ctx, {
                         // Check if the category_id exists in the returned data
                         if (data.category_id !== undefined) {
                             // Set the CategoryID input field to the fetched category ID
-                            document.getElementById('CategoryID').value = data.category_id;
+                            document.getElementById('CategoryIDProd').value = data.category_id;
                         } else {
                             console.error('Category ID not found in the response data');
                         }
@@ -1402,7 +1402,7 @@ var myChart = new Chart(ctx, {
 
         // Set up an event listener for the input event on the CategoryType field
         window.onload = function() {
-            document.getElementById('CategoryType').addEventListener('input', getCategory);
+            document.getElementById('CategoryTypeProd').addEventListener('input', getCategory);
         }
 
 // ----------------------------------------- ADD EMPLOYEE MODAL ----------------------------------------- //
