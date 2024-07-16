@@ -7,7 +7,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ps-5 fs-3 fw-bold mb-2 mb-lg-0 col d-flex justify-content-end">                  
+            <ul class="navbar-nav ps-5 fs-4   mb-lg-0 col d-flex justify-content-end">                  
                 <li class="nav-item">
                 <a class="nav-link" href="index.php">Home</a>
                 </li>
@@ -30,8 +30,8 @@
                 echo '</li>';
                 }
                 else{          
-                echo  '&nbsp;&nbsp;<div class="dropdown">';
-                echo  '<button class="btn dropdown-toggle fs-3 fw-bold" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">';
+                echo  '&nbsp;<div class="dropdown">';
+                echo  '<button class="btn dropdown-toggle fs-4 " type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">';
                 echo    "Welcome ".htmlspecialchars($_SESSION["full_name"]).'';   
                 echo  '</button>';
                 echo  '<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">';

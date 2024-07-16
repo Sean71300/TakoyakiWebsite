@@ -1,12 +1,25 @@
 <?php
     session_start();
     include_once 'edit_functions.php';
-    $Confirmation = "";
+    
 
     if ($_SERVER["REQUEST_METHOD"] == "POST")
-    {
-        editdata();
-        $Confirmation='<h5 class="mt-3">Record Edited successfully!</h5><br>';
+    {       
+        if (editdata()==true)
+        {
+            $Confirmation ='<h4 class="mt-3 text-success">Record edited successfully!</h4><br>';  
+            $passcheck = "";  
+        }    
+        else if (editdata()==false && pass_Check()==false)
+        {
+            $passcheck ='<h5 class="mb-3 text-danger">Incorrect password</h5>';
+            $Confirmation = "";
+           
+        }
+        else if (editdata()==false && pass_Check()==true)
+        {
+            $Confirmation ='<h4 class="mt-3 text-danger">Record unsuccesfully edited!</h4><br>';  
+        }
     }
 ?>
 
@@ -209,7 +222,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="phone" class="form-label">Phone Number</label>
-                        <input type="number" min="0"  onkeydown="return false" id="phone" name="phone" class="form-control"   value="<?php echo search_Value("phone_number",htmlspecialchars($_SESSION["id"]))?>"
+                        <input type="number" min="0"   id="phone" name="phone" class="form-control"   value="<?php echo search_Value("phone_number",htmlspecialchars($_SESSION["id"]))?>"
                                required>
                     </div>
                     <div class="mb-3">
@@ -232,8 +245,9 @@
                         <label for="female">Others</label>
                     </div>        
                     <div class="mb-3">
-                        <label for="address" class="form-label">Enter Password to Save Changes</label>
-                        <input type="Password" id="pass" name="pass" class="form-control" rows="" autocomplete="off"></input>
+                        <label for="address" class="form-label">Enter Password to save changes:</label>
+                        <input type="Password" id="pass" name="pass" class="form-control" rows="" autocomplete="new-password"></input> 
+                        <?php echo $passcheck?>                       
                     </div>
                     <button type="submit" class="btn btn-primary save-changes-button">Save Changes</button>
                     <?php echo $Confirmation?>
