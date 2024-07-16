@@ -49,7 +49,7 @@
 
 // -------------------------------------- CHECK FOR ID DUPLICATION (already declared)-------------------------------------- //
 
-/*
+
     function checkDuplication($id, $checkQuery) {
         $conn = connect();
         // Function to check for duplicate ID
@@ -71,7 +71,7 @@
         $conn->close();
         return $id;
     }
-*/
+
 // -------------------------------------- CUSTOMERS TABLE CREATION -------------------------------------- //
     function create_CustomersTable()
     {
