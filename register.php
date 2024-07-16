@@ -153,15 +153,11 @@ function retainInput($fieldName, $type = 'text', $radioValue = '') {
     }
 }
 
-function calculateAge($birthdate) 
-{
-    $dateObj = DateTime::createFromFormat('Y-m-d', $birthdate);
-    if (!$dateObj) {
-        return false; // Invalid date format
-    }
+function calculateAge($birthdate) {
+    $dob = new DateTime($birthdate);
     $today = new DateTime();
-    $diff = $today->diff($dateObj);
-    return $diff->y;
+    $age = $today->diff($dob)->y;
+    return $age;
 }
 
 function checkPhone($phone_number) {
@@ -274,6 +270,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <title>Register</title>
         <link rel="stylesheet" href="style.css">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        <style>
+            body {
+            background: url('images/register1-bg.png') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            }
+        </style>
     </head>
     <body style = "height: auto">
         <div class="container1 w-50 m-5" style = "height: auto">
@@ -302,6 +311,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         max="<?php echo date('Y-m-d', strtotime('-18 years')); ?>"
                     required>
                 </div>
+                <div class="form-group">
+                    <p><span class="text-danger font-italic">*</span>Age:</p>
+                    <input type="text" id="age" name="age" class="form-control" readonly>
+                </div>
                 <div class="form-group" style="margin-top:20px;">
                     <p><span class="text-danger font-italic">*</span>Gender:</p>
                     <input type="radio" name="gender" value="Male" <?php retainInput('gender', 'radio', 'Male'); ?> required>
@@ -324,12 +337,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="text" id="address" name="address" class="form-control" value=  "<?php retainInput('address');?>" placeholder="ex. 123 Mabini Street Barangay San Lorenzo Makati City, Metro Manila 1223 Philippines" required>
                 </div>
                 <div class="form-group">
-                    <p><span class="text-danger font-italic">*</span>Password:</p>
-                    <input type="password" name="password" class="form-control" placeholder="Minimum of 8 characters | 1 uppercase, lowercase, and special character needed."required>
-                </div>
-                <div class="form-group">
-                    <p><span class="text-danger font-italic">*</span>Confirm Password:</p>
-                    <input type="password" name="confirm_password" class="form-control" required>
+				    <p><span class="text-danger font-italic">*</span>Password:</p>
+				    <div class="password-toggle" style="position: relative;">
+				        <input id="password" type="password" name="password" class="form-control" required>
+				        <span class="show-hide-icon clickable" onclick="togglePassword('password')" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;">
+				            <i class="fas fa-eye"></i>
+				        </span>
+			        </div>
+		        </div>
+		        <div class="form-group">
+		            <p><span class="text-danger font-italic">*</span>Confirm Password:</p>
+                    <div class="password-toggle" style="position: relative;">
+                        <input id="confirm_password" type="password" name="confirm_password" class="form-control" required>
+                        <span class="show-hide-icon clickable" onclick="togglePassword('confirm_password')" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;">
+                            <i class="fas fa-eye"></i>
+                        </span>
+                    </div>
                 </div>
 
                 <div class="form-group d-flex justify-content-center align-items-center">
@@ -349,4 +372,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </form>
         </div>
     </body>
+    <script>
+        document.getElementById('birthD').addEventListener('change', function() {
+            var birthdate = this.value;
+            if (birthdate) {
+                var dob = new Date(birthdate);
+                var today = new Date();
+                var age = today.getFullYear() - dob.getFullYear();
+                
+                // Adjust for the case where the birth month/day has not occurred yet this year
+                var monthDiff = today.getMonth() - dob.getMonth();
+                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+                    age--;
+                }
+                
+                document.getElementById('age').value = age;
+            }
+        });
+            
+        function togglePassword(inputId)
+        {
+            var passwordInput = document.getElementById(inputId);
+            var icon = passwordInput.nextElementSibling.querySelector('i');
+
+            if (passwordInput.type === "password")
+            {
+                passwordInput.type = "text";
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            }
+            else
+            {
+                passwordInput.type = "password";
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
 </html>

@@ -891,7 +891,7 @@ function getTopOrLeastBoughtProducts($query, $conn) {
                     </div>
                     <div class="mb-3">
                         <label for="categoryType" class="form-label"><b style="color: red;">*</b>Product Name</label>
-                        <input type="text" class="form-control" id="ProductName" name="productName" required>
+                        <input type="text" class="form-control" id="ProductName" name="productName" pattern="[A-Za-z\s]+" required title="Please enter only alphabetic characters." required>
                     </div>
                     <div class="mb-3">
                         <label for="categoryIDProd" class="form-label"><b style="color: red;">*</b>Category ID <i style="color: lightgrey;">(automated)</i></label>
@@ -903,7 +903,7 @@ function getTopOrLeastBoughtProducts($query, $conn) {
                     </div>
                     <div class="mb-3">
                         <label for="productStatus" class="form-label"><b style="color: red;">*</b>Status</label>
-                        <input type="text" class="form-control" id="ProductStatus" name="productStatus" required>
+                        <input type="text" class="form-control" id="ProductStatus" name="productStatus" pattern="[A-Za-z\s]+" required title="Please enter only alphabetic characters." required>
                     </div>
                     <div class="mb-3">
                         <label for="productPrice" class="form-label"><b style="color: red;">*</b>Price</label>
@@ -929,35 +929,19 @@ function getTopOrLeastBoughtProducts($query, $conn) {
                     </div>
                     <div class="mb-3">
                         <label for="employeeName" class="form-label"><b style="color: red;">*</b>Name</label>
-                        <input type="text" class="form-control" id="EmployeeName" name="employeeName" required>
+                        <input type="text" class="form-control" id="EmployeeName" name="employeeName" pattern="[A-Za-z\s]+" required title="Please enter only alphabetic characters." required>
                     </div>
                     <div class="mb-3">
                         <label for="employeePosition" class="form-label"><b style="color: red;">*</b>Position</label>
-                        <input type="text" class="form-control" id="EmployeePosition" name="employeePosition" required>
+                        <input type="text" class="form-control" id="EmployeePosition" name="employeePosition" pattern="[A-Za-z\s]+" required title="Please enter only alphabetic characters." required>
                     </div>
                     <div class="mb-3">
                         <label for="employeeEmail" class="form-label"><b style="color: red;">*</b>Email</label>
                         <input type="email" class="form-control" id="EmployeeEmail" name="employeeEmail" required>
-                        <?php 
-                            if (isset($_POST["employeeEmail"]))
-                            {
-                                $email = $_POST["employeeEmail"];
-                                $email_pattern = "/^[a-zA-Z0-0._%+-]+@[a-zA-Z0-9.-]+\\.com$/";
-    
-                                $errors = 0;
-                                $error_display = "";
-                
-                                if (!preg_match($email_pattern, $email) ) 
-                                {
-                                    $error_display = "Please enter a valid email address with a .com extension.";
-                                    echo $error_display;
-                                }
-                            }
-                        ?>
                     </div>
                     <div class="mb-3">
                         <label for="employeePhone" class="form-label"><b style="color: red;">*</b>Phone</label>
-                        <input type="tel" class="form-control" id="EmployeePhoneNum" name="employeePhone" required>
+                        <input type="tel" class="form-control" id="EmployeePhoneNum" name="employeePhone" pattern="[0-9]+" required title="Please enter only numeric characters." required>
                     </div>
                     <div class="mb-3">
                         <label for="employeeAddress" class="form-label"><b style="color: red;">*</b>Address</label>
@@ -1385,16 +1369,14 @@ var myChart = new Chart(ctx, {
 	    document.getElementById('clearFormBtnProduct').addEventListener('click', function() {
         document.getElementById('addProductForm').reset();
 	    });  
-
-        categoryTypeProd = document.getElementById('CategoryTypeProd');
-
-        // ----- GET CATEGORY INFO ----- //
-        function getCategoryID() {
+        
+        function getCategoryID() 
+        {
             // Get the value of the CategoryType input field
             var categoryTypeProd = document.getElementById('CategoryTypeProd').value;
 
-            // Check if the categoryType is not empty
-            if (categoryType) {
+            // Check if the categoryTypeProd is not empty
+            if (categoryTypeProd) {
                 // Fetch the category ID from the server
                 fetch(`getCategoryID.php?category_type=${encodeURIComponent(categoryTypeProd)}`)
                     .then(response => {
@@ -1410,7 +1392,7 @@ var myChart = new Chart(ctx, {
                             // Set the CategoryID input field to the fetched category ID
                             document.getElementById('CategoryIDProd').value = data.category_id;
                         } else {
-                            console.error('Category ID not found in the response data');
+                            alert('Category ID not found in the response data');
                         }
                     })
                     .catch(error => {
@@ -1423,6 +1405,24 @@ var myChart = new Chart(ctx, {
         window.onload = function() {
             document.getElementById('CategoryTypeProd').addEventListener('input', getCategoryID);
         }
+
+        // Prevents entering numerical values for NAME
+        document.getElementById('ProductName').addEventListener('input', function(e) {
+            let input = e.target;
+            let value = input.value;
+    
+            // Remove any non-alphabetic characters
+            input.value = value.replace(/[^A-Za-z\s]/g, '');
+        });
+
+        // Prevents entering numerical values for POSITION
+        document.getElementById('ProductStatus').addEventListener('input', function(e) {
+            let input = e.target;
+            let value = input.value;
+    
+            // Remove any non-alphabetic characters
+            input.value = value.replace(/[^A-Za-z\s]/g, '');
+        });
 
 // ----------------------------------------- ADD EMPLOYEE MODAL ----------------------------------------- //
 
@@ -1445,6 +1445,33 @@ var myChart = new Chart(ctx, {
 	    document.getElementById('clearFormBtnEmployee').addEventListener('click', function() {
         document.getElementById('addEmployeeForm').reset();
 	    });
+
+        // Prevents entering numerical values for NAME
+        document.getElementById('EmployeeName').addEventListener('input', function(e) {
+            let input = e.target;
+            let value = input.value;
+    
+            // Remove any non-alphabetic characters
+            input.value = value.replace(/[^A-Za-z\s]/g, '');
+        });
+
+        // Prevents entering numerical values for POSITION
+        document.getElementById('EmployeePosition').addEventListener('input', function(e) {
+            let input = e.target;
+            let value = input.value;
+    
+            // Remove any non-alphabetic characters
+            input.value = value.replace(/[^A-Za-z\s]/g, '');
+        });
+
+        // Prevents entering alphabets for PHONE NUMBER
+        document.getElementById('EmployeePhoneNum').addEventListener('input', function(e) {
+            let input = e.target;
+            let value = input.value;
+
+            // Remove any non-numeric characters
+            input.value = value.replace(/[^0-9]/g, '');
+        });
          
 // -------------------------------------------------- DISPLAY AGE AUTOMATICALLY -------------------------------------------------- //
 

@@ -158,27 +158,20 @@
             {
                 $error_display = "Please enter a valid email address with a .com extension.";
                 $errors++;
+                // Redirect to Admin_category.php with a success query parameter
+                header("Location: Admin_employee.php?fail=email");
             }
             if (checkPhone($phone) == false)
             {
                 $error_display = "Invalid phone number, please check or try again.";
                 $errors++;
-            }
-            if ($age < 18)
-            {
-                $error_display = "Applicant is underaged.";
-                $errors++;
+                // Redirect to Admin_category.php with a success query parameter
+                header("Location: Admin_employee.php?fail=phone");
             }
 
             if ($errors == 0)
             {
                 add_Employee($position, $employee_name, $age, $bday, $gender, $email, $phone, $address);
-            }
-            else
-            {
-                echo "$error_display";
-                // Redirect to Admin_category.php with a success query parameter
-                header("Location: Admin_employee.php?fail=add");
             }
         }
         else if(isset($_POST['employeePosition'], $_POST['employeeName'], $_POST['EmployeeAge'], $_POST['EmployeeBday'], $_POST['employeeGender'], $_POST['employeeEmail'], $_POST['employeePhone'], $_POST['employeeAddress'], $_POST["employeeID"]))

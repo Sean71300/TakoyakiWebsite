@@ -499,11 +499,11 @@ session_start();
                     </div>
                     <div class="mb-3">
                         <label for="employeeName" class="form-label"><b style="color: red;">*</b>Name</label>
-                        <input type="text" class="form-control" id="EmployeeName" name="employeeName" required>
+                        <input type="text" class="form-control" id="EmployeeName" name="employeeName" pattern="[A-Za-z\s]+" required title="Please enter only alphabetic characters." required>
                     </div>
                     <div class="mb-3">
                         <label for="employeePosition" class="form-label"><b style="color: red;">*</b>Position</label>
-                        <input type="text" class="form-control" id="EmployeePosition" name="employeePosition" required>
+                        <input type="text" class="form-control" id="EmployeePosition" name="employeePosition" pattern="[A-Za-z\s]+" required title="Please enter only alphabetic characters." required>
                     </div>
                     <div class="mb-3">
                         <label for="employeeEmail" class="form-label"><b style="color: red;">*</b>Email</label>
@@ -511,7 +511,7 @@ session_start();
                     </div>
                     <div class="mb-3">
                         <label for="employeePhone" class="form-label"><b style="color: red;">*</b>Phone</label>
-                        <input type="tel" class="form-control" id="EmployeePhoneNum" name="employeePhone" required>
+                        <input type="tel" class="form-control" id="EmployeePhoneNum" name="employeePhone" pattern="[0-9]+" required title="Please enter only numeric characters." required>
                     </div>
                     <div class="mb-3">
                         <label for="employeeAddress" class="form-label"><b style="color: red;">*</b>Address</label>
@@ -645,16 +645,46 @@ session_start();
             {
                 alert("Employee updated successfully.");
             }
-            else if (failType === 'add') 
+            else if (failType === 'email') 
             {
-                alert("Failed adding employee.");
+                alert("Please enter a valid email address with a .com extension.");
+            }
+            else if (failType === 'phone') 
+            {
+                alert("Invalid phone number, please check or try again.");
             }
             
-
             // Reset successType and urlParams
             successType = null;
             urlParams = null;
         }
+
+        // Prevents entering numerical values for NAME
+        document.getElementById('EmployeeName').addEventListener('input', function(e) {
+            let input = e.target;
+            let value = input.value;
+    
+            // Remove any non-alphabetic characters
+            input.value = value.replace(/[^A-Za-z\s]/g, '');
+        });
+
+        // Prevents entering numerical values for POSITION
+        document.getElementById('EmployeePosition').addEventListener('input', function(e) {
+            let input = e.target;
+            let value = input.value;
+    
+            // Remove any non-alphabetic characters
+            input.value = value.replace(/[^A-Za-z\s]/g, '');
+        });
+
+        // Prevents entering alphabets for PHONE NUMBER
+        document.getElementById('EmployeePhoneNum').addEventListener('input', function(e) {
+            let input = e.target;
+            let value = input.value;
+
+            // Remove any non-numeric characters
+            input.value = value.replace(/[^0-9]/g, '');
+        });
 
 // -------------------------------------------------- ADD EMPLOYEE MODAL JS -------------------------------------------------- //
 
