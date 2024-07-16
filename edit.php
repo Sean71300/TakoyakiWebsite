@@ -197,9 +197,9 @@
                         </div>
                     </div>
                     <label for="profile_picture" class="btn btn-success add-picture-button mt-3">
-                        <input type="file" id="profile_picture" name="profile_picture" required onchange="profilePicture(this)" style="display:none;"> Add Picture
+                        <input type="file" id="profile_picture" name="profile_picture" accept=".jpg, .png, .jpeg"required onchange="profilePicture(this)" style="display:none;"> Add Picture
                     </label>  
-                </form>
+                
                 <a href="reset.php">
                     <button class="btn btn-primary edit-profile-button mt-1 ">Change Password</button>
                 </a>
@@ -208,7 +208,7 @@
         <div class="col-md-9">        
             <!-- Edit Profile Form -->
             <div class="profile-section">
-                <form action="<?php echo $_SERVER["PHP_SELF"]?>" method="POST" id="CustomerEdit">                
+                
                     <div class="mb-0">
                         <label for="name" class="form-label">User ID: <?php echo htmlspecialchars($_SESSION["id"])?></label>
                     </div>                    
@@ -252,6 +252,7 @@
                     </div>
                     <button type="submit" class="btn btn-primary save-changes-button">Save Changes</button>
                     <?php echo $Confirmation?>
+                    
                 </form>
             </div>
         </div>
