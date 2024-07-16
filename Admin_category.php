@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -240,108 +244,132 @@
     .category-actions a:hover {
         color: #666;
     }
-
-    /* Custom Modal Styles */
-    .modal {
-        display: none; 
-        position: fixed; /* Stay in place */
-        z-index: 1050; /* Sit on top */
-        left: 0;
-        top: 0;
-        width: 100%; /* Full width */
-        height: 100%; /* Full height */
-        overflow: auto; /* Enable scroll if needed */
-        background-color: rgba(0,0,0,0.4); 
-    }
-
-    /* Modal Content */
-    .modal-content {
-        background-color: #fefefe;
-        margin: 5% auto; /* 5% from the top and centered */
-        padding: 30px;
-        border: none;
-        width: 80%; 
-        max-width: 500px; /* Limit maximum width */
-        border-radius: 10px;
-        position: relative;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); 
-    }
         
-    .close {
-        color: #aaaaaa;
-        font-size: 30px;
-        font-weight: bold;
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        cursor: pointer;
-    }
+        /* Custom Modal Styles */
+        .modal {
+            display: none; 
+            position: fixed; /* Stay in place */
+            z-index: 1050; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); 
+        }
 
-    .close:hover,
-    .close:focus {
-        color: #000;
-        text-decoration: none;
-        cursor: pointer;
-    }
+        /* Modal Content */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; /* 5% from the top and centered */
+            padding: 30px;
+            border: none;
+            width: 80%; 
+            max-width: 500px; /* Limit maximum width */
+            border-radius: 10px;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); 
+        }
 
-    /* Form Input Styling */
-    .form-label {
-        font-weight: bold;
-        color: #555;
-    }
+        .modal-content-help {
+            background-color: #fefefe;
+            margin: 5% auto; /* 5% from the top and centered */
+            padding: 30px;
+            border: none;
+            width: 80%; 
+            max-width: 650px; /* Limit maximum width */
+            border-radius: 10px;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); 
+        }
+        
+        .close {
+            color: #aaaaaa;
+            font-size: 30px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
 
-    .form-control {
-        width: 100%;
-        padding: 8px;
-        margin-bottom: 15px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        box-sizing: border-box;
-        font-size: 16px;
-    }
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
 
-    .btn-primary {
-        background-color: #FFC10B;
-        border: none;
-        color: white;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
+        /* Form Input Styling */
+        .form-label {
+            font-weight: bold;
+            color: #555;
+        }
 
-    .btn-primary:hover {
-        background-color: #953728;
-    }
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
 
-    /* Centered Text in Modal */
-    .centered-text {
-        text-align: center;
-        margin-bottom: 20px;
-        font-size: 24px;
-        color: #953728;
-    }
+        .form-select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
 
-    .btn-primary, .btn-clear {
-        background-color: #FFC10B;
-        border: none;
-        color: white;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        width: 40%; 
-        margin: 4.5%;
-    }
+        .btn-primary {
+            background-color: #FFC10B;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
 
-    .btn-clear {
-        background-color: #953728;
-    }
+        .btn-primary:hover {
+            background-color: #953728;
+        }
 
-    .btn-primary:hover, .btn-clear:hover {
-        background-color: #953728;
-    }
+        /* Centered Text in Modal */
+        .centered-text {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 30px;
+            font-weight: bold;
+            color: #953728;
+        }
+		
 
+        .btn-primary, .btn-clear {
+            background-color: #FFC10B;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 40%; 
+            margin: 4.5%;
+        }
+
+        .btn-clear {
+            background-color: #953728;
+        }
+
+        .btn-primary:hover, .btn-clear:hover {
+            background-color: #953728;
+        }
+        
     @media (max-width: 576px) {
         .add-category-btn {
             float: none;
@@ -366,8 +394,8 @@
             <li><a href="Admin_category.php"><i class="fas fa-th fa-fw"></i> <span class="nav-text">Categories</span></a></li>
             <li><a href="Admin_products.php"><i class="fas fa-box-open fa-fw"></i> <span class="nav-text">Products</span></a></li>
             <li><a href="Admin_ratings.php"><i class="fas fa-star fa-fw"></i> <span class="nav-text">Ratings</span></a></li>
-            <li><a href="#"><i class="fas fa-sign-out-alt fa-fw"></i> <span class="nav-text">Sign Out</span></a></li>
-            <li><a href="#"><i class="fas fa-question-circle fa-fw"></i> <span class="nav-text">Help</span></a></li>
+            <li><a href="logout.php"><i class="fas fa-sign-out-alt fa-fw"></i> <span class="nav-text">Sign Out</span></a></li>
+            <li><a href="#" id="HelpLink"><i class="fas fa-question-circle fa-fw"></i> <span class="nav-text">Help</span></a></li>
 		</ul>
     </div>
 
@@ -377,6 +405,7 @@
             <button class="navbar-toggler" type="button" id="sidebarCollapseButton">
                 <i class="fas fa-bars text-black"></i>
             </button>
+            <?php include 'nav.php'; ?>
         </div>
     </nav>
 
@@ -434,6 +463,79 @@
                 </form>
             </div>
         </div>
+
+        <!------- HELP MODAL ------->
+        <div id="helpModal" class="modal">
+            <div class="modal-content-help">
+                <span class="close">&times;</span>
+                <h1 class="centered-text" id="title">Help</h1>
+                <table>
+                    <tr>
+                        <td>
+                            <h5><b>Dashboard</b></h5>
+                            <ul>
+                                <li>Shows the Sales of the business.</li>
+                                <li>Shows the Ratings of the products.</li>
+                                <li>Shows the Employees summarized information.</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <h5><b>Categories</b></h5>
+                            <ul>
+                                <li>Shows all the Categories.</li>
+                                <li>Can add new Category.</li>
+                                <li>Can edit existing Category.</li>
+                                <li>Can delete a Category.</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h5><b>Transaction History</b></h5>
+                            <ul>
+                                <li>Shows the overall Transaction of the business.</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <h5><b>Products</b></h5>
+                            <ul>
+                                <li>Shows all the Products.</li>
+                                <li>Can add new Product.</li>
+                                <li>Can edit existing Product.</li>
+                                <li>Can delete a Product.</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h5><b>Employees</b></h5>
+                            <ul>
+                                <li>Shows all the Employees.</li>
+                                <li>Can add new Employees.</li>
+                                <li>Can edit existing Employees' information.</li>
+                                <li>Can delete an Employee.</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <h5><b>Ratings</b></h5>
+                            <ul>
+                                <li>Shows all the Ratings.</li>
+                                <li>Can approve customers' Ratings.</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h5><b>Customers</b></h5>
+                            <ul>
+                                <li>Shows all the Customers.</li>
+                                <li>Can delete a Customer.</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
     </div>
 
     <script src="js/bootstrap.bundle.min.js"></script>
@@ -449,6 +551,28 @@
         document.querySelector('.search-icon').addEventListener('click', function() {
             document.querySelector('.search-box').focus();
         });
+
+        // Check if the URL has the success query parameter
+        var urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('success')) 
+        {
+            // Retrieve the successType value
+            var successType = urlParams.get('success');
+
+            // Check the value of successType
+            if (successType === 'add') 
+            {
+                alert("Category added successfully.");
+            } 
+            else if (successType === 'update') 
+            {
+                alert("Category updated successfully.");
+            }
+
+            // Reset successType and urlParams
+            successType = null;
+            urlParams = null;
+        }
 
 // ------------------------- ADD CATEGORY MODAL JS ------------------------- //
 
@@ -607,7 +731,24 @@
                     row.style.display = '';
                 });
             }
-        }           
+        }  
+        
+// ----------------------------------------- HELP MODAL ----------------------------------------- //
+
+        // Show Help Modal
+	    document.getElementById('HelpLink').addEventListener('click', function() {
+        var modal = document.getElementById('helpModal');
+        modal.style.display = "block";
+        console.log('Help modal opened');
+	    });
+        
+        // Close Modal
+	    var closeBtn = document.getElementsByClassName("close")[1];
+	    closeBtn.onclick = function() {
+        var modal = document.getElementById('helpModal');
+        modal.style.display = "none";
+        console.log('Modal closed');
+	    };         
     </script>
 </body>
 </html>

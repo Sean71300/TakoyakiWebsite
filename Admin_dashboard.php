@@ -707,7 +707,7 @@ function getTopOrLeastBoughtProducts($query, $conn) {
 
         function getTodaysEarnings($conn) {
         // SQL query to get and total the earnings of the current day
-        $sql = "SELECT SUM(total_price) AS total_earnings 
+        $sql = "SELECT SUM(total_price * quantity) AS total_earnings 
                 FROM transaction_history 
                 WHERE DATE(transaction_date) = CURDATE()";
 
@@ -895,11 +895,11 @@ function getTopOrLeastBoughtProducts($query, $conn) {
                     </div>
                     <div class="mb-3">
                         <label for="categoryIDProd" class="form-label"><b style="color: red;">*</b>Category ID <i style="color: lightgrey;">(automated)</i></label>
-                        <input type="text" class="form-control" id="CategoryIDProd" name="categoryIDProd" placeholder="202403----" readonly>
+                        <input type="text" class="form-control" id="CategoryIDProd" name="categoryID" placeholder="202403----" readonly>
                     </div>
                     <div class="mb-3">
                         <label for="categoryTypeProd" class="form-label"><b style="color: red;">*</b>Category Type</label>
-                        <input type="text" class="form-control" id="CategoryTypeProd" name="categoryTypeProd" required>
+                        <input type="text" class="form-control" id="CategoryTypeProd" name="categoryType" required>
                     </div>
                     <div class="mb-3">
                         <label for="productStatus" class="form-label"><b style="color: red;">*</b>Status</label>

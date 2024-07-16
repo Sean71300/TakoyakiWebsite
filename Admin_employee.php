@@ -398,20 +398,6 @@ session_start();
             background-color: #953728;
         }
 
-        .notification {
-            background-color: #4CAF50; /* Green */
-            color: white;
-            padding: 15px;
-            margin-bottom: 15px;
-            border: none;
-            cursor: pointer;
-            width: 100%;
-            display: inline-block;
-        }
-        .hidden {
-            display: none;
-        }
-
     </style>
 </head>
 <body>
