@@ -8,35 +8,47 @@ ob_start();
 
 
 // ------------ QUERIES FOR CHART -------------------------
-$conn = connect(); 
 
-$sql = "SELECT DATE(transaction_date) AS transaction_day, SUM(total_price) AS total_sales 
-        FROM transaction_history 
-        GROUP BY DATE(transaction_date) 
-        ORDER BY transaction_date";
+function getChartData($conn, $query) {
+    $result = $conn->query($query);
 
-$result = $conn->query($sql);
+    $labels = [];
+    $data = [];
 
-$labels = [];
-$data = [];
-
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $labels[] = $row['transaction_day'];  // Day labels
-        $data[] = $row['total_sales'];   // Total sales data
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $labels[] = $row['transaction_day'];  // Day labels
+            $data[] = $row['total_value'];   // Total sales or transaction count data
+        }
     }
-} else {
-    echo "0 results";
+
+    return [
+        'labels' => $labels,
+        'data' => $data
+    ];
 }
 
-$conn->close();
+$conn = connect();
+$type = isset($_POST['type']) ? $_POST['type'] : 'sales';
 
-$chart_data = [
-    'labels' => $labels,
-    'data' => $data
-];
+if ($type === 'transactions') {
+    // Query to get total number of transactions each day
+    $query = "SELECT DATE(transaction_date) AS transaction_day, COUNT(*) AS total_value 
+              FROM transaction_history 
+              GROUP BY DATE(transaction_date) 
+              ORDER BY transaction_date";
+} else {
+    // Default query to get total earnings each day
+    $query = "SELECT DATE(transaction_date) AS transaction_day, SUM(total_price) AS total_value 
+              FROM transaction_history 
+              GROUP BY DATE(transaction_date) 
+              ORDER BY transaction_date";
+}
+
+$chart_data = getChartData($conn, $query);
 
 $chart_data_json = json_encode($chart_data);
+
 
 // ------------------------------ TOP AND BOTTOM PRODUCTS------------------------
 function getTopOrLeastBoughtProducts($query, $conn) {
@@ -115,8 +127,29 @@ function getTopOrLeastBoughtProducts($query, $conn) {
             return null; 
         }
     }
+// ------------------------------ UNAVAILABLE STOCKS-------------------------------
 
-
+    function unavailableStock($conn) {
+        // Define the query
+        $query = "SELECT COUNT(*) AS unavailable_count
+                  FROM products
+                  WHERE status = 'Unavailable'";
+    
+        // Execute the query
+        $result = mysqli_query($conn, $query);
+    
+        // Check if the query was successful
+        if ($result) {
+            // Fetch the result row
+            $row = mysqli_fetch_assoc($result);
+            // Return the count of unavailable products
+            return $row['unavailable_count'];
+        } else {
+            // Handle query error
+            return "Error: " . mysqli_error($conn);
+        }
+    }
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -546,13 +579,13 @@ function getTopOrLeastBoughtProducts($query, $conn) {
 		<div class="row">
         <div class="col-lg-8">
             <div class="card">
-                <div class="card-header justify-content-start mx-1">
+                <div class="card-header justify-content-between mx-1">
                     <h3 class="card-title ">Overview</h3>
-                    <form method="post" action="">
-                    <button type="submit" name="interval" value="<?php echo (isset($_POST['interval']) && $_POST['interval'] === 'sales') ? 'transaction' : 'sales'; ?>">
-                        <?php echo (isset($_POST['interval']) && $_POST['interval'] === 'sales') ? 'Transaction' : 'Sales'; ?>
-                    </button>
-                </form>
+                    <form method="POST" id="queryForm">
+                        <button type="submit" name="type" value="<?php echo $type === 'transactions' ? 'sales' : 'transactions'; ?>">
+                            <?php echo $type === 'transactions' ? 'Show Sales' : 'Show Transactions'; ?>
+                        </button>
+                    </form>
 
                 </div>
                 <div class="card-body">
@@ -574,7 +607,7 @@ function getTopOrLeastBoughtProducts($query, $conn) {
 
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
-            $totalEarnings = $row['total_earnings'] ? $row['total_earnings'] : 0; // Handle null result
+            $totalEarnings = $row['total_earnings'] ? $row['total_earnings'] : 0; 
             return number_format($totalEarnings, 2);
         } else {
             return "0.00";
@@ -607,7 +640,7 @@ function getTopOrLeastBoughtProducts($query, $conn) {
                 $conn = connect();
                 $earnings = getMonthlyEarnings($conn);
                 $month = date('F');
-            echo ' <div class="card-header">
+            echo ' <div class="card-header justify-content-center p-1">
                     <h3 class="card-title" style="text-align: center;">Total Sales  This <b> '. $month .' </b> </h3>
                     </div>
                     <div class="card-body">
@@ -618,27 +651,29 @@ function getTopOrLeastBoughtProducts($query, $conn) {
             </div>
 
             <!-- Unavailable Product Section -->
-            <div class="card card-right">
-            <div class="card-header">
+            <div class="card card-right ">
+            <div class="card-header justify-content-center p-1">
                 <h3 class="card-title">Unavailable Product</h3>
             </div>
             <?php
-                // $conn = connect();
-                // $stock = unavailableStock($conn);
+                $conn = connect();
+                $unavailableCount = unavailableStock($conn);
+                echo ' <div class="card-body p-1">
+                            <p class="card-text" style= "font-size: 30px; text-align: center; ">'. $unavailableCount .'</p>
+                        </div>
+                        </div>
+            ';
+
 
             ?>
-            <div class="card-body">
-                <p class="card-text">$100,000.00</p>
-            </div>
-            </div>
-
+           
             <!-- Total Earn Section -->
             <div class="card card-right">
             <?php
             $conn = connect();
             $today = date('F j, Y'); 
             $totalToday = getTodaysEarnings($conn);
-            echo    '<div class="card-header">
+            echo    '<div class="card-header justify-content-center p-1">
                         <h3 class="card-title">Total for: <b> '. $today .' </b></h3>
                     </div>
                     <div class="card-body">
@@ -756,7 +791,7 @@ function getTopOrLeastBoughtProducts($query, $conn) {
             </div>
                     </div>
 		</div>
-        <?php
+    <?php
         function getAverageRating($conn, $product_id) {
             $sql = "SELECT AVG(rating) AS average_rating 
                     FROM ratings 
@@ -879,17 +914,24 @@ function getTopOrLeastBoughtProducts($query, $conn) {
 
         ?>
 	        <!-- Recent Transactions -->
-            <div class="row ">        
-                <div class="col-12">
-
-                    
-                </div>
-            </div>
-        <!-- <div class="row ">
-            <div class="col-12">
+            <!-- <div class="col-6">
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Recent Transactions</h3>
+                                <div class="search-bar">
+            <input type="text" placeholder="Search transactions..." id="searchInput">
+            <button type="button" class="btn btn-primary" onclick="searchTransactions()"><i class="fas fa-search" style="color: red;"></i></button>
+
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dateFilterDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: gold; border-color: black; color: black;">
+                    Filter by Date
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dateFilterDropdown" style="background-color: gold;">
+                    <a class="dropdown-item" href="#" style="color: black;" onclick="filterByRecent()">Recent</a>
+                    <a class="dropdown-item" href="#" style="color: black;" onclick="filterByOldest()">Oldest</a>
+                </div>
+            </div>
+        </div>
                     </div>
                     <div class="card-body">
                         <table class="transaction-table">
@@ -914,8 +956,7 @@ function getTopOrLeastBoughtProducts($query, $conn) {
                         </table>
                     </div>
                 </div>
-            </div>
-        </div> -->
+            </div> -->
     </div>
     <!-- Bootstrap JavaScript -->
     <!-- Bootstrap JS and other scripts -->
@@ -934,37 +975,39 @@ function getTopOrLeastBoughtProducts($query, $conn) {
             var chartData = <?php echo $chart_data_json; ?>;
 
     // Access labels and data from PHP variable
-    var labels = chartData.labels.map(function(dateString) {
-        var date = new Date(dateString); // Convert string to Date object
-        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-    });
-    var data = chartData.data;
+    var chartData = <?php echo $chart_data_json; ?>;
 
-    // Chart.js configuration
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labels,  // Formatted date labels
-            datasets: [{
-                label: 'Daily Sales',
-                data: data,
-                fill: false,
-                borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false, // Set to false to fill the whole container
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+// Access labels and data from PHP variable
+var labels = chartData.labels.map(function(dateString) {
+    var date = new Date(dateString); // Convert string to Date object
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+});
+var data = chartData.data;
+
+// Chart.js configuration
+var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: labels,  // Formatted date labels
+        datasets: [{
+            label: '<?php echo $type === 'transactions' ? 'Daily Transactions' : 'Daily Sales'; ?>',
+            data: data,
+            fill: false,
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0.1
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false, // Set to false to fill the whole container
+        scales: {
+            y: {
+                beginAtZero: true
             }
         }
-    });
-
+    }
+});
     </script>
 </body>
 </html>
