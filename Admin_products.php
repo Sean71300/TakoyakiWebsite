@@ -447,7 +447,7 @@ session_start();
                     </div>
                     <div class="mb-3">
                         <label for="categoryType" class="form-label"><b style="color: red;">*</b>Product Name</label>
-                        <input type="text" class="form-control" id="ProductName" name="productName" required>
+                        <input type="text" class="form-control" id="ProductName" name="productName" pattern="[A-Za-z\s]+" required title="Please enter only alphabetic characters." required>
                     </div>
                     <div class="mb-3">
                         <label for="categoryID" class="form-label"><b style="color: red;">*</b>Category ID <i style="color: lightgrey;">(automated)</i></label>
@@ -459,7 +459,7 @@ session_start();
                     </div>
                     <div class="mb-3">
                         <label for="categoryType" class="form-label"><b style="color: red;">*</b>Status</label>
-                        <input type="text" class="form-control" id="ProductStatus" name="productStatus" required>
+                        <input type="text" class="form-control" id="ProductStatus" name="productStatus" pattern="[A-Za-z\s]+" required title="Please enter only alphabetic characters." required>
                     </div>
                     <div class="mb-3">
                         <label for="categoryType" class="form-label"><b style="color: red;">*</b>Price</label>
@@ -571,17 +571,35 @@ session_start();
             // Check the value of successType
             if (successType === 'add') 
             {
-                alert("Category added successfully.");
+                alert("Product added successfully.");
             } 
             else if (successType === 'update') 
             {
-                alert("Category updated successfully.");
+                alert("Product updated successfully.");
             }
 
             // Reset successType and urlParams
             successType = null;
             urlParams = null;
         }
+
+        // Prevents entering numerical values for NAME
+        document.getElementById('ProductName').addEventListener('input', function(e) {
+            let input = e.target;
+            let value = input.value;
+    
+            // Remove any non-alphabetic characters
+            input.value = value.replace(/[^A-Za-z\s]/g, '');
+        });
+
+        // Prevents entering numerical values for POSITION
+        document.getElementById('ProductStatus').addEventListener('input', function(e) {
+            let input = e.target;
+            let value = input.value;
+    
+            // Remove any non-alphabetic characters
+            input.value = value.replace(/[^A-Za-z\s]/g, '');
+        });
 
 // ------------------------- ADD PRODUCT MODAL JS ------------------------- //
 

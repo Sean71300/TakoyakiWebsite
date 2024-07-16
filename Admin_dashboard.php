@@ -891,19 +891,19 @@ function getTopOrLeastBoughtProducts($query, $conn) {
                     </div>
                     <div class="mb-3">
                         <label for="categoryType" class="form-label"><b style="color: red;">*</b>Product Name</label>
-                        <input type="text" class="form-control" id="ProductName" name="productName" required>
+                        <input type="text" class="form-control" id="ProductName" name="productName" pattern="[A-Za-z\s]+" required title="Please enter only alphabetic characters." required>
                     </div>
                     <div class="mb-3">
                         <label for="categoryIDProd" class="form-label"><b style="color: red;">*</b>Category ID <i style="color: lightgrey;">(automated)</i></label>
-                        <input type="text" class="form-control" id="CategoryIDProd" name="categoryIDProd" placeholder="202403----" readonly>
+                        <input type="text" class="form-control" id="CategoryIDProd" name="categoryID" placeholder="202403----" readonly>
                     </div>
                     <div class="mb-3">
                         <label for="categoryTypeProd" class="form-label"><b style="color: red;">*</b>Category Type</label>
-                        <input type="text" class="form-control" id="CategoryTypeProd" name="categoryTypeProd" required>
+                        <input type="text" class="form-control" id="CategoryTypeProd" name="categoryType" required>
                     </div>
                     <div class="mb-3">
                         <label for="productStatus" class="form-label"><b style="color: red;">*</b>Status</label>
-                        <input type="text" class="form-control" id="ProductStatus" name="productStatus" required>
+                        <input type="text" class="form-control" id="ProductStatus" name="productStatus" pattern="[A-Za-z\s]+" required title="Please enter only alphabetic characters." required>
                     </div>
                     <div class="mb-3">
                         <label for="productPrice" class="form-label"><b style="color: red;">*</b>Price</label>
@@ -929,35 +929,19 @@ function getTopOrLeastBoughtProducts($query, $conn) {
                     </div>
                     <div class="mb-3">
                         <label for="employeeName" class="form-label"><b style="color: red;">*</b>Name</label>
-                        <input type="text" class="form-control" id="EmployeeName" name="employeeName" required>
+                        <input type="text" class="form-control" id="EmployeeName" name="employeeName" pattern="[A-Za-z\s]+" required title="Please enter only alphabetic characters." required>
                     </div>
                     <div class="mb-3">
                         <label for="employeePosition" class="form-label"><b style="color: red;">*</b>Position</label>
-                        <input type="text" class="form-control" id="EmployeePosition" name="employeePosition" required>
+                        <input type="text" class="form-control" id="EmployeePosition" name="employeePosition" pattern="[A-Za-z\s]+" required title="Please enter only alphabetic characters." required>
                     </div>
                     <div class="mb-3">
                         <label for="employeeEmail" class="form-label"><b style="color: red;">*</b>Email</label>
                         <input type="email" class="form-control" id="EmployeeEmail" name="employeeEmail" required>
-                        <?php 
-                            if (isset($_POST["employeeEmail"]))
-                            {
-                                $email = $_POST["employeeEmail"];
-                                $email_pattern = "/^[a-zA-Z0-0._%+-]+@[a-zA-Z0-9.-]+\\.com$/";
-    
-                                $errors = 0;
-                                $error_display = "";
-                
-                                if (!preg_match($email_pattern, $email) ) 
-                                {
-                                    $error_display = "Please enter a valid email address with a .com extension.";
-                                    echo $error_display;
-                                }
-                            }
-                        ?>
                     </div>
                     <div class="mb-3">
                         <label for="employeePhone" class="form-label"><b style="color: red;">*</b>Phone</label>
-                        <input type="tel" class="form-control" id="EmployeePhoneNum" name="employeePhone" required>
+                        <input type="tel" class="form-control" id="EmployeePhoneNum" name="employeePhone" pattern="[0-9]+" required title="Please enter only numeric characters." required>
                     </div>
                     <div class="mb-3">
                         <label for="employeeAddress" class="form-label"><b style="color: red;">*</b>Address</label>
@@ -1282,135 +1266,111 @@ function getTopOrLeastBoughtProducts($query, $conn) {
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="modal.html"></script>
     <script>
-            document.getElementById('sidebarCollapseButton').addEventListener('click', function() {
-                document.getElementById('sidebar').classList.toggle('active');
-                document.body.classList.toggle('sidebar-active');
-            });
-            var chartData = <?php echo $chart_data_json; ?>;
+        document.getElementById('sidebarCollapseButton').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.body.classList.toggle('sidebar-active');
+        });
+        var chartData = <?php echo $chart_data_json; ?>;
 
-    // Access labels and data from PHP variable
-    var chartData = <?php echo $chart_data_json; ?>;
+        // Access labels and data from PHP variable
+        var chartData = <?php echo $chart_data_json; ?>;
 
-// Access labels and data from PHP variable
-var labels = chartData.labels.map(function(dateString) {
-    var date = new Date(dateString); // Convert string to Date object
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-});
-var data = chartData.data;
+        // Access labels and data from PHP variable
+        var labels = chartData.labels.map(function(dateString) {
+            var date = new Date(dateString); // Convert string to Date object
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        });
+        var data = chartData.data;
 
-// Chart.js configuration
-var ctx = document.getElementById('myChart').getContext('2d');
-var myChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: labels,  // Formatted date labels
-        datasets: [{
-            label: '<?php echo $type === 'transactions' ? 'Daily Transactions' : 'Daily Sales'; ?>',
-            data: data,
-            fill: false,
-            borderColor: 'rgb(75, 192, 192)',
-            tension: 0.1
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false, // Set to false to fill the whole container
-        scales: {
-            y: {
-                beginAtZero: true
+        // Chart.js configuration
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,  // Formatted date labels
+                datasets: [{
+                    label: '<?php echo $type === 'transactions' ? 'Daily Transactions' : 'Daily Sales'; ?>',
+                    data: data,
+                    fill: false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // Set to false to fill the whole container
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Display success message based on URL parameter
+        var urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('success')) {
+            var successType = urlParams.get('success');
+            if (successType === 'add') {
+                alert("Added successfully.");
             }
         }
-    }
-});
 
-        // Check if the URL has the success query parameter
-        var urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.has('success')) 
-        {
-            // Retrieve the successType value
-            var successType = urlParams.get('success');
+        // Show and hide modals for adding categories, products, and employees
+        document.getElementById('addCategoryBtn').addEventListener('click', function() {
+            document.getElementById('addCategoryModal').style.display = "block";
+        });
 
-            // Check the value of successType
-            if (successType === 'add') 
-            {
-                alert("Added successfully.");
-            } 
+        document.getElementsByClassName("close")[0].onclick = function() {
+            document.getElementById('addCategoryModal').style.display = "none";
+        };
 
-            // Reset successType and urlParams
-            successType = null;
-            urlParams = null;
-        }
-        
-// ----------------------------------------- ADD CATEGORY MODAL ----------------------------------------- //
+        document.getElementById('addProductBtn').addEventListener('click', function() {
+            document.getElementById('addProductModal').style.display = "block";
+            blank(); // Assuming `blank()` is defined elsewhere
+        });
 
-        // Show Add Category Modal
-	    document.getElementById('addCategoryBtn').addEventListener('click', function() {
-        var modal = document.getElementById('addCategoryModal');
-        modal.style.display = "block";
-        console.log('Add New Category button clicked');
-	    });
-	
-	    // Close Modal
-	    var closeBtn = document.getElementsByClassName("close")[0];
-	    closeBtn.onclick = function() {
-        var modal = document.getElementById('addCategoryModal');
-        modal.style.display = "none";
-        console.log('Modal closed');
-	    };
-	
-	    // Clear Form Button
-	    document.getElementById('clearFormBtnCategory').addEventListener('click', function() {
-        document.getElementById('addCategoryForm').reset();
-	    });
-        
-// ----------------------------------------- ADD PRODUCT MODAL ----------------------------------------- //
+        document.getElementsByClassName("close")[1].onclick = function() {
+            document.getElementById('addProductModal').style.display = "none";
+        };
 
-        // Show Add Category Modal
-	    document.getElementById('addProductBtn').addEventListener('click', function() {
-        var modal = document.getElementById('addProductModal');
-        modal.style.display = "block";
-        blank();
-        console.log('Add New Product button clicked');
-	    });
-	
-	    // Close Modal
-	    var closeBtn = document.getElementsByClassName("close")[1];
-	    closeBtn.onclick = function() {
-        var modal = document.getElementById('addProductModal');
-        modal.style.display = "none";
-        console.log('Modal closed');
-	    };
-	
-	    // Clear Form Button
-	    document.getElementById('clearFormBtnProduct').addEventListener('click', function() {
-        document.getElementById('addProductForm').reset();
-	    });  
+        document.getElementById('addEmployeeBtn').addEventListener('click', function() {
+            document.getElementById('addEmployeeModal').style.display = "block";
+        });
 
-        categoryTypeProd = document.getElementById('CategoryTypeProd');
+        document.getElementsByClassName("close")[2].onclick = function() {
+            document.getElementById('addEmployeeModal').style.display = "none";
+        };
 
-        // ----- GET CATEGORY INFO ----- //
+        // Clear form buttons for category, product, and employee forms
+        document.getElementById('clearFormBtnCategory').addEventListener('click', function() {
+            document.getElementById('addCategoryForm').reset();
+        });
+
+        document.getElementById('clearFormBtnProduct').addEventListener('click', function() {
+            document.getElementById('addProductForm').reset();
+        });
+
+        document.getElementById('clearFormBtnEmployee').addEventListener('click', function() {
+            document.getElementById('addEmployeeForm').reset();
+        }); 
+
+        // Fetch category ID based on category type input
         function getCategoryID() {
-            // Get the value of the CategoryType input field
             var categoryTypeProd = document.getElementById('CategoryTypeProd').value;
-
-            // Check if the categoryType is not empty
-            if (categoryType) {
-                // Fetch the category ID from the server
+            if (categoryTypeProd) {
                 fetch(`getCategoryID.php?category_type=${encodeURIComponent(categoryTypeProd)}`)
                     .then(response => {
-                        // Ensure the response is in JSON format
                         if (!response.ok) {
                             throw new Error('Network response was not ok');
                         }
                         return response.json();
                     })
                     .then(data => {
-                        // Check if the category_id exists in the returned data
                         if (data.category_id !== undefined) {
-                            // Set the CategoryID input field to the fetched category ID
                             document.getElementById('CategoryIDProd').value = data.category_id;
                         } else {
-                            console.error('Category ID not found in the response data');
+                            alert('Category ID not found in the response data');
                         }
                     })
                     .catch(error => {
@@ -1419,70 +1379,40 @@ var myChart = new Chart(ctx, {
             }
         }
 
-        // Set up an event listener for the input event on the CategoryType field
         window.onload = function() {
             document.getElementById('CategoryTypeProd').addEventListener('input', getCategoryID);
-        }
-
-// ----------------------------------------- ADD EMPLOYEE MODAL ----------------------------------------- //
-
-	    // Show Add Employee Modal
-	    document.getElementById('addEmployeeBtn').addEventListener('click', function() {
-        var modal = document.getElementById('addEmployeeModal');
-        modal.style.display = "block";
-        console.log('Add New Employee button clicked');
-	    });
-    
-	    // Close Modal
-	    var closeBtn = document.getElementsByClassName("close")[2];
-	    closeBtn.onclick = function() {
-        var modal = document.getElementById('addEmployeeModal');
-        modal.style.display = "none";
-        console.log('Modal closed');
-	    };
-	
-	    // Clear Form Button
-	    document.getElementById('clearFormBtnEmployee').addEventListener('click', function() {
-        document.getElementById('addEmployeeForm').reset();
-	    });
-         
-// -------------------------------------------------- DISPLAY AGE AUTOMATICALLY -------------------------------------------------- //
-
-        function calculateAge() 
-        {
-            var birthdate = document.getElementById('employeeBirthdate').value;
-            if (birthdate) {
-                var today = new Date();
-                var birthDate = new Date(birthdate);
-                var age = today.getFullYear() - birthDate.getFullYear();
-                var monthDifference = today.getMonth() - birthDate.getMonth();
-                if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
-                    age--;
+            document.getElementById('EmployeeName').addEventListener('input', function(e) {
+                e.target.value = e.target.value.replace(/[^A-Za-z\s]/g, '');
+            });
+            document.getElementById('EmployeePosition').addEventListener('input', function(e) {
+                e.target.value = e.target.value.replace(/[^A-Za-z\s]/g, '');
+            });
+            document.getElementById('EmployeePhoneNum').addEventListener('input', function(e) {
+                e.target.value = e.target.value.replace(/[^0-9]/g, '');
+            });
+            document.getElementById('employeeBirthdate').addEventListener('input', function() {
+                var birthdate = document.getElementById('employeeBirthdate').value;
+                if (birthdate) {
+                    var today = new Date();
+                    var birthDate = new Date(birthdate);
+                    var age = today.getFullYear() - birthDate.getFullYear();
+                    var monthDifference = today.getMonth() - birthDate.getMonth();
+                    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+                        age--;
+                    }
+                    document.getElementById('employeeAge').value = age;
                 }
-                document.getElementById('employeeAge').value = age;
-            }
-        }
+            });
+        };
 
-        window.onload = function() {
-            document.getElementById('employeeBirthdate').addEventListener('input', calculateAge);
-        }
-        
-// ----------------------------------------- HELP MODAL ----------------------------------------- //
+        // Help modal functionality
+        document.getElementById('HelpLink').addEventListener('click', function() {
+            document.getElementById('helpModal').style.display = "block";
+        });
 
-        // Show Help Modal
-	    document.getElementById('HelpLink').addEventListener('click', function() {
-        var modal = document.getElementById('helpModal');
-        modal.style.display = "block";
-        console.log('Help modal opened');
-	    });
-        
-        // Close Modal
-	    var closeBtn = document.getElementsByClassName("close")[3];
-	    closeBtn.onclick = function() {
-        var modal = document.getElementById('helpModal');
-        modal.style.display = "none";
-        console.log('Modal closed');
-	    };
+        document.getElementsByClassName("close")[3].onclick = function() {
+            document.getElementById('helpModal').style.display = "none";
+        };
     </script>
 </body>
 </html>
