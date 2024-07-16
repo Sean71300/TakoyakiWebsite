@@ -90,7 +90,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
         <style>
             body {
-            background: url('images/login1-bg.png') no-repeat center center fixed;
+            background: url('images/login2-bg.png') no-repeat center center fixed;
             background-size: cover;
             margin: 0;
             padding: 0;

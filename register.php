@@ -131,14 +131,6 @@ function checkDuplication($id, $checkQuery) {
     return $id;
 }
 
-function calculateAge($birthdate) 
-{
-    $birthDate = new DateTime($birthdate);
-    $today = new DateTime();
-    $age = $today->diff($birthDate)->y;
-    return $age;
-}
-
 //function for password symbol checker
 function specialChars($password) {
     return preg_match('/[^a-zA-Z0-9]/', $password) > 0;
@@ -160,6 +152,18 @@ function retainInput($fieldName, $type = 'text', $radioValue = '') {
         }
     }
 }
+
+function calculateAge($birthdate) 
+{
+    $dateObj = DateTime::createFromFormat('Y-m-d', $birthdate);
+    if (!$dateObj) {
+        return false; // Invalid date format
+    }
+    $today = new DateTime();
+    $diff = $today->diff($dateObj);
+    return $diff->y;
+}
+
 function checkPhone($phone_number) {
     $phone_number = preg_replace('/\D/', '', $phone_number);
 
@@ -290,9 +294,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <p><span class="text-danger font-italic">*</span>Last Name:</p>
                     <input type="text" id="lastN" name="lastN" class="form-control" pattern="[A-Za-z\s]+" placeholder="ex. Dela Cruz" value="<?php retainInput('lastN'); ?>" required>
                 </div>
-                <div>
+                <div class="form-group">
                     <p><span class="text-danger font-italic">*</span>Birthdate:</p>
-                    <input type="date" id="birthD" name="birthD" class="form-control" value= "<?php retainInput('birthD');?>" required>
+                    <input type="date" id="birthD" name="birthD" class="form-control" 
+                        value="<?php echo isset($_POST['birthD']) ? htmlspecialchars($_POST['birthD']) : ''; ?>"
+                        min="<?php echo date('Y-m-d', strtotime('-50 years')); ?>"
+                        max="<?php echo date('Y-m-d', strtotime('-18 years')); ?>"
+                    required>
                 </div>
                 <div class="form-group" style="margin-top:20px;">
                     <p><span class="text-danger font-italic">*</span>Gender:</p>

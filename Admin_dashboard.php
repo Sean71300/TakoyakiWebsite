@@ -938,6 +938,22 @@ function getTopOrLeastBoughtProducts($query, $conn) {
                     <div class="mb-3">
                         <label for="employeeEmail" class="form-label"><b style="color: red;">*</b>Email</label>
                         <input type="email" class="form-control" id="EmployeeEmail" name="employeeEmail" required>
+                        <?php 
+                            if (isset($_POST["employeeEmail"]))
+                            {
+                                $email = $_POST["employeeEmail"];
+                                $email_pattern = "/^[a-zA-Z0-0._%+-]+@[a-zA-Z0-9.-]+\\.com$/";
+    
+                                $errors = 0;
+                                $error_display = "";
+                
+                                if (!preg_match($email_pattern, $email) ) 
+                                {
+                                    $error_display = "Please enter a valid email address with a .com extension.";
+                                    echo $error_display;
+                                }
+                            }
+                        ?>
                     </div>
                     <div class="mb-3">
                         <label for="employeePhone" class="form-label"><b style="color: red;">*</b>Phone</label>
@@ -949,7 +965,10 @@ function getTopOrLeastBoughtProducts($query, $conn) {
                     </div>
                     <div class="mb-3">
                         <label for="employeeBirthdate" class="form-label"><b style="color: red;">*</b>Birthdate</label>
-                        <input type="date" class="form-control" id="employeeBirthdate" name="EmployeeBday" required>
+                        <input type="date" class="form-control" id="employeeBirthdate" name="EmployeeBday"
+                            value="<?php echo isset($_POST['EmployeeBday']) ? htmlspecialchars($_POST['EmployeeBdat']) : ''; ?>"
+                            min="<?php echo date('Y-m-d', strtotime('-50 years')); ?>"
+                            max="<?php echo date('Y-m-d', strtotime('-18 years')); ?>"  required>
                     </div>
                     <div class="mb-3">
                         <label for="employeeAge" class="form-label"><b style="color: red;">*</b>Age <i style="color: lightgrey;">(automated)</i></label>
