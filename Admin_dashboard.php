@@ -535,6 +535,19 @@ function getTopOrLeastBoughtProducts($query, $conn) {
                 padding: 8px;
             }
         }
+    
+    /* Custom Modal Styles */
+    .modal {
+        display: none; 
+        position: fixed; /* Stay in place */
+        z-index: 1050; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgba(0,0,0,0.4); 
+    }
 
         /* Modal Content */
         .modal-content {
@@ -618,11 +631,11 @@ function getTopOrLeastBoughtProducts($query, $conn) {
             background-color: #FFC10B;
             border: none;
             color: white;
-            padding: 10px 20px;
+            padding: 9px;
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
-            width: 40%; 
+            width: 25%; 
             margin: 4.5%;
         }
 
@@ -1324,6 +1337,8 @@ var myChart = new Chart(ctx, {
             successType = null;
             urlParams = null;
         }
+        
+// ----------------------------------------- ADD CATEGORY MODAL ----------------------------------------- //
 
         // Show Add Category Modal
 	    document.getElementById('addCategoryBtn').addEventListener('click', function() {
@@ -1344,11 +1359,15 @@ var myChart = new Chart(ctx, {
 	    document.getElementById('clearFormBtn').addEventListener('click', function() {
         document.getElementById('addCategoryForm').reset();
 	    });
+        
+// ----------------------------------------- ADD PRODUCT MODAL ----------------------------------------- //
 
         // Show Add Product Modal
 	    document.getElementById('addProductBtn').addEventListener('click', function() {
         var modal = document.getElementById('addProductModal');
         modal.style.display = "block";
+        changeFormTitleAndButton('Add Product', 'Add Product');
+        blank();
         console.log('Add New Product button clicked');
 	    });
 	
@@ -1363,7 +1382,49 @@ var myChart = new Chart(ctx, {
 	    // Clear Form Button
 	    document.getElementById('clearFormBtn').addEventListener('click', function() {
         document.getElementById('addProductForm').reset();
-	    });  
+	    });  // ----- GET CATEGORY INFO ----- //
+function getCategory() {
+    // Get the value of the CategoryType input field
+    var categoryType = document.getElementById('CategoryType').value;
+
+    // Check if the categoryType is not empty
+    if (categoryType) {
+        // Fetch the category ID from the server
+        fetch(`getCategoryID.php?category_type=${encodeURIComponent(categoryType)}`)
+            .then(response => {
+                // Ensure the response is in JSON format
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Check if the category_id exists in the returned data
+                if (data.category_id !== undefined) {
+                    // Set the CategoryID input field to the fetched category ID
+                    document.getElementById('CategoryID').value = data.category_id;
+                } else {
+                    console.error('Category ID not found in the response data');
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching category data:', error);
+            });
+    }
+}
+
+// Set up an event listener for the input event on the CategoryType field
+window.onload = function() {
+    var categoryTypeInput = document.getElementById('CategoryType');
+    if (categoryTypeInput) {
+        categoryTypeInput.addEventListener('input', getCategory);
+    } else {
+        console.error('CategoryType input field not found');
+    }
+};
+
+        
+// ----------------------------------------- ADD EMPLOYEE MODAL ----------------------------------------- //
 
 	    // Show Add Employee Modal
 	    document.getElementById('addEmployeeBtn').addEventListener('click', function() {
@@ -1386,37 +1447,6 @@ var myChart = new Chart(ctx, {
 	    });
 
         categoryType = document.getElementById('CategoryType');
-
-        // ----- GET CATEGORY INFO ----- //
-        function getCategory() {
-            // Get the value of the CategoryType input field
-            var categoryType = document.getElementById('CategoryType').value;
-
-            // Check if the categoryType is not empty
-            if (categoryType) {
-                // Fetch the category ID from the server
-                fetch(`getCategoryID.php?category_type=${encodeURIComponent(categoryType)}`)
-                    .then(response => {
-                        // Ensure the response is in JSON format
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        // Check if the category_id exists in the returned data
-                        if (data.category_id !== undefined) {
-                            // Set the CategoryID input field to the fetched category ID
-                            document.getElementById('CategoryID').value = data.category_id;
-                        } else {
-                            console.error('Category ID not found in the response data');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error fetching category data:', error);
-                    });
-            }
-        }  
         
 // ----------------------------------------- HELP MODAL ----------------------------------------- //
 
