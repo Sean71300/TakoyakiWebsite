@@ -536,8 +536,6 @@ function getTopOrLeastBoughtProducts($query, $conn) {
             }
         }
 
-        
-
         /* Modal Content */
         .modal-content {
             background-color: #fefefe;
@@ -666,9 +664,12 @@ function getTopOrLeastBoughtProducts($query, $conn) {
             <?php include 'nav.php'; ?>
         </div>
         <div class="ml-auto">
-            <button class="btn btn-success mx-2">Add Category</button>
-            <button class="btn btn-primary mx-2">Add Product</button>
-            <button class="btn btn-info mx-2">Add Employee</button>
+            <button class="btn btn-success mx-2" id="addCategoryBtn">Add Category</button>
+            <?php include 'dashboard_addCategory.php'; ?>
+            <button class="btn btn-primary mx-2" id="addProductBtn">Add Product</button>
+            <?php include 'dashboard_addProduct.php'; ?>
+            <button class="btn btn-info mx-2" id="addEmployeeBtn">Add Employee</button>
+            <?php include 'dashboard_addEmployee.php'; ?>
         </div>
 		</div>
 		</nav>
@@ -844,6 +845,201 @@ function getTopOrLeastBoughtProducts($query, $conn) {
                      
                      ?>
                 </div>
+            </div>
+        </div>
+
+        <!------- ADD CATEGORY MODAL ------->
+        <div id="addCategoryModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2 class="centered-text" id="title">Add New Category</h2>
+                <form id="addCategoryForm" method="post" action="category_functions.php">
+                    <div class="mb-3">
+                        <label for="categoryID" class="form-label">Category ID <i style="color: lightgrey;">(automated)</i></label>
+                        <input type="text" class="form-control" id="CategoryID" name="categoryID" placeholder="202403----" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="categoryType" class="form-label"><b style="color: red;">*</b>Category Type</label>
+                        <input type="text" class="form-control" id="CategoryType" name="categoryType" required>
+                    </div>
+                    <div  class="form-group d-flex justify-content-center align-items-center">
+                        <button type="submit" class="btn btn-primary" id="updateBtn">Add Category</button>
+                        <button type="button" class="btn btn-clear" id="clearFormBtn">Clear</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!------- ADD PRODUCT MODAL ------->
+        <div id="addProductModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2 class="centered-text" id="title">Add New Product</h2>
+                <form id="addProductForm" method="post" action="product_functions.php">
+                    <div class="mb-3">
+                        <label for="categoryID" class="form-label">Product ID <i style="color: lightgrey;">(automated)</i></label>
+                        <input type="text" class="form-control" id="ProductID" name="productID" placeholder="202416----" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="categoryType" class="form-label"><b style="color: red;">*</b>Product Name</label>
+                        <input type="text" class="form-control" id="ProductName" name="productName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="categoryID" class="form-label">Category ID <i style="color: lightgrey;">(automated)</i></label>
+                        <input type="text" class="form-control" id="CategoryID" name="categoryID" placeholder="202403----" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="categoryType" class="form-label"><b style="color: red;">*</b>Category Type</label>
+                        <input type="text" class="form-control" id="CategoryType" name="categoryType" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="categoryType" class="form-label"><b style="color: red;">*</b>Status</label>
+                        <input type="text" class="form-control" id="ProductStatus" name="productStatus" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="categoryType" class="form-label"><b style="color: red;">*</b>Price</label>
+                        <input type="text" class="form-control" id="ProductPrice" name="productPrice" required>
+                    </div>
+                    <div  class="form-group d-flex justify-content-center align-items-center">
+                        <button type="submit" class="btn btn-primary" id="updateBtn">Add Product</button>
+                        <button type="button" class="btn btn-clear" id="clearFormBtn">Clear</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- ADD EMPLOYEE MODAL -->
+        <div id="addEmployeeModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2 class="centered-text" id="title">Add New Employee</h2>
+                <form id="addEmployeeForm" method="post" action="employee_functions.php">
+                    <div class="mb-3">
+                        <label for="employeeID" class="form-label">Employee ID <i style="color: lightgrey;">(automated)</i></label>
+                        <input type="text" class="form-control" id="EmployeeID" name="employeeID" placeholder="202405----" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="employeeName" class="form-label"><b style="color: red;">*</b>Name</label>
+                        <input type="text" class="form-control" id="EmployeeName" name="employeeName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="employeePosition" class="form-label"><b style="color: red;">*</b>Position</label>
+                        <input type="text" class="form-control" id="EmployeePosition" name="employeePosition" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="employeeEmail" class="form-label"><b style="color: red;">*</b>Email</label>
+                        <input type="email" class="form-control" id="EmployeeEmail" name="employeeEmail" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="employeePhone" class="form-label"><b style="color: red;">*</b>Phone</label>
+                        <input type="tel" class="form-control" id="EmployeePhoneNum" name="employeePhone" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="employeeAddress" class="form-label"><b style="color: red;">*</b>Address</label>
+                        <input type="text" class="form-control" id="EmployeeAddress" name="employeeAddress" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="employeeBirthdate" class="form-label"><b style="color: red;">*</b>Birthdate</label>
+                        <input type="date" class="form-control" id="employeeBirthdate" name="EmployeeBday" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="employeeAge" class="form-label"><b style="color: red;">*</b>Age</label>
+                        <input type="number" class="form-control" id="employeeAge" name="EmployeeAge" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="employeeGender" class="form-label"><b style="color: red;">*</b>Gender</label>
+                        <select class="form-select" id="EmployeeGender" name="employeeGender" required>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="employeeGender" class="form-label">Gender</label>
+                        <select class="form-select" id="EmployeeGender" name="employeeGender" required>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group d-flex justify-content-center align-items-center">
+                        <button type="submit" class="btn btn-primary" id="updateBtn">Add Employee</button>
+                        <button type="button" class="btn btn-clear" id="clearFormBtn">Clear</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!------- HELP MODAL ------->
+        <div id="helpModal" class="modal">
+            <div class="modal-content-help">
+                <span class="close">&times;</span>
+                <h1 class="centered-text" id="title">Help</h1>
+                <table>
+                    <tr>
+                        <td>
+                            <h5><b>Dashboard</b></h5>
+                            <ul>
+                                <li>Shows the Sales of the business.</li>
+                                <li>Shows the Ratings of the products.</li>
+                                <li>Shows the Employees summarized information.</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <h5><b>Categories</b></h5>
+                            <ul>
+                                <li>Shows all the Categories.</li>
+                                <li>Can add new Category.</li>
+                                <li>Can edit existing Category.</li>
+                                <li>Can delete a Category.</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h5><b>Transaction History</b></h5>
+                            <ul>
+                                <li>Shows the overall Transaction of the business.</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <h5><b>Products</b></h5>
+                            <ul>
+                                <li>Shows all the Products.</li>
+                                <li>Can add new Product.</li>
+                                <li>Can edit existing Product.</li>
+                                <li>Can delete a Product.</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h5><b>Employees</b></h5>
+                            <ul>
+                                <li>Shows all the Employees.</li>
+                                <li>Can add new Employees.</li>
+                                <li>Can edit existing Employees' information.</li>
+                                <li>Can delete an Employee.</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <h5><b>Ratings</b></h5>
+                            <ul>
+                                <li>Shows all the Ratings.</li>
+                                <li>Can approve customers' Ratings.</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h5><b>Customers</b></h5>
+                            <ul>
+                                <li>Shows all the Customers.</li>
+                                <li>Can delete a Customer.</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>
@@ -1106,6 +1302,121 @@ var myChart = new Chart(ctx, {
         }
     }
 });
+
+        // Check if the URL has the success query parameter
+        var urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('success')) 
+        {
+            // Retrieve the successType value
+            var successType = urlParams.get('success');
+
+            // Check the value of successType
+            if (successType === 'add') 
+            {
+                alert("Added successfully.");
+            } 
+            else if (successType === 'update') 
+            {
+                alert("Updated successfully.");
+            }
+
+            // Reset successType and urlParams
+            successType = null;
+            urlParams = null;
+        }
+
+        // Show Add Category Modal
+	    document.getElementById('addCategoryBtn').addEventListener('click', function() {
+        var modal = document.getElementById('addCategoryModal');
+        modal.style.display = "block";
+        console.log('Add New Category button clicked');
+	    });
+	
+	    // Close Modal
+	    var closeBtn = document.getElementsByClassName("close")[0];
+	    closeBtn.onclick = function() {
+        var modal = document.getElementById('addCategoryModal');
+        modal.style.display = "none";
+        console.log('Modal closed');
+	    };
+	
+	    // Clear Form Button
+	    document.getElementById('clearFormBtn').addEventListener('click', function() {
+        document.getElementById('addCategoryForm').reset();
+	    });
+
+        // Show Add Product Modal
+	    document.getElementById('addProductBtn').addEventListener('click', function() {
+        var modal = document.getElementById('addProductModal');
+        modal.style.display = "block";
+        console.log('Add New Product button clicked');
+	    });
+	
+	    // Close Modal
+	    var closeBtn = document.getElementsByClassName("close")[1];
+	    closeBtn.onclick = function() {
+        var modal = document.getElementById('addProductModal');
+        modal.style.display = "none";
+        console.log('Modal closed');
+	    };
+	
+	    // Clear Form Button
+	    document.getElementById('clearFormBtn').addEventListener('click', function() {
+        document.getElementById('addProductForm').reset();
+	    });  
+
+	    // Show Add Employee Modal
+	    document.getElementById('addEmployeeBtn').addEventListener('click', function() {
+        var modal = document.getElementById('addEmployeeModal');
+        modal.style.display = "block";
+        console.log('Add New Employee button clicked');
+	    });
+    
+	    // Close Modal
+	    var closeBtn = document.getElementsByClassName("close")[2];
+	    closeBtn.onclick = function() {
+        var modal = document.getElementById('addEmployeeModal');
+        modal.style.display = "none";
+        console.log('Modal closed');
+	    };
+	
+	    // Clear Form Button
+	    document.getElementById('clearFormBtn').addEventListener('click', function() {
+        document.getElementById('addEmployeeForm').reset();
+	    });
+
+        categoryType = document.getElementById('CategoryType');
+
+        // ----- GET CATEGORY INFO ----- //
+        function getCategory() {
+            // Get the value of the CategoryType input field
+            var categoryType = document.getElementById('CategoryType').value;
+
+            // Check if the categoryType is not empty
+            if (categoryType) {
+                // Fetch the category ID from the server
+                fetch(`getCategoryID.php?category_type=${encodeURIComponent(categoryType)}`)
+                    .then(response => {
+                        // Ensure the response is in JSON format
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Check if the category_id exists in the returned data
+                        if (data.category_id !== undefined) {
+                            // Set the CategoryID input field to the fetched category ID
+                            document.getElementById('CategoryID').value = data.category_id;
+                        } else {
+                            console.error('Category ID not found in the response data');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching category data:', error);
+                    });
+            }
+        }
     </script>
 </body>
 </html>

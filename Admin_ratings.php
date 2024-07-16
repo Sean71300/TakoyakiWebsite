@@ -605,6 +605,7 @@
             <button class="navbar-toggler" type="button" id="sidebarCollapseButton">
                 <i class="fas fa-bars text-black"></i>
             </button>
+            <?php include_once 'nav.php'; ?>
         </div>
     </nav>
     
