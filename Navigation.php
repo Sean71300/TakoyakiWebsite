@@ -2,7 +2,7 @@
     <nav class="navbar navbar-expand-lg bg-body-tertiary ">
         <div class="container-fluid ">
         <a href="index.php"><img src="Images/Logo.jpg" class="logo ms-4 ms-lg-5 "></a>
-        <a class="navbar-brand " href="index.php"><b>Hentoki</b></a>
+        <a class="navbar-brand fs-3 " href="index.php"><b>Hentoki</b></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -30,8 +30,8 @@
                 echo '</li>';
                 }
                 else{          
-                echo  '<div class="dropdown">';
-                echo  '<button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">';
+                echo  '&nbsp;&nbsp;<div class="dropdown">';
+                echo  '<button class="btn dropdown-toggle fs-3 fw-bold" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">';
                 echo    "Welcome ".htmlspecialchars($_SESSION["full_name"]).'';   
                 echo  '</button>';
                 echo  '<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
