@@ -527,8 +527,9 @@
             -webkit-overflow-scrolling: touch;
             -ms-overflow-style: -ms-autohiding-scrollbar;
             .short-comment {
-    display: inline;
-}
+            display: inline;
+        }
+        }
         /* addition */
         .short-comment {
             display: inline;
@@ -576,6 +577,87 @@
             font-size: 36px;
             color: #FFFFFF; /* Icon color */
         }
+
+        /* Modal Content */
+        .modal-content-help {
+            background-color: #fefefe;
+            margin: 5% auto; /* 5% from the top and centered */
+            padding: 30px;
+            border: none;
+            width: 80%; 
+            max-width: 650px; /* Limit maximum width */
+            border-radius: 10px;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); 
+        }
+        
+        .close {
+            color: #aaaaaa;
+            font-size: 30px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Form Input Styling */
+        .form-label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        /* Centered Text in Modal */
+        .centered-text {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 30px;
+            font-weight: bold;
+            color: #953728;
+        }
+		
+        .btn-clear {
+            background-color: #FFC10B;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 40%; 
+            margin: 4.5%;
+        }
+
+        .btn-clear {
+            background-color: #953728;
+        }
     </style>
 </head>
 <body>
@@ -587,15 +669,15 @@
             </div>
         </div>
         <ul>
-            <li><a href="Admin_dashboard.html"><i class="fas fa-tachometer-alt fa-fw"></i> <span class="nav-text">Dashboard</span></a></li>
-            <li><a href="Admin_transaction.html"><i class="fas fa-history fa-fw"></i> <span class="nav-text">Transaction History</span></a></li>
-            <li><a href="#"><i class="fas fa-users fa-fw"></i> <span class="nav-text">Customers</span></a></li>
-            <li><a href="#"><i class="fas fa-box-open fa-fw"></i> <span class="nav-text">Products</span></a></li>
-            <li><a href="Admin_employee.html"><i class="fas fa-user-tie fa-fw"></i> <span class="nav-text">Employees</span></a></li>
-            <li><a href="Admin_category.html"><i class="fas fa-th fa-fw"></i> <span class="nav-text">Categories</span></a></li>
-            <li><a href="Admin_ratings.html"><i class="fas fa-star fa-fw"></i> <span class="nav-text">Ratings</span></a></li>
-            <li><a href="#"><i class="fas fa-sign-out-alt fa-fw"></i> <span class="nav-text">Sign Out</span></a></li>
-            <li><a href="#"><i class="fas fa-question-circle fa-fw"></i> <span class="nav-text">Help</span></a></li>
+            <li><a href="Admin_dashboard.php"><i class="fas fa-tachometer-alt fa-fw"></i> <span class="nav-text">Dashboard</span></a></li>
+            <li><a href="Admin_transaction.php"><i class="fas fa-history fa-fw"></i> <span class="nav-text">Transaction History</span></a></li>
+            <li><a href="Admin_employee.php"><i class="fas fa-user-tie fa-fw"></i> <span class="nav-text">Employees</span></a></li>
+            <li><a href="Admin_customers.php"><i class="fas fa-users fa-fw"></i> <span class="nav-text">Customers</span></a></li>
+            <li><a href="Admin_category.php"><i class="fas fa-th fa-fw"></i> <span class="nav-text">Categories</span></a></li>
+            <li><a href="Admin_products.php"><i class="fas fa-box-open fa-fw"></i> <span class="nav-text">Products</span></a></li>
+            <li><a href="Admin_ratings.php"><i class="fas fa-star fa-fw"></i> <span class="nav-text">Ratings</span></a></li>
+            <li><a href="logout.php"><i class="fas fa-sign-out-alt fa-fw"></i> <span class="nav-text">Sign Out</span></a></li>
+            <li><a href="#" id="HelpLink"><i class="fas fa-question-circle fa-fw"></i> <span class="nav-text">Help</span></a></li>
         </ul>
     </div>
 
@@ -605,6 +687,7 @@
             <button class="navbar-toggler" type="button" id="sidebarCollapseButton">
                 <i class="fas fa-bars text-black"></i>
             </button>
+            <?php include_once 'nav.php'; ?>
         </div>
     </nav>
     
@@ -682,6 +765,79 @@
                 }
                 ?>
             </table>
+        </div>
+
+        <!------- HELP MODAL ------->
+        <div id="helpModal" class="modal">
+            <div class="modal-content-help">
+                <span class="close">&times;</span>
+                <h1 class="centered-text" id="title">Help</h1>
+                <table>
+                    <tr>
+                        <td>
+                            <h5><b>Dashboard</b></h5>
+                            <ul>
+                                <li>Shows the Sales of the business.</li>
+                                <li>Shows the Ratings of the products.</li>
+                                <li>Shows the Employees summarized information.</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <h5><b>Categories</b></h5>
+                            <ul>
+                                <li>Shows all the Categories.</li>
+                                <li>Can add new Category.</li>
+                                <li>Can edit existing Category.</li>
+                                <li>Can delete a Category.</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h5><b>Transaction History</b></h5>
+                            <ul>
+                                <li>Shows the overall Transaction of the business.</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <h5><b>Products</b></h5>
+                            <ul>
+                                <li>Shows all the Products.</li>
+                                <li>Can add new Product.</li>
+                                <li>Can edit existing Product.</li>
+                                <li>Can delete a Product.</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h5><b>Employees</b></h5>
+                            <ul>
+                                <li>Shows all the Employees.</li>
+                                <li>Can add new Employees.</li>
+                                <li>Can edit existing Employees' information.</li>
+                                <li>Can delete an Employee.</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <h5><b>Ratings</b></h5>
+                            <ul>
+                                <li>Shows all the Ratings.</li>
+                                <li>Can approve customers' Ratings.</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h5><b>Customers</b></h5>
+                            <ul>
+                                <li>Shows all the Customers.</li>
+                                <li>Can delete a Customer.</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
     <!-- Button to trigger the modal -->
@@ -901,9 +1057,24 @@
             }
         });
     });
-});
+});  
+        
+// ----------------------------------------- HELP MODAL ----------------------------------------- //
 
-
+        // Show Help Modal
+	    document.getElementById('HelpLink').addEventListener('click', function() {
+        var modal = document.getElementById('helpModal');
+        modal.style.display = "block";
+        console.log('Help modal opened');
+	    });
+        
+        // Close Modal
+	    var closeBtn = document.getElementsByClassName("close")[0];
+	    closeBtn.onclick = function() {
+        var modal = document.getElementById('helpModal');
+        modal.style.display = "none";
+        console.log('Modal closed');
+	    };
     </script>
 </body>
 </html>
