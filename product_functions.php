@@ -102,6 +102,7 @@
                 {
                     $productID = $row["product_id"];
                     $productImg = base64_encode($row["product_img"]);
+                    $F_price = number_format($row["price"], 2);
                     echo "<tr>";
                     echo "<td><img src='data:image/jpeg;base64," . $productImg . "' height=60></td>";
                     echo "<td>" . $row["product_id"] . "</td>";
@@ -109,7 +110,7 @@
                     echo "<td>" . $row["category_id"] . "</td>";
                     echo "<td>" . $row["category_type"] . "</td>";
                     echo "<td>" . $row["status"] . "</td>";
-                    echo "<td>" . $row["price"] . "</td>";
+                    echo "<td>" . $F_price . "</td>";
                     echo "<td>
                             <a href='#' class='btn btn-sm btn-success'><i class='fas fa-edit' onclick='updateProduct(" . $productID . ")'></i></a>
                             <a href='#' class='btn btn-sm btn-danger'><i class='fas fa-trash' onclick='deleteProduct(" . $productID . ")'></i></a>

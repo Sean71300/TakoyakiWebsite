@@ -87,6 +87,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         <title>Login</title>
         <link rel="stylesheet" href="style.css">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     </head>
 
     <body>
@@ -101,10 +102,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 </div>
 
                 <div class="form-group">
-                    <p style="margin-top: 15px;">Password:</p>
-                    <input type="password" name="password" class ="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>">
-                    <span class="invalid-feedback"><?php echo $password_err; ?></span>
-                </div>
+				    <p>Password:</p>
+				    <div class="password-toggle" style="position: relative;">
+				        <input id="password" type="password" name="password" class="form-control" required>
+				        <span class="show-hide-icon clickable" onclick="togglePassword('password')" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;">
+				            <i class="fas fa-eye"></i>
+				        </span>
+			        </div>
+		        </div>
 
                 <?php 
                 if(!empty($login_err)){
@@ -119,4 +124,24 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             </form>
         </div>
     </body>
+    <script>
+        function togglePassword(inputId)
+        {
+            var passwordInput = document.getElementById(inputId);
+            var icon = passwordInput.nextElementSibling.querySelector('i');
+
+            if (passwordInput.type === "password")
+            {
+                passwordInput.type = "text";
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            }
+            else
+            {
+                passwordInput.type = "password";
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
 </html>

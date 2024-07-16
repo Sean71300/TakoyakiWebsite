@@ -442,7 +442,7 @@ session_start();
                 <h2 class="centered-text" id="title">Add New Product</h2>
                 <form id="addProductForm" method="post" action="product_functions.php">
                     <div class="mb-3">
-                        <label for="categoryID" class="form-label">Product ID <i style="color: lightgrey;">(automated)</i></label>
+                        <label for="categoryID" class="form-label"><b style="color: red;">*</b>Product ID <i style="color: lightgrey;">(automated)</i></label>
                         <input type="text" class="form-control" id="ProductID" name="productID" placeholder="202416----" readonly>
                     </div>
                     <div class="mb-3">
@@ -450,7 +450,7 @@ session_start();
                         <input type="text" class="form-control" id="ProductName" name="productName" required>
                     </div>
                     <div class="mb-3">
-                        <label for="categoryID" class="form-label">Category ID <i style="color: lightgrey;">(automated)</i></label>
+                        <label for="categoryID" class="form-label"><b style="color: red;">*</b>Category ID <i style="color: lightgrey;">(automated)</i></label>
                         <input type="text" class="form-control" id="CategoryID" name="categoryID" placeholder="202403----" readonly>
                     </div>
                     <div class="mb-3">
