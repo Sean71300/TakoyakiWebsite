@@ -18,9 +18,8 @@
 
         if ($stmt->execute()) 
         {
-            $message = "Category added successfully!";
-            header("Refresh: 0; url=Admin_category.php");
-            echo "<script type='text/javascript'>alert('$message');</script>";
+            // Redirect to Admin_category.php with a success query parameter
+            header("Location: Admin_category.php?success=add");
         } 
         else 
         {
@@ -42,9 +41,8 @@
     
         if ($stmt->execute()) 
         {
-            $message = "Updated successfully!";
-            header("Refresh: 0; url=Admin_category.php");
-            echo "<script type='text/javascript'>alert('$message');</script>";
+            // Redirect to Admin_category.php with a success query parameter
+            header("Location: Admin_category.php?success=update");
         }
         else 
         {

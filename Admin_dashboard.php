@@ -895,11 +895,11 @@ function getTopOrLeastBoughtProducts($query, $conn) {
                     </div>
                     <div class="mb-3">
                         <label for="categoryIDProd" class="form-label"><b style="color: red;">*</b>Category ID <i style="color: lightgrey;">(automated)</i></label>
-                        <input type="text" class="form-control" id="CategoryIDProd" name="categoryIDProd" placeholder="202403----" readonly>
+                        <input type="text" class="form-control" id="CategoryIDProd" name="categoryID" placeholder="202403----" readonly>
                     </div>
                     <div class="mb-3">
                         <label for="categoryTypeProd" class="form-label"><b style="color: red;">*</b>Category Type</label>
-                        <input type="text" class="form-control" id="CategoryTypeProd" name="categoryTypeProd" required>
+                        <input type="text" class="form-control" id="CategoryTypeProd" name="categoryType" required>
                     </div>
                     <div class="mb-3">
                         <label for="productStatus" class="form-label"><b style="color: red;">*</b>Status</label>

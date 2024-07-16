@@ -1,4 +1,5 @@
 <?php
+    session_start();
     require_once 'setup.php';
     include 'modal.html';
     
@@ -576,6 +577,19 @@
         .success-icon {
             font-size: 36px;
             color: #FFFFFF; /* Icon color */
+        }
+        
+        /* Custom Modal Styles */
+        .modal {
+            display: none; 
+            position: fixed; /* Stay in place */
+            z-index: 1050; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); 
         }
 
         /* Modal Content */

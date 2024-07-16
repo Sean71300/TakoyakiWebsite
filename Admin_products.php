@@ -571,11 +571,11 @@ session_start();
             // Check the value of successType
             if (successType === 'add') 
             {
-                alert("Category added successfully.");
+                alert("Product added successfully.");
             } 
             else if (successType === 'update') 
             {
-                alert("Category updated successfully.");
+                alert("Product updated successfully.");
             }
 
             // Reset successType and urlParams

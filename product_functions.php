@@ -4,6 +4,7 @@
     include 'setup.php';
 
 // --------------------------------------------------------- ADD PRODUCT --------------------------------------------------------- //
+    
     function add_Product($product_name, $categoryID, $categoryType, $status, $price)
     {
         $conn = connect();
@@ -23,13 +24,12 @@
             die("Error preparing statement: " . $conn->error);
         }
 
-        $stmt->bind_param("isiisd", $id, $product_name, $categoryID, $categoryType, $status, $price);
+        $stmt->bind_param("isissd", $id, $product_name, $categoryID, $categoryType, $status, $price);
 
         if ($stmt->execute()) 
         {
             // Redirect to Admin_products.php with a success query parameter
             header("Location: Admin_products.php?success=add");
-            exit();
         }
         else 
         {
@@ -94,10 +94,14 @@
         $sql = "SELECT * FROM products";
         $retval = $conn->query($sql);
     
-        if (!$retval) {
+        if (!$retval) 
+        {
             echo "Error: " . $conn->error;
-        } else {
-            if ($retval->num_rows > 0) {
+        } 
+        else 
+        {
+            if ($retval->num_rows > 0) 
+            {
                 while ($row = $retval->fetch_assoc()) 
                 {
                     $productID = $row["product_id"];
@@ -126,19 +130,28 @@
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") 
     {
+        // Check for required POST parameters and handle actions accordingly
         if (isset($_POST['productName'], $_POST['categoryID'], $_POST['categoryType'], $_POST['productStatus'], $_POST['productPrice']) && empty($_POST["productID"])) 
         {
-            add_Product($_POST['productName'],$_POST['categoryID'],$_POST['categoryType'],$_POST['productStatus'],$_POST['productPrice']);
-        }
-        else if(isset($_POST['productName'], $_POST['categoryID'], $_POST['categoryType'], $_POST['productStatus'], $_POST['productPrice'], $_POST["productID"]))
+            // Add new product
+                add_Product($_POST['productName'], $_POST['categoryID'], $_POST['categoryType'], $_POST['productStatus'], $_POST['productPrice']);
+        } 
+        elseif (isset($_POST['productName'], $_POST['categoryID'], $_POST['categoryType'], $_POST['productStatus'], $_POST['productPrice'], $_POST["productID"])) 
         {
-            update_Product($_POST['productName'],$_POST['categoryID'],$_POST['categoryType'],$_POST['productStatus'],$_POST['productPrice'],$_POST["productID"]);
-        }
-        else
-        {
+            // Update existing product
             $productID = intval($_POST["productID"]);
-    
+            update_Product($_POST['productName'], $_POST['categoryID'], $_POST['categoryType'], $_POST['productStatus'], $_POST['productPrice'], $productID);
+        } 
+        elseif (!empty($_POST["productID"])) 
+        {
+            // Delete product
+            $productID = intval($_POST["productID"]);
             delete_Product($productID);
+        } 
+        else 
+        {
+            // Handle unexpected cases or errors
+            echo "Invalid request parameters.";
         }
     }
 ?>

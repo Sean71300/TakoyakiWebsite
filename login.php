@@ -136,6 +136,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     <a class="btn btn-secondary text-light w-100" href="register.php">Register</a>
                 </div>
             </form>
+            <!-- Reset Password Link -->
+            <div style="margin-top: 20px; text-align: center;">
+                <a href="forgot.php">Forgot your password?</a>
+            </div>
         </div>
     </body>
     <script>
