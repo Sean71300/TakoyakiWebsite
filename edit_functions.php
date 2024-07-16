@@ -7,7 +7,7 @@
 
 // ---------------------------------------------------------- GATHER USERS DATA -------------------------------------------------------------//
 function editdata()
-{
+{    
     
     $customer_name = $_POST["custoname"];
     $birthdate = $_POST["BirthD"];
@@ -44,8 +44,8 @@ function update_Customer($customer_name,$age,$birthdate,$gender,$email,$phone_nu
     {
         $conn = connect();
         
-        $stmt = $conn->prepare("UPDATE customers SET full_name = ?, age = ?, birthdate = ?, gender = ?, email = ?, phone_number = ?, address = ? WHERE customer_id = ?");
-        $stmt->bind_param("sisssssi", $customer_name, $age, $birthdate, $gender, $email, $phone_num, $address,$customerID);
+        $stmt = $conn->prepare("UPDATE customers SET customer_img = ?, full_name = ?, age = ?, birthdate = ?, gender = ?, email = ?, phone_number = ?, address = ? WHERE customer_id = ?");
+        $stmt->bind_param("bsisssssi",$img_Data, $customer_name, $age, $birthdate, $gender, $email, $phone_num, $address,$customerID);
     
         if ($stmt->execute()) 
         {
@@ -113,5 +113,4 @@ function pass_Check()
     }
     
 }
-?>
 

@@ -187,16 +187,17 @@
         <div class="col-md-3">
             <!-- Profile Picture -->
             <div class="profile-section text-center">
-                <div class="profile-picture mx-auto">
-                    <img src="Images/authentic.png" alt="Profile Picture">
-                    <div class="edit-icon">
-                        <i class="fas fa-edit"></i>
-                    </div>
-                </div>
-                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post"
+                
+                <form action="<?php echo ($_SERVER["PHP_SELF"]); ?>" method="post"
                       enctype="multipart/form-data">
+                    <div class="profile-picture mx-auto">
+                        <img src="Images/authentic.png" alt="picture" id="picture" class="picture">
+                        <div class="edit-icon">
+                            <i class="fas fa-edit"></i>
+                        </div>
+                    </div>
                     <label for="profile_picture" class="btn btn-success add-picture-button mt-3">
-                        <input type="file" id="profile_picture" name="profile_picture" style="display:none;"> Add Profile
+                        <input type="file" id="profile_picture" name="profile_picture" required onchange="profilePicture(this)" style="display:none;"> Add Picture
                     </label>  
                 </form>
                 <a href="reset.php">
@@ -269,6 +270,17 @@
         return false;
       }
       return true;
+    }
+    function profilePicture(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById("picture").src = e.target.result;
+                };
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                document.getElementById("picture").src = "#";
+            }
     }
   </script>
 </body>
