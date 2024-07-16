@@ -494,39 +494,39 @@ session_start();
                 <h2 class="centered-text" id="title">Add New Employee</h2>
                 <form id="addEmployeeForm" method="post" action="employee_functions.php">
                     <div class="mb-3">
-                        <label for="employeeID" class="form-label">Employee ID</label>
+                        <label for="employeeID" class="form-label">Employee ID <i style="color: lightgrey;">(automated)</i></label>
                         <input type="text" class="form-control" id="EmployeeID" name="employeeID" placeholder="202405----" readonly>
                     </div>
                     <div class="mb-3">
-                        <label for="employeeName" class="form-label">Name</label>
+                        <label for="employeeName" class="form-label"><b style="color: red;">*</b>Name</label>
                         <input type="text" class="form-control" id="EmployeeName" name="employeeName" required>
                     </div>
                     <div class="mb-3">
-                        <label for="employeePosition" class="form-label">Position</label>
+                        <label for="employeePosition" class="form-label"><b style="color: red;">*</b>Position</label>
                         <input type="text" class="form-control" id="EmployeePosition" name="employeePosition" required>
                     </div>
                     <div class="mb-3">
-                        <label for="employeeEmail" class="form-label">Email</label>
+                        <label for="employeeEmail" class="form-label"><b style="color: red;">*</b>Email</label>
                         <input type="email" class="form-control" id="EmployeeEmail" name="employeeEmail" required>
                     </div>
                     <div class="mb-3">
-                        <label for="employeePhone" class="form-label">Phone</label>
+                        <label for="employeePhone" class="form-label"><b style="color: red;">*</b>Phone</label>
                         <input type="tel" class="form-control" id="EmployeePhoneNum" name="employeePhone" required>
                     </div>
                     <div class="mb-3">
-                        <label for="employeeAddress" class="form-label">Address</label>
+                        <label for="employeeAddress" class="form-label"><b style="color: red;">*</b>Address</label>
                         <input type="text" class="form-control" id="EmployeeAddress" name="employeeAddress" required>
                     </div>
                     <div class="mb-3">
-                        <label for="employeeBirthdate" class="form-label">Birthdate</label>
+                        <label for="employeeBirthdate" class="form-label"><b style="color: red;">*</b>Birthdate</label>
                         <input type="date" class="form-control" id="employeeBirthdate" name="EmployeeBday" required>
                     </div>
                     <div class="mb-3">
-                        <label for="employeeAge" class="form-label">Age</label>
+                        <label for="employeeAge" class="form-label"><b style="color: red;">*</b>Age</label>
                         <input type="number" class="form-control" id="employeeAge" name="EmployeeAge" readonly>
                     </div>
                     <div class="mb-3">
-                        <label for="employeeGender" class="form-label">Gender</label>
+                        <label for="employeeGender" class="form-label"><b style="color: red;">*</b>Gender</label>
                         <select class="form-select" id="EmployeeGender" name="employeeGender" required>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
