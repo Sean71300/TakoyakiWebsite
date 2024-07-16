@@ -707,7 +707,7 @@ function getTopOrLeastBoughtProducts($query, $conn) {
 
         function getTodaysEarnings($conn) {
         // SQL query to get and total the earnings of the current day
-        $sql = "SELECT SUM(total_price) AS total_earnings 
+        $sql = "SELECT SUM(total_price * quantity) AS total_earnings 
                 FROM transaction_history 
                 WHERE DATE(transaction_date) = CURDATE()";
 
