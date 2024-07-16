@@ -5,6 +5,8 @@ include 'modal.html';
 
 ob_start();
 
+session_start();
+
 
 
 // ------------ QUERIES FOR CHART -------------------------
@@ -533,6 +535,102 @@ function getTopOrLeastBoughtProducts($query, $conn) {
                 padding: 8px;
             }
         }
+
+        
+
+        /* Modal Content */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; /* 5% from the top and centered */
+            padding: 30px;
+            border: none;
+            width: 80%; 
+            max-width: 500px; /* Limit maximum width */
+            border-radius: 10px;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); 
+        }
+
+        .modal-content-help {
+            background-color: #fefefe;
+            margin: 5% auto; /* 5% from the top and centered */
+            padding: 30px;
+            border: none;
+            width: 80%; 
+            max-width: 650px; /* Limit maximum width */
+            border-radius: 10px;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); 
+        }
+        
+        .close {
+            color: #aaaaaa;
+            font-size: 30px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Form Input Styling */
+        .form-label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        /* Centered Text in Modal */
+        .centered-text {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 30px;
+            font-weight: bold;
+            color: #953728;
+        }
+		
+
+        .btn-clear {
+            background-color: #FFC10B;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 40%; 
+            margin: 4.5%;
+        }
+
+        .btn-clear {
+            background-color: #953728;
+        }
     </style>
 </head>
 <body>
@@ -548,13 +646,13 @@ function getTopOrLeastBoughtProducts($query, $conn) {
         <ul>
             <li><a href="Admin_dashboard.php"><i class="fas fa-tachometer-alt fa-fw"></i> <span class="nav-text">Dashboard</span></a></li>
             <li><a href="Admin_transaction.php"><i class="fas fa-history fa-fw"></i> <span class="nav-text">Transaction History</span></a></li>
-            <li><a href="Admin_customer.php"><i class="fas fa-users fa-fw"></i> <span class="nav-text">Customers</span></a></li>
-            <li><a href="Admin_ratings.php"><i class="fas fa-box-open fa-fw"></i> <span class="nav-text">Products</span></a></li>
             <li><a href="Admin_employee.php"><i class="fas fa-user-tie fa-fw"></i> <span class="nav-text">Employees</span></a></li>
+            <li><a href="Admin_customers.php"><i class="fas fa-users fa-fw"></i> <span class="nav-text">Customers</span></a></li>
             <li><a href="Admin_category.php"><i class="fas fa-th fa-fw"></i> <span class="nav-text">Categories</span></a></li>
+            <li><a href="Admin_products.php"><i class="fas fa-box-open fa-fw"></i> <span class="nav-text">Products</span></a></li>
             <li><a href="Admin_ratings.php"><i class="fas fa-star fa-fw"></i> <span class="nav-text">Ratings</span></a></li>
-            <li><a href="#"><i class="fas fa-sign-out-alt fa-fw"></i> <span class="nav-text">Sign Out</span></a></li>
-            <li><a href="#"><i class="fas fa-question-circle fa-fw"></i> <span class="nav-text">Help</span></a></li>
+            <li><a href="logout.php"><i class="fas fa-sign-out-alt fa-fw"></i> <span class="nav-text">Sign Out</span></a></li>
+            <li><a href="#" id="HelpLink"><i class="fas fa-question-circle fa-fw"></i> <span class="nav-text">Help</span></a></li>
         </ul>
         </div>
 
@@ -565,7 +663,7 @@ function getTopOrLeastBoughtProducts($query, $conn) {
             <i class="fas fa-bars text-black"></i>
         </button>
         <div class="welcome-admin">
-            Welcome Admin
+            <?php include 'nav.php'; ?>
         </div>
         <div class="ml-auto">
             <button class="btn btn-success mx-2">Add Category</button>

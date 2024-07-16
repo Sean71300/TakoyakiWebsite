@@ -47,7 +47,7 @@
         $conn->close();
     }
 
-// -------------------------------------- CHECK FOR ID DUPLICATION (already declared)-------------------------------------- //
+// -------------------------------------- CHECK FOR ID DUPLICATION -------------------------------------- //
 
 
     function checkDuplication($id, $checkQuery) {
@@ -265,75 +265,76 @@
             return $genID;
         }
 // -------------------------------------- PRODUCTS TABLE CREATION -------------------------------------- //
-        function create_ProductTable()
-        {
-            $conn = connect();
+function create_ProductTable()
+{
+    $conn = connect();
 
-            $sql = "CREATE TABLE products(
-                    product_id INT(10) PRIMARY KEY AUTO_INCREMENT,
-                    product_img LONGBLOB,
-                    product_name VARCHAR(50),
-                    category_id INT(10),
-                    category_type VARCHAR(100),
-                    status VARCHAR(30),
-                    price FLOAT(6),
-                    FOREIGN KEY (category_id) REFERENCES categories(category_id))";
+    $sql = "CREATE TABLE products(
+            product_id INT(10) PRIMARY KEY AUTO_INCREMENT,
+            product_img BLOB,
+            product_name VARCHAR(50),
+            category_id INT(10),
+            category_type VARCHAR(100),
+            status VARCHAR(30),
+            price FLOAT(6),
+            FOREIGN KEY (category_id) REFERENCES categories(category_id))";
 
-            if (mysqli_query($conn, $sql))
-            {
-                // Prepare image data
-                $imgArr = array(
-                    "Images/octobits.png", "Images/crab bits.png", "Images/cheese bits.png", "Images/bacon bits.png",
-                    "Images/assorted-barkada.png", "Images/cheesy-barkada.png", "Images/beef.png", "Images/pork.png"
-                );
+    if (mysqli_query($conn, $sql))
+    {
+        // Prepare image data
+        $imgArr = array(
+            "Images/octobits.png", "Images/crab bits.png", "Images/cheese bits.png", "Images/bacon bits.png",
+            "Images/assorted-barkada.png", "Images/cheesy-barkada.png", "Images/beef.png", "Images/pork.png"
+        );
 
-                $escapedImgDataArr = array();
+        $escapedImgDataArr = array();
 
-                foreach ($imgArr as $imgPath) {
-                    $imgData = file_get_contents($imgPath);
-                    if ($imgData === false) {
-                        echo "Failed to read image: $imgPath";
-                        continue; 
-                    }
-                    $escapedImgDataArr[] = mysqli_real_escape_string($conn, $imgData);
-                }
-
-                // Generate IDs
-                $id = generate_ProductID();
-                $categoryID = generate_CategoryID();
-                $catID = $categoryID - 4;
-
-                // Insert products with image
-                $sql = "INSERT INTO products
-                    (product_id, product_img, product_name, category_id, category_type, status, price)
-                    VALUES
-                    ($id, '{$escapedImgDataArr[0]}', 'Octo Bits', $catID , 'Takoyaki', 'Available', 39),
-                    (". (++$id) .", '{$escapedImgDataArr[1]}', 'Crab Bits', $catID , 'Takoyaki', 'Available', 39),
-                    (". (++$id) .", '{$escapedImgDataArr[2]}', 'Cheese Bits', $catID, 'Takoyaki', 'Available', 39),
-                    (". (++$id) .", '{$escapedImgDataArr[3]}', 'Bacon Bits', $catID, 'Takoyaki', 'Available', 39),
-                    (". (++$id) .", '{$escapedImgDataArr[0]}', 'Octo Bits', ". (++$catID) .", '10+1', 'Available', 100),
-                    (". (++$id) .", '{$escapedImgDataArr[1]}', 'Crab Bits', $catID , '10+1', 'Available', 100),
-                    (". (++$id) .", '{$escapedImgDataArr[2]}', 'Cheese Bits', $catID , '10+1', 'Available', 100),
-                    (". (++$id) .", '{$escapedImgDataArr[3]}', 'Bacon Bits', $catID , '10+1', 'Available', 100),
-                    (". (++$id) .", '{$escapedImgDataArr[4]}', 'Assorted Barkada', ". (++$catID) .", 'Barkada Platter', 'Available', 400),
-                    (". (++$id) .", '{$escapedImgDataArr[5]}', 'Cheesey Barkada', $catID, 'Barkada Platter', 'Available', 320),
-                    (". (++$id) .", '{$escapedImgDataArr[6]}', 'Beef Gyudon', ". (++$catID) .", 'Rice Meals', 'Available', 85),
-                    (". (++$id) .", '{$escapedImgDataArr[7]}', 'Pork Tonkatsun', $catID, 'Rice Meals', 'Available', 75)";
-
-                mysqli_query($conn, $sql);
-
-                // Check for errors
-                if (mysqli_error($conn)) {
-                    echo "Error inserting image: " . mysqli_error($conn);
-                }
+        foreach ($imgArr as $imgPath) {
+            $imgData = file_get_contents($imgPath);
+            if ($imgData === false) {
+                echo "Failed to read image: $imgPath";
+                continue; 
             }
-            else
-            {
-                echo "<br>There is an error in creating the table: " . mysqli_error($conn);
-            }
-
-            $conn->close();
+            $escapedImgDataArr[] = mysqli_real_escape_string($conn, $imgData);
         }
+
+        // Generate IDs
+        $id = generate_ProductID();
+        $categoryID = generate_CategoryID();
+        $catID = $categoryID - 4;
+
+        // Insert products with image
+        $sql = "INSERT INTO products
+            (product_id, product_img, product_name, category_id, category_type, status, price)
+            VALUES
+            ($id, '{$escapedImgDataArr[0]}', 'Octo Bits', $catID , 'Takoyaki', 'Available', 39),
+            (". (++$id) .", '{$escapedImgDataArr[1]}', 'Crab Bits', $catID , 'Takoyaki', 'Available', 39),
+            (". (++$id) .", '{$escapedImgDataArr[2]}', 'Cheese Bits', $catID, 'Takoyaki', 'Available', 39),
+            (". (++$id) .", '{$escapedImgDataArr[3]}', 'Bacon Bits', $catID, 'Takoyaki', 'Available', 39),
+            (". (++$id) .", '{$escapedImgDataArr[0]}', 'Octo Bits', ". (++$catID) .", '10+1', 'Available', 100),
+            (". (++$id) .", '{$escapedImgDataArr[1]}', 'Crab Bits', $catID , '10+1', 'Available', 100),
+            (". (++$id) .", '{$escapedImgDataArr[2]}', 'Cheese Bits', $catID , '10+1', 'Available', 100),
+            (". (++$id) .", '{$escapedImgDataArr[3]}', 'Bacon Bits', $catID , '10+1', 'Available', 100),
+            (". (++$id) .", '{$escapedImgDataArr[4]}', 'Assorted Barkada', ". (++$catID) .", 'Barkada Platter', 'Available', 400),
+            (". (++$id) .", '{$escapedImgDataArr[5]}', 'Cheesey Barkada', $catID, 'Barkada Platter', 'Available', 320),
+            (". (++$id) .", '{$escapedImgDataArr[6]}', 'Beef Gyudon', ". (++$catID) .", 'Rice Meals', 'Available', 85),
+            (". (++$id) .", '{$escapedImgDataArr[7]}', 'Pork Tonkatsun', $catID, 'Rice Meals', 'Available', 75)";
+
+        mysqli_query($conn, $sql);
+
+        // Check for errors
+        if (mysqli_error($conn)) {
+            echo "Error inserting image: " . mysqli_error($conn);
+        }
+    }
+    else
+    {
+        echo "<br>There is an error in creating the table: " . mysqli_error($conn);
+    }
+
+    $conn->close();
+}
+
 
 // -------------------------------------- PRODUCTS ID CREATION -------------------------------------- //  
     

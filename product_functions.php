@@ -112,34 +112,6 @@
         $conn->close();
     }
 
-// --------------------------------------------------------- CHECK FOR DUPLICATION ID --------------------------------------------------------- //
-
-    function checkDuplication($id, $checkQuery) 
-    {
-        $conn = connect();
-        // Function to check for duplicate ID
-        while (true) 
-        {
-            // Prepare the query to check for the duplicate ID
-            $stmt = $conn->prepare($checkQuery);
-            $stmt->bind_param("i", $id);
-            $stmt->execute();
-            $stmt->store_result();
-
-            if ($stmt->num_rows == 0) 
-            {
-                break;
-            }
-            $id++;
-
-            $stmt->close();
-        }
-        $stmt->close();
-        $conn->close();
-
-        return $id;
-    }
-
 // --------------------------------------------------------- HANDLE FORM SUBMISSION --------------------------------------------------------- //
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") 

@@ -58,8 +58,9 @@
                 while ($row = $retval->fetch_assoc()) 
                 {    
                     $customerID = $row["customer_id"];
+                    $customerImg = base64_encode($row["customer_img"]);
                     echo "<tr>";
-                    echo "<td>" . $row["customer_img"] . "</td>";
+                    echo "<td><img src='data:image/jpeg;base64," . $customerImg . "' height=60></td>";
                     echo "<td>" . $row["customer_id"] . "</td>";
                     echo "<td>" . $row["full_name"] . "</td>";
                     echo "<td>" . $row["age"] . "</td>";
