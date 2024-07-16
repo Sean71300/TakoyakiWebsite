@@ -2,7 +2,6 @@
 #Connect to database
 #Insert transaction to db
 
-/*
 session_start();
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
   echo '<html>';
@@ -19,12 +18,10 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
   header("Refresh: 2; url=login.php");
   exit;
 }
-*/
+
 ?>
 
 <?php
-session_start();
-
 require_once "connect.php";
 require_once "setup.php";
 ?>
@@ -80,9 +77,9 @@ if (isset($_POST['pay'])) {
             $sql = "INSERT INTO transaction_history (transaction_id, customer_id, full_name, phone_number, product_id, product_name, quantity, total_price) VALUES ($transacID, $id, '$name', '$phone_num', $productID, '$prod_name', $quantity, $price)";
 
             if ($conn->query($sql) === TRUE) {
-                echo 'Transaction successful!';
+                echo '<script>alert("Order successful, thank you for ordering!")</script>';
             } else {
-                echo "Error occurred in connecting to the database, please try again.";
+                echo '<script>alert("Error occurred in connecting to the database, please try again.")</script>';
             } 
             $conn->close();
         }
