@@ -135,7 +135,7 @@ function getTopOrLeastBoughtProducts($query, $conn) {
         // Define the query
         $query = "SELECT COUNT(*) AS unavailable_count
                   FROM products
-                  WHERE status = 'Unavailable'";
+                  WHERE status = 'Not Available'";
     
         // Execute the query
         $result = mysqli_query($conn, $query);
@@ -762,7 +762,7 @@ function getTopOrLeastBoughtProducts($query, $conn) {
             <!-- Unavailable Product Section -->
             <div class="card card-right ">
             <div class="card-header justify-content-center p-1">
-                <h3 class="card-title">Unavailable Product</h3>
+                <h3 class="card-title">Not Available Product</h3>
             </div>
             <?php
                 $conn = connect();
@@ -779,6 +779,8 @@ function getTopOrLeastBoughtProducts($query, $conn) {
             <!-- Total Earn Section -->
             <div class="card card-right">
             <?php
+            date_default_timezone_set('Asia/Manila'); 
+
             $conn = connect();
             $today = date('F j, Y'); 
             $totalToday = getTodaysEarnings($conn);
