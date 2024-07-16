@@ -536,18 +536,18 @@ function getTopOrLeastBoughtProducts($query, $conn) {
             }
         }
     
-    /* Custom Modal Styles */
-    .modal {
-        display: none; 
-        position: fixed; /* Stay in place */
-        z-index: 1050; /* Sit on top */
-        left: 0;
-        top: 0;
-        width: 100%; /* Full width */
-        height: 100%; /* Full height */
-        overflow: auto; /* Enable scroll if needed */
-        background-color: rgba(0,0,0,0.4); 
-    }
+        /* Custom Modal Styles */
+        .modal {
+            display: none; 
+            position: fixed; /* Stay in place */
+            z-index: 1050; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); 
+        }
 
         /* Modal Content */
         .modal-content {
@@ -626,7 +626,6 @@ function getTopOrLeastBoughtProducts($query, $conn) {
             color: #953728;
         }
 		
-
         .btn-clear {
             background-color: #FFC10B;
             border: none;
@@ -678,11 +677,8 @@ function getTopOrLeastBoughtProducts($query, $conn) {
         </div>
         <div class="ml-auto">
             <button class="btn btn-success mx-2" id="addCategoryBtn">Add Category</button>
-            <?php include 'dashboard_addCategory.php'; ?>
             <button class="btn btn-primary mx-2" id="addProductBtn">Add Product</button>
-            <?php include 'dashboard_addProduct.php'; ?>
             <button class="btn btn-info mx-2" id="addEmployeeBtn">Add Employee</button>
-            <?php include 'dashboard_addEmployee.php'; ?>
         </div>
 		</div>
 		</nav>
@@ -1328,10 +1324,6 @@ var myChart = new Chart(ctx, {
             {
                 alert("Added successfully.");
             } 
-            else if (successType === 'update') 
-            {
-                alert("Updated successfully.");
-            }
 
             // Reset successType and urlParams
             successType = null;
@@ -1363,45 +1355,57 @@ var myChart = new Chart(ctx, {
 // ----------------------------------------- ADD PRODUCT MODAL ----------------------------------------- //
 
         // Show Add Product Modal
-	    document.getElementById('addProductBtn').addEventListener('click', function() {
-        var modal = document.getElementById('addProductModal');
+document.getElementById('addProductBtn').addEventListener('click', function() {
+    var modal = document.getElementById('addProductModal');
+    if (modal) {
         modal.style.display = "block";
-        changeFormTitleAndButton('Add Product', 'Add Product');
-        blank();
         console.log('Add New Product button clicked');
-	    });
-	
-	    // Close Modal
-	    var closeBtn = document.getElementsByClassName("close")[1];
-	    closeBtn.onclick = function() {
+    } else {
+        console.error('Add Product Modal not found');
+    }
+});
+
+// Close Modal
+var closeBtns = document.getElementsByClassName("close");
+if (closeBtns.length > 1) {
+    var closeBtn = closeBtns[1];
+    closeBtn.onclick = function() {
         var modal = document.getElementById('addProductModal');
-        modal.style.display = "none";
-        console.log('Modal closed');
-	    };
-	
-	    // Clear Form Button
-	    document.getElementById('clearFormBtn').addEventListener('click', function() {
-        document.getElementById('addProductForm').reset();
-	    });  // ----- GET CATEGORY INFO ----- //
+        if (modal) {
+            modal.style.display = "none";
+            console.log('Modal closed');
+        } else {
+            console.error('Add Product Modal not found');
+        }
+    };
+} else {
+    console.error('Close button for Add Product Modal not found');
+}
+
+// Clear Form Button
+document.getElementById('clearFormBtn').addEventListener('click', function() {
+    var form = document.getElementById('addProductForm');
+    if (form) {
+        form.reset();
+    } else {
+        console.error('Add Product Form not found');
+    }
+});
+
+// ----- GET CATEGORY INFO ----- //
 function getCategory() {
-    // Get the value of the CategoryType input field
     var categoryType = document.getElementById('CategoryType').value;
 
-    // Check if the categoryType is not empty
     if (categoryType) {
-        // Fetch the category ID from the server
         fetch(`getCategoryID.php?category_type=${encodeURIComponent(categoryType)}`)
             .then(response => {
-                // Ensure the response is in JSON format
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 return response.json();
             })
             .then(data => {
-                // Check if the category_id exists in the returned data
                 if (data.category_id !== undefined) {
-                    // Set the CategoryID input field to the fetched category ID
                     document.getElementById('CategoryID').value = data.category_id;
                 } else {
                     console.error('Category ID not found in the response data');
@@ -1419,7 +1423,7 @@ window.onload = function() {
     if (categoryTypeInput) {
         categoryTypeInput.addEventListener('input', getCategory);
     } else {
-        console.error('CategoryType input field not found');
+        console.error('CategoryType input field not found.');
     }
 };
 
