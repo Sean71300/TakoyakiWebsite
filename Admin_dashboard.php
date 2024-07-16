@@ -1370,7 +1370,7 @@ var myChart = new Chart(ctx, {
         categoryTypeProd = document.getElementById('CategoryTypeProd');
 
         // ----- GET CATEGORY INFO ----- //
-        function getCategory() {
+        function getCategoryID() {
             // Get the value of the CategoryType input field
             var categoryTypeProd = document.getElementById('CategoryTypeProd').value;
 
@@ -1402,7 +1402,7 @@ var myChart = new Chart(ctx, {
 
         // Set up an event listener for the input event on the CategoryType field
         window.onload = function() {
-            document.getElementById('CategoryTypeProd').addEventListener('input', getCategory);
+            document.getElementById('CategoryTypeProd').addEventListener('input', getCategoryID);
         }
 
 // ----------------------------------------- ADD EMPLOYEE MODAL ----------------------------------------- //
