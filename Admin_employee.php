@@ -494,7 +494,7 @@ session_start();
                 <h2 class="centered-text" id="title">Add New Employee</h2>
                 <form id="addEmployeeForm" method="post" action="employee_functions.php">
                     <div class="mb-3">
-                        <label for="employeeID" class="form-label">Employee ID <i style="color: lightgrey;">(automated)</i></label>
+                        <label for="employeeID" class="form-label"><b style="color: red;">*</b>Employee ID <i style="color: lightgrey;">(automated)</i></label>
                         <input type="text" class="form-control" id="EmployeeID" name="employeeID" placeholder="202405----" readonly>
                     </div>
                     <div class="mb-3">
@@ -522,7 +522,7 @@ session_start();
                         <input type="date" class="form-control" id="employeeBirthdate" name="EmployeeBday" required>
                     </div>
                     <div class="mb-3">
-                        <label for="employeeAge" class="form-label"><b style="color: red;">*</b>Age</label>
+                        <label for="employeeAge" class="form-label"><b style="color: red;">*</b>Age <i style="color: lightgrey;">(automated)</i></label>
                         <input type="number" class="form-control" id="employeeAge" name="EmployeeAge" readonly>
                     </div>
                     <div class="mb-3">
