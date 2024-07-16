@@ -31,15 +31,15 @@ require_once "setup.php";
 ?>
 
 <?php
-    #Check for valid phone number:
-    function checkPhone($phone_number) {
-      $phone_number = preg_replace('/\D/', '', $phone_number);
+    #Validate GCash number:
+    function checkPhone($gcash_number) {
+      $gcash_number = preg_replace('/\D/', '', $gcash_number);
   
-      if (strlen($phone_number) != 10 && strlen($phone_number) != 11) {
+      if (strlen($gcash_number) != 10 && strlen($gcash_number) != 11) {
           return false;
       }
       $valid_area_codes = array('02', '032', '033', '034', '035', '036', '037', '038', '039', '041', '042', '043', '044', '045', '046', '047', '048', '049', '052', '053', '054', '055', '056', '057', '058', '059', '063', '064', '065', '066', '067', '068', '077', '078', '082', '083', '084', '085', '086', '087', '088', '089');
-      if (substr($phone_number, 0, 1) != '0' && substr($phone_number, 0, 2) != '9' && !in_array(substr($phone_number, 0, 2), $valid_area_codes)) {
+      if (substr($gcash_number, 0, 1) != '0' && substr($gcash_number, 0, 2) != '9' && !in_array(substr($gcash_number, 0, 2), $valid_area_codes)) {
           return false;
       }
   
@@ -48,10 +48,10 @@ require_once "setup.php";
 
     if (isset($_POST['pay'])) {
       $errors = 0;
-      $phone_number = $_POST["phone_number"];
+      $gcash_number = $_POST["gcash_number"];
 
-        if(checkPhone($phone_number) == false){
-          $error_display = "Invalid phone number, please check or try again.";
+        if(checkPhone($gcash_number) == false){
+          $error_display = "Invalid GCash account, please try again.";
           $errors++;
       }
     }
@@ -203,6 +203,10 @@ require_once "setup.php";
                                                 }
                                             }
                                         }
+
+                                        if (isset($_POST['clear_from_cart'])) {
+                                            unset($_SESSION['cart']);
+                                        }
                                         
                                         $total = 0;
                                         if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
@@ -243,11 +247,14 @@ require_once "setup.php";
                         <hr style="margin-top: 25px;">
                         <div class="d-flex">
                             <div class="total-container w-50">
-                                <h5>Total: ₱<?php echo number_format($total, 2);?></h5>
+                                <h5 class="btn disabled bg-dark" style="font-size: 1.5rem; color:white">Total: ₱<?php echo number_format($total, 2);?></h5>
                             </div>
                             <div stlye="overflow: auto;" class="container w-50">
-                                <div style="float:right">    
-                                    <h5>Clear Cart</h5>
+                                <div style="float:right">
+                                    <form action="" method="post">
+                                        <input type="hidden" name="clear_from_cart" value="1">
+                                        <button type="submit" class="btn btn-danger" style="font-size: 1.5rem;">Clear Cart</button>
+                                    </form>   
                                 </div>
                             </div>
                         </div>
@@ -261,35 +268,58 @@ require_once "setup.php";
                         <hr>
                         <div class="form-group">
                             <p>Name:</p>
-                            <p name="name" class="form-control">Lorem</p>
+                            <p name="name" class="form-control"><?php echo htmlspecialchars($_SESSION["full_name"]) ?></p>
                             <p>Phone Number:</p>
-                            <p name="number" class="form-control">Lorem</p>
+                            <p name="number" id="number" class="form-control"><?php echo htmlspecialchars($_SESSION["phone_number"]) ?></p>
                             <p>Address:</p>
-                            <p class="form-control" name="address">Lorem</p>
+                            <p class="form-control" name="address" id="address"><?php echo htmlspecialchars($_SESSION["address"]) ?></p>
                         </div>
                     </div>
                     <div class="total-container mt-5">
                         <h4>Shipping Address</h4>
                         <hr>
                         <div class="form-group">
-                            <p>Address:</p>
-                            <p class="form-control" name="shipping-address">Lorem</p>
+                            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+                                <p>Address:</p>
+                                <input type="text" class="form-control" name="shipping-address" id="shipping-address" placeholder="Enter shipping address here" required></input>
+                                <button type="button" class="btn btn-link mt-1" name="btn_same_address" id="btn_same_address">Same as Address</button>                           
                         </div>
                     </div>
                     <div class="total-container mt-5">
                         <h4>Confirm Payment:</h4>
                         <hr>
                         <h6 class="mt-2">Enter GCash Number:</h6>
-                        <form method="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" action="">
-                            <input type="text" class="w-100 mt-2 mb-4" style="height:50px"placeholder=" 09XXXXXXXXX">
-                            <input type="submit" name="pay" value="Pay"class="btn btn-warning w-100"></input>
+                            <input type="text" name="gcash_number" id="gcash_number" class="w-100 mt-2" style="height:50px" placeholder=" 09XXXXXXXXX" required maxlength="11">
+                            <button type="button" class="btn btn-link mt-1 mb-1" name="btn_same_phone" id="btn_same_phone">Same as Phone No.</button> 
+                            <input type="submit" name="pay" value="Pay" class="btn btn-warning w-100" style="color: white; font-size: 1.5rem;"></input>
+                            
                         </form>
-                    </div>
+                        <?php
+                        if(!empty($error_display)) {
+                            echo '
+                        <div class="alert alert-danger mt-3 text-center">
+                            '. $error_display .'
+                        </div>
+                        ';
+                        }
+                        ?>
+                    </div>                    
                 </div>
-            </div>
+            </div>         
         </div>
 
         <!-- [FOOTER ] -->
         <?php include "footer.php"?>
+        <!-- [FOOTER ] -->
+
+        <script>
+            document.getElementById('btn_same_address').addEventListener('click', function() {
+            document.getElementById('shipping-address').value = document.getElementById('address').textContent;
+            });
+
+            document.getElementById('btn_same_phone').addEventListener('click', function() {
+            document.getElementById('gcash_number').value = document.getElementById('number').textContent;
+            });
+        </script>
     </body>
 </html>

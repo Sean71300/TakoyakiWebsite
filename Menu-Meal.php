@@ -37,8 +37,24 @@ function getProductRatings($product_id) {
 <?php
 if (isset($_POST['product_id'])) {
   $product_id = $_POST['product_id'];
+  #IF USER IS NOT LOGGED IN SEND TO LOGIN PAGE
+  if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+    echo '<html>';
+    echo '<head>';
+    echo '<title>INVALID ACCESS</title>';
+    echo '<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">';
+    echo '</head>';
+    echo '<body>';
+    echo '<div class="h-100 container d-flex flex-column justify-content-center align-items-center">';
+    echo '<div class="mt-4 alert alert-danger"> Please login to continue. </div>';
+    echo '</div>';
+    echo '</body>';
+    echo '</html>';
+    header("Refresh: 2; url=login.php");
+    exit;
+  }
   #Select database and initialize product
-$sql = "SELECT product_id, product_name, category_type, price FROM products WHERE product_id = ?";
+  $sql = "SELECT product_id, product_name, category_type, price FROM products WHERE product_id = ?";
 
 #Get product details from db
 if ($stmt = mysqli_prepare($link, $sql)) {
@@ -96,6 +112,7 @@ function retrieveProductsByCategory($categoryId) {
       $productId = $row['product_id'];
       $productName = $row['product_name'];
       $productPrice = $row['price'];
+      $productStatus = $row['status'];
       $productImg = base64_encode($row['product_img']);
       $ratings = getProductRatings($productId);
 
@@ -130,25 +147,38 @@ function retrieveProductsByCategory($categoryId) {
         echo "<p>$stars ($averageRating)</p>";      
         echo '<p class="card-title getProduct">' . $productName . '</p>';
         echo '<div class="d-flex justify-content-evenly align-items-center">';
-          echo '<p id="price" class="card-title fw-bold w-100" style="display:inline-block"><span class="text-warning">₱</span>' . number_format($productPrice, 2) . '</p>';
-          #quantity
+        #Display product availability         
+        switch ($productStatus) {
+          #IF PRODUCT IS AVAILABLE
+          case "Available":
+            echo '<p id="price" class="card-title fw-bold w-100" style="display:inline-block"><span class="text-warning">₱</span>' . number_format($productPrice, 2) . '</p>';
+            #quantity
             echo '<button class="bg-warning rounded text-white fw-bold border-0 w-25" onclick="decreaseCount(this)" data-product-id="' . $productId . '">-</button>';
             echo '<span style="font-size: 16px; font-weight: bold; margin-left: 5px; margin-right: 5px;" id="quantity_' . $productId . '">1</span>';
             echo '<button class="bg-warning rounded text-white fw-bold border-0 w-25" onclick="increaseCount(this)" data-product-id="' . $productId . '">+</button>';
-          #form
-          echo '
-            <form action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'" method="post" id="cart-form-'.htmlspecialchars($productId).'">
-              <input type="hidden" name="product_id" value="'.htmlspecialchars($productId).'">
-              <input type="hidden" name="quantity" id="quantity-'.htmlspecialchars($productId).'" value="">
-              <input type="submit" name="add_to_cart" value="Add to Cart" class="bg-warning border-0 rounded text-white fw-bold" style="font-size: 16px; margin-left:20px; height: 30px;" onclick="updateQuantity('.htmlspecialchars($productId).')">
-            </form>';
-        echo '</div>';
-      echo '</div>';
-    }
-  } else {
-    echo "0 results";
+            #form
+            echo '
+              <form action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'" method="post" id="cart-form-'.htmlspecialchars($productId).'">
+                <input type="hidden" name="product_id" value="'.htmlspecialchars($productId).'">
+                <input type="hidden" name="quantity" id="quantity-'.htmlspecialchars($productId).'" value="">
+                <input type="submit" name="add_to_cart" value="Add to Cart" class="bg-warning border-0 rounded text-white fw-bold" style="font-size: 16px; margin-left:20px; height: 30px;" onclick="updateQuantity('.htmlspecialchars($productId).')">
+              </form>';
+            echo '</div>';
+            echo '</div>';
+            break;
+          #IF PRODUCT IS NOT AVAILABLE
+          case "Not Available":
+            echo '<p class="card-title text-danger p-2 fw-bold"> NOT AVAILABLE</p>';
+            echo '</div>';
+            echo '</div>';
+            break;
+        }
+        
   }
-  mysqli_close($conn);
+} else {
+  echo "0 results";
+}
+mysqli_close($conn);
 }
 ?>
 

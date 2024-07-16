@@ -32,10 +32,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     if(empty($email_err) && empty($password_err)){
         // unite employees & customers tables to find user
         $sql = "
-            SELECT id, email, full_name, password, position FROM (
-                SELECT customer_id AS id, email, full_name, password, position FROM customers
+            SELECT id, email, full_name, password, position, phone_number, address FROM (
+                SELECT customer_id AS id, email, full_name, password, position, phone_number, address FROM customers
                 UNION
-                SELECT employee_id AS id, email, full_name, password, position FROM employees
+                SELECT employee_id AS id, email, full_name, password, position, phone_number, address FROM employees
             ) AS combined
             WHERE email = ?
         ";
@@ -47,7 +47,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             if(mysqli_stmt_execute($stmt)){
                 mysqli_stmt_store_result($stmt);
                 if(mysqli_stmt_num_rows($stmt) == 1){
-                    mysqli_stmt_bind_result($stmt, $id, $email, $full_name, $hashed_password, $position);
+                    mysqli_stmt_bind_result($stmt, $id, $email, $full_name, $hashed_password, $position, $phone_number, $address);
                     if(mysqli_stmt_fetch($stmt)){
                         if(password_verify($password, $hashed_password)){
                             $_SESSION["loggedin"] = true;
@@ -55,6 +55,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             $_SESSION["full_name"] = $full_name;
                             $_SESSION["email"] = $email;
                             $_SESSION["position"] = $position;
+                            $_SESSION["phone_number"] = $phone_number;
+                            $_SESSION["address"] = $address;
 
                             if($position === "Client"){
                                 header("location: index.php");
