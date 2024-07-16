@@ -128,16 +128,7 @@ function checkDuplication($id, $checkQuery) {
     }
     $stmt->close();
     $conn->close();
-     echo $id;
     return $id;
-}
-
-function calculateAge($birthdate) 
-{
-    $birthDate = new DateTime($birthdate);
-    $today = new DateTime();
-    $age = $today->diff($birthDate)->y;
-    return $age;
 }
 
 //function for password symbol checker
@@ -161,6 +152,14 @@ function retainInput($fieldName, $type = 'text', $radioValue = '') {
         }
     }
 }
+
+function calculateAge($birthdate) {
+    $dob = new DateTime($birthdate);
+    $today = new DateTime();
+    $age = $today->diff($dob)->y;
+    return $age;
+}
+
 function checkPhone($phone_number) {
     $phone_number = preg_replace('/\D/', '', $phone_number);
 
@@ -172,9 +171,17 @@ function checkPhone($phone_number) {
         return false;
     }
 
+
     return true;
 }
 ?>
+
+<script>
+  function validateInput(input) {
+    input.value = input.value.replace(/\D/g, ''); // Remove non-numeric characters
+  }
+
+</script>
 
 <?php
 // Form submission
@@ -243,7 +250,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             VALUES 
                             ($gen_id, '$type', '$unique[0]', '$birthdate', $age, '$gender', '$unique[1]', '$unique[2]', '$unique[3]', '$hashed_password')";
                     if ($conn->query($sql) === TRUE) {
-                        $message = "customers successfully!";
+                        $message = "Successfully Registered!";
                         header("Refresh: 3; url=login.php");
                     } else {
                         echo "Error occured in connecting to the database, please try again.";
@@ -263,6 +270,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <title>Register</title>
         <link rel="stylesheet" href="style.css">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        <style>
+            body {
+            background: url('images/register1-bg.png') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            }
+        </style>
     </head>
     <body style = "height: auto">
         <div class="container1 w-50 m-5" style = "height: auto">
@@ -273,19 +293,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <form action="<?php echo $_SERVER["PHP_SELF"]?>" id="registrationForm" method="post" class="w-100">
                 <div class="form-group">
                     <p><span class="text-danger font-italic">*</span>First Name:</p>
-                    <input type="text" id="firstN" name="firstN" class="form-control" pattern="[A-Za-z]+" placeholder="ex. Juan" value="<?php retainInput('firstN'); ?>" required>
+                    <input type="text" id="firstN" name="firstN" class="form-control" pattern="[A-Za-z\s]+" placeholder="ex. Juan" value="<?php retainInput('firstN'); ?>" required>
                 </div>
                 <div class="form-group">
                     <p>Middle Name:</p>
-                    <input type="text" id="middleN" name="middleN" class="form-control" pattern="[A-Za-z]+" placeholder="ex. Marquez" value="<?php retainInput('middleN'); ?>">
+                    <input type="text" id="middleN" name="middleN" class="form-control" pattern="[A-Za-z\s]+" placeholder="ex. Marquez" value="<?php retainInput('middleN'); ?>">
                 </div>
                 <div class="form-group">
                     <p><span class="text-danger font-italic">*</span>Last Name:</p>
-                    <input type="text" id="lastN" name="lastN" class="form-control" pattern="[A-Za-z]+" placeholder="ex. Dela Cruz" value="<?php retainInput('lastN'); ?>" required>
+                    <input type="text" id="lastN" name="lastN" class="form-control" pattern="[A-Za-z\s]+" placeholder="ex. Dela Cruz" value="<?php retainInput('lastN'); ?>" required>
                 </div>
-                <div>
+                <div class="form-group">
                     <p><span class="text-danger font-italic">*</span>Birthdate:</p>
-                    <input type="date" id="birthD" name="birthD" class="form-control" value= "<?php retainInput('birthD');?>" required>
+                    <input type="date" id="birthD" name="birthD" class="form-control" 
+                        value="<?php echo isset($_POST['birthD']) ? htmlspecialchars($_POST['birthD']) : ''; ?>"
+                        min="<?php echo date('Y-m-d', strtotime('-50 years')); ?>"
+                        max="<?php echo date('Y-m-d', strtotime('-18 years')); ?>"
+                    required>
+                </div>
+                <div class="form-group">
+                    <p><span class="text-danger font-italic">*</span>Age:</p>
+                    <input type="text" id="age" name="age" class="form-control" readonly>
                 </div>
                 <div class="form-group" style="margin-top:20px;">
                     <p><span class="text-danger font-italic">*</span>Gender:</p>
@@ -302,19 +330,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div class="form-group">
                     <p><span class="text-danger font-italic">*</span>Phone Number:</p>
-                    <input type="tel" id="phone_number" name="phone_number" class="form-control" value = "<?php retainInput('phone_number');?>" placeholder="09xxxxxxxxx" required>
+                    <input type="text" maxlength="11" id="phone_number" name="phone_number" class="form-control" value = "<?php retainInput('phone_number');?>" placeholder="09xxxxxxxxx" inputmode="numeric" required oninput="validateInput(this)">
                 </div>
                 <div class="form-group">
                     <p><span class="text-danger font-italic">*</span>Address:</p>
                     <input type="text" id="address" name="address" class="form-control" value=  "<?php retainInput('address');?>" placeholder="ex. 123 Mabini Street Barangay San Lorenzo Makati City, Metro Manila 1223 Philippines" required>
                 </div>
                 <div class="form-group">
-                    <p><span class="text-danger font-italic">*</span>Password:</p>
-                    <input type="password" name="password" class="form-control" placeholder="Minimum of 8 characters | 1 uppercase, lowercase, and special character needed."required>
-                </div>
-                <div class="form-group">
-                    <p><span class="text-danger font-italic">*</span>Confirm Password:</p>
-                    <input type="password" name="confirm_password" class="form-control" required>
+				    <p><span class="text-danger font-italic">*</span>Password:</p>
+				    <div class="password-toggle" style="position: relative;">
+				        <input id="password" type="password" name="password" class="form-control" required>
+				        <span class="show-hide-icon clickable" onclick="togglePassword('password')" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;">
+				            <i class="fas fa-eye"></i>
+				        </span>
+			        </div>
+		        </div>
+		        <div class="form-group">
+		            <p><span class="text-danger font-italic">*</span>Confirm Password:</p>
+                    <div class="password-toggle" style="position: relative;">
+                        <input id="confirm_password" type="password" name="confirm_password" class="form-control" required>
+                        <span class="show-hide-icon clickable" onclick="togglePassword('confirm_password')" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;">
+                            <i class="fas fa-eye"></i>
+                        </span>
+                    </div>
                 </div>
 
                 <div class="form-group d-flex justify-content-center align-items-center">
@@ -334,4 +372,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </form>
         </div>
     </body>
+    <script>
+        document.getElementById('birthD').addEventListener('change', function() {
+            var birthdate = this.value;
+            if (birthdate) {
+                var dob = new Date(birthdate);
+                var today = new Date();
+                var age = today.getFullYear() - dob.getFullYear();
+                
+                // Adjust for the case where the birth month/day has not occurred yet this year
+                var monthDiff = today.getMonth() - dob.getMonth();
+                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+                    age--;
+                }
+                
+                document.getElementById('age').value = age;
+            }
+        });
+            
+        function togglePassword(inputId)
+        {
+            var passwordInput = document.getElementById(inputId);
+            var icon = passwordInput.nextElementSibling.querySelector('i');
+
+            if (passwordInput.type === "password")
+            {
+                passwordInput.type = "text";
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            }
+            else
+            {
+                passwordInput.type = "password";
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
 </html>

@@ -6,7 +6,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
         header("location: index.php");
         exit;
     } elseif($_SESSION["position"] === "admin"){
-        header("location: admin.php");
+        header("location: Admin_dashboard.php");
         exit;
     }
 }
@@ -30,37 +30,47 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }
 
     if(empty($email_err) && empty($password_err)){
-        $sql = "SELECT customer_id, email, full_name, password, position FROM customers WHERE email = ?";
+        // unite employees & customers tables to find user
+        $sql = "
+            SELECT id, email, full_name, password, position, phone_number, address FROM (
+                SELECT customer_id AS id, email, full_name, password, position, phone_number, address FROM customers
+                UNION
+                SELECT employee_id AS id, email, full_name, password, position, phone_number, address FROM employees
+            ) AS combined
+            WHERE email = ?
+        ";
+
         if($stmt = mysqli_prepare($link, $sql)){
             mysqli_stmt_bind_param($stmt, "s", $param_email);
             $param_email = $email;
 
             if(mysqli_stmt_execute($stmt)){
                 mysqli_stmt_store_result($stmt);
-                if(mysqli_stmt_num_rows($stmt) == 1){                    
-                    mysqli_stmt_bind_result($stmt, $id, $email, $full_name, $hashed_password, $type);
+                if(mysqli_stmt_num_rows($stmt) == 1){
+                    mysqli_stmt_bind_result($stmt, $id, $email, $full_name, $hashed_password, $position, $phone_number, $address);
                     if(mysqli_stmt_fetch($stmt)){
                         if(password_verify($password, $hashed_password)){
-
                             $_SESSION["loggedin"] = true;
                             $_SESSION["id"] = $id;
                             $_SESSION["full_name"] = $full_name;
                             $_SESSION["email"] = $email;
-                            $_SESSION["type"] = $type;
-                            
-                            if($type === "Client"){
-                                session_start();
+                            $_SESSION["position"] = $position;
+                            $_SESSION["phone_number"] = $phone_number;
+                            $_SESSION["address"] = $address;
+
+                            if($position === "Client"){
                                 header("location: index.php");
-                            } else if($type === "Admin"){
-                                session_start();
-                                header("location: admin.php");
+                            } else if($position === "Admin"){
+                                header("location: Admin_dashboard.php");
+                            } else {
+                                header("location: index.php");
                             }
                         } else{
                             $login_err = "Incorrect password, please try again.";
                         }
                     }
                 } else{
-                    $login_err = "Incorrect e-mail, please try again.";
+                    $login_err = "Incorrect email, please try again.";
                 }
             } else{
                 $login_err = "Something went wrong, please try again later.";
@@ -69,6 +79,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             mysqli_stmt_close($stmt);
         }
     }
+
     mysqli_close($link);
 }
 ?>
@@ -78,6 +89,19 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         <title>Login</title>
         <link rel="stylesheet" href="style.css">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        <style>
+            body {
+            background: url('images/login2-bg.png') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            }
+        </style>
     </head>
 
     <body>
@@ -92,10 +116,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 </div>
 
                 <div class="form-group">
-                    <p style="margin-top: 15px;">Password:</p>
-                    <input type="password" name="password" class ="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>">
-                    <span class="invalid-feedback"><?php echo $password_err; ?></span>
-                </div>
+				    <p>Password:</p>
+				    <div class="password-toggle" style="position: relative;">
+				        <input id="password" type="password" name="password" class="form-control" required>
+				        <span class="show-hide-icon clickable" onclick="togglePassword('password')" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;">
+				            <i class="fas fa-eye"></i>
+				        </span>
+			        </div>
+		        </div>
 
                 <?php 
                 if(!empty($login_err)){
@@ -110,4 +138,24 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             </form>
         </div>
     </body>
+    <script>
+        function togglePassword(inputId)
+        {
+            var passwordInput = document.getElementById(inputId);
+            var icon = passwordInput.nextElementSibling.querySelector('i');
+
+            if (passwordInput.type === "password")
+            {
+                passwordInput.type = "text";
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            }
+            else
+            {
+                passwordInput.type = "password";
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
 </html>

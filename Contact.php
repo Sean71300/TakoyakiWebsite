@@ -1,5 +1,11 @@
 <?php
   session_start();
+  if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)
+  {
+    header("Refresh: 2; url=login.php");
+    exit;
+  }
+
 ?>
 <html>
     <head>
@@ -30,11 +36,78 @@
 		.loading-screen img {
 		  animation: spin 1s linear forwards;
 		}
-
 		@keyframes spin {
 		  from { transform: rotate(0deg); }
 		  to { transform: rotate(1000deg); }
 		}
+    .banner{
+        background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.50), rgb(0, 0, 0,0.45)), url('Images/cont-bg.jpg');;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-attachment: fixed;
+        background-size: cover;
+		  }
+
+      #caption {
+			color: hsl(0, 4%, 11%, 0.1);
+			background-repeat:no-repeat;
+			background-size: 0% 100%;
+			background-clip:text;
+			background-image: linear-gradient(90deg, #ffffff, #ffffff);
+			animation-timeline: view();			
+
+			animation: scroll-anim 1.5s ease 0s 1 normal forwards;
+		}
+    @keyframes scroll-anim{
+		  0% {
+			background-size: 0% 100%;
+		  }
+		  
+		  60% {
+			background-size: 0% 100%;
+		  }
+		  
+		  100% {
+			background-size: 100% 100%;
+		  }
+		}
+		
+		@keyframes fade {
+			0% {
+				opacity: 0;
+			}
+			
+			50% {
+				opacity: 0;
+			}
+
+			100% {
+				opacity: 1;
+			}
+		}
+		
+		@keyframes fade-bottom {
+			0% {
+				opacity: 0;
+				transform: translateY(50px);
+			}
+			
+			70% {
+				opacity: 0;
+				transform: translateY(50px);
+			}
+
+			100% {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+    .banner-image { 
+      background-size: cover; /* Cover the entire container */ 
+      background-position: center; /* Center the image */ 
+      background-repeat: no-repeat;
+      height: 300px; /* Set a fixed height or adjust as needed  */
+    }
 		
 		</style>
     </head>
@@ -52,62 +125,20 @@
 	  <div class="loading-screen">
 		<img src="Images/loading.png" alt="Loading...">
 	  </div>
-      <div class="forNavigationbar sticky-top">
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
-          <div class="container-fluid">
-            <a href="index.php"><img src="Images/Logo.jpg" class="logo ms-4 ms-lg-5 "></a>
-            <a class="navbar-brand " href="index.php"><b>Hentoki</b></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-              <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav  ps-5 mb-2 mb-lg-0 col d-flex justify-content-between">
-                  <li class="nav-item">
-                    <a class="nav-link"  href="index.php">Home</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="About.php">About</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link"  href="Menu.php">Menu</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link"  href="Pages.php">Personnel</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="Contact.php">Contact</a>
-                  </li> 
-                  <?php  
-                  if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-                    echo '<li class="nav-item">';
-                    echo '<a class="nav-link " href="Login.php">Login</a>';
-                    echo '</li>';
-                  }
-                  else{          
-                    echo  '<div class="dropdown">';
-                    echo  '<button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">';
-                    echo    "Welcome ".htmlspecialchars($_SESSION["full_name"]).'';   
-                    echo  '</button>';
-                    echo  '<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
-                    echo    '<li><a class="dropdown-item" href="rating.php">Rate</a></li>';
-                    echo    '<li><a class="dropdown-item" href="reset.php">Change Password</a></li>';
-                    echo    '<li><a class="dropdown-item" href="logout.php">Sign Out</a></li>';
-                    echo  '</ul>';
-                    echo  '</div>';
-                    
-                  }
-                  ?>                                    
-                </ul>              
-              </div>
-          </div>
-        </nav>
-      </div>
+      <!-- Navbar -->
+    <?php include "Navigation.php"?>      
       <div class="forbanner">
         <div class="banner col-12 bg-black ">
-          <div class="py-lg-4 py-3"></div>
-          <div class="py-lg-5 py-4"></div>
-          <div class="py-lg-4 py-3"></div>
-        </div>        
+          <div class="py-lg-5 py-3"></div>
+          <div class="col-12 text-center text-light fs-1 fw-bolder" style="animation: fade 1s ease 0s 1 normal forwards;">
+            CONTACTS & LOCATION
+            <span class="fw-light fs-4" id="caption">
+              <br> Easy Access And Fast Interaction
+            </span>
+          </div>
+          <div class="py-lg-5 py-3 "></div>
+        </div>
+    </div>       
       </div>
       <div class="forcontent">        
         <div class="container-fluid">
@@ -117,21 +148,33 @@
               <br>
               <br>
               <span class="fs-6">Fill out this form to contact Hentoki about your concerns and comments</span>
-              <form action="<?php echo $_SERVER["PHP_SELF"]?>" id="Contacts" method="post" class="w-100">
-                <input name="txtName" class="my-2 rounded-2 w-100" type="text" placeholder="Name*" ><br>
-                <input name="txtEmail" class="my-2 rounded-2 w-100" type="text" placeholder="Subject*"><br>
-                <textarea name="txtComments" class = "my-2 rounded-2 w-100" id="comments" placeholder="Comments/Message/Rating*" rows="3"></textarea>
-                <select name="Means" class="my-2 border-2 rounded-2 w-100" >
-                  <option value = "" disabled selected>How did you find us?</option>
-                  <option value = "Social Medias">Social Medias</option>
-                  <option value = "Friends">Friends</option>
-                  <option value = "Posters">Posters</option>
-                  <option value = "Net">Search engines like google,yahoo,etc</option><br>
-                  <option value = "Others">Others</option>
-                </select>     
+              <form action="email.php" id="Contacts" method="post" class="w-100">
+                
+                <!--User Input-->
+                <!--Name-->
+                <?php 
+                if(isset($_SESSION["full_name"]))
+                  {
+                                        
+                  }                 
+                
+                ?>
+
+
+
+
+
+                <!--Subject-->
+                <input name="subject" class="my-2 rounded-2 w-100" type="text" placeholder="Subject*" required><br>
+                <!--Message/Comments-->
+                <textarea name="message" class = "my-2 rounded-2 w-100" id="comments" placeholder="Comments/Message/Rating*" rows="15" required></textarea>
+                 
                          
                 <br>
-                <button type="submit" id="con" class="btn btn-danger ml-3 mr-3 w-100"data-bs-toggle="modal" data-bs-target="#exampleModal">Submit</button>              
+                <button action="" type="submit" name="send" id="con" class="btn btn-danger ml-3 mr-3 w-100" data-bs-toggle="modal" data-bs-target="#exampleModal" >Submit</button>              
+                
+
+                
                 <!-- Modal -->
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                   <div class="modal-dialog">
@@ -154,6 +197,8 @@
                     </div>
                   </div>
                 </div>
+
+                <!--Footer-->
                 <div class="col-12">
                   <div class="row mt-4  rounded-3 justify-content-center">                      
                     <div class="col-1 col-lg-2 my-2 ">
@@ -188,33 +233,8 @@
         </div>
         
       </div>
-      <div class="forfooter">
-        <div class="container-fluid text-light bg-black mt-5">          
-          <div class="row ">
-            <div class="col-12 text-center">
-              <a href="index.php"><img src="Images/Logo.jpg" class="footer image-fluid my-4"></a>
-            </div>           
-            <div class="col-12">
-              <div class="row">
-                <div class="col-lg-3 col-md-1 col-sm-0"></div>
-                <div class="col-lg-6 col-md-10 col-sm-12 d-flex justify-content-around pe-4">
-                  <a href="index.php" class="text-decoration-none text-reset">Home</a>
-                  <a href="About.php" class="text-decoration-none text-reset">About us</a>
-                  <a href="Menu.php" class="text-decoration-none text-reset">Menu</a>
-                  <a href="Contact.php" class="text-decoration-none text-reset">Contact</a>
-                  <a href="Pages.php" class="text-decoration-none text-reset">Personnel</a>
-                </div>
-                <div class="col-lg-3 col-md-1 col-sm-0"></div>
-              </div>              
-            </div> 
-            <div class="col-12 text-center my-3">
-              <a href="https://www.facebook.com/hentokitakoyaki"><img src="Images/facebook.png" class="img-fluid footer1 m-2"></a>
-              <a href="https://www.instagram.com/hentokitakoyaki/"><img src="Images/instagram.png" class="img-fluid footer1 m-2"></a> <br>  
-              <span class="text-white-50">@copyright 2023 - hentoki</span>
-            </div> 
-          </div>          
-        </div>
-      </div>
+      <!-- Footer -->
+    <?php include "Footer.php"?>      
       <?php
         include 'setup.php';
 
