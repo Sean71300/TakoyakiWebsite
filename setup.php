@@ -535,36 +535,23 @@ function create_ProductTable()
 
 // -------------------------------------- REPLY TO RATINGS TABLE CREATION -------------------------------------- //
 
-    function create_ReplytoCustomer()
-    {
-        $conn = connect();
+    function create_images_gallery_table() {
+            $conn = connect();
+    $sql = "
+    CREATE TABLE IF NOT EXISTS images_gallery (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        image LONGBLOB NOT NULL,
+        TimeStamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )";
 
-        $sql = "CREATE TABLE IF NOT EXISTS ReplytoCustomer (
-            rating_id INT(10), 
-            reply VARCHAR(550),
-            date_reply TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
-            FOREIGN KEY (rating_id) REFERENCES ratings(rating_id) ON DELETE CASCADE
-        )"; 
-
-        if (mysqli_query($conn, $sql)) {
-            $reply = "Thank you for your review! Hope to see you again in Hentoki!";
-            $rate = generate_RatingID();
-            $ratingID = --$rate;
-            
-            // Insert into the table
-            $sql = "INSERT INTO ReplytoCustomer (
-                    rating_id, 
-                    reply) VALUES 
-                    ($ratingID, 'aus ang sarap')";
-
-            mysqli_query($conn, $sql);
-            
-        } else {
-            echo "<br>There is an error in creating the table: " . $conn->error;
-        }
-
-        $conn->close();
+    if (mysqli_query($conn, $sql)) {
+        
+    } else {
+        echo "Error creating table: " . mysqli_error($conn);
     }
+}
+
+    
 ?>
 
 <?php
@@ -643,6 +630,14 @@ function create_ProductTable()
     if (mysqli_num_rows($result) == 0) 
     {
         create_ShippingAddressTable();
+    }
+
+    $table_check_query = "SHOW TABLES LIKE 'images_gallery'";
+    $result = mysqli_query($conn, $table_check_query);
+
+    if (mysqli_num_rows($result) == 0) 
+    {
+        create_images_gallery_table();
     }
 
     $conn->close();
