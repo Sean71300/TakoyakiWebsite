@@ -30,30 +30,67 @@ require_once "setup.php";
 ?>
 
 <?php
-    #Validate GCash number:
-    function checkPhone($gcash_number) {
-      $gcash_number = preg_replace('/\D/', '', $gcash_number);
-  
-      if (strlen($gcash_number) != 10 && strlen($gcash_number) != 11) {
-          return false;
-      }
-      $valid_area_codes = array('02', '032', '033', '034', '035', '036', '037', '038', '039', '041', '042', '043', '044', '045', '046', '047', '048', '049', '052', '053', '054', '055', '056', '057', '058', '059', '063', '064', '065', '066', '067', '068', '077', '078', '082', '083', '084', '085', '086', '087', '088', '089');
-      if (substr($gcash_number, 0, 1) != '0' && substr($gcash_number, 0, 2) != '9' && !in_array(substr($gcash_number, 0, 2), $valid_area_codes)) {
-          return false;
-      }
-  
-      return true;
+#Validate GCash number:
+function checkPhone($gcash_number) {
+    $gcash_number = preg_replace('/\D/', '', $gcash_number);
+
+    if (strlen($gcash_number) != 10 && strlen($gcash_number) != 11) {
+        return false;
+    }
+    $valid_area_codes = array('02', '032', '033', '034', '035', '036', '037', '038', '039', '041', '042', '043', '044', '045', '046', '047', '048', '049', '052', '053', '054', '055', '056', '057', '058', '059', '063', '064', '065', '066', '067', '068', '077', '078', '082', '083', '084', '085', '086', '087', '088', '089');
+    if (substr($gcash_number, 0, 1) != '0' && substr($gcash_number, 0, 2) != '9' && !in_array(substr($gcash_number, 0, 2), $valid_area_codes)) {
+        return false;
     }
 
-    if (isset($_POST['pay'])) {
-      $errors = 0;
-      $gcash_number = $_POST["gcash_number"];
+    return true;
+}
 
-        if(checkPhone($gcash_number) == false){
-          $error_display = "Invalid GCash account, please try again.";
-          $errors++;
-      }
+if (isset($_POST['pay'])) {
+    $errors = 0;
+    $gcash_number = $_POST["gcash_number"];
+
+    if(checkPhone($gcash_number) == false){
+        $error_display = "Invalid GCash account, please try again.";
+        $errors++;
     }
+}
+?>
+
+<?php
+#Send to transaction_db
+#Upon 'Pay' button click
+if (isset($_POST['pay'])) {   
+    if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
+        
+        
+        #Take item out of Cart
+        foreach ($_SESSION['cart'] as $item) {
+            #Customer Info
+            $transacID = generate_TransactionID();
+            $name = $_SESSION["full_name"];
+            $phone_num = $_SESSION['phone_number'];
+            #Product Info
+            $id = $_SESSION["id"];
+            $productID = $item['product_id'];
+            $prod_name = $item['product_name'];
+            $quantity = $item['quantity'];
+            $price = $item['price'] * $item['quantity'];
+
+            $conn = connect();
+            $sql = "INSERT INTO transaction_history (transaction_id, customer_id, full_name, phone_number, product_id, product_name, quantity, total_price) VALUES ($transacID, $id, '$name', '$phone_num', $productID, '$prod_name', $quantity, $price)";
+
+            if ($conn->query($sql) === TRUE) {
+                echo 'Transaction successful!';
+            } else {
+                echo "Error occurred in connecting to the database, please try again.";
+            } 
+            $conn->close();
+        }
+
+        // Clear the cart after successful transaction
+        unset($_SESSION['cart']);
+    }
+}
 ?>
     
 <html>
@@ -202,7 +239,7 @@ require_once "setup.php";
                                                 }
                                             }
                                         }
-
+                                        
                                         if (isset($_POST['clear_from_cart'])) {
                                             unset($_SESSION['cart']);
                                         }
@@ -290,8 +327,7 @@ require_once "setup.php";
                         <h6 class="mt-2">Enter GCash Number:</h6>
                             <input type="text" name="gcash_number" id="gcash_number" class="w-100 mt-2" style="height:50px" placeholder=" 09XXXXXXXXX" required maxlength="11">
                             <button type="button" class="btn btn-link mt-1 mb-1" name="btn_same_phone" id="btn_same_phone">Same as Phone No.</button> 
-                            <input type="submit" name="pay" value="Pay" class="btn btn-warning w-100" style="color: white; font-size: 1.5rem;"></input>
-                            
+                            <input type="submit" name="pay" value="Pay" class="btn btn-warning w-100" style="color: white; font-size: 1.5rem;"></input>                           
                         </form>
                         <?php
                         if(!empty($error_display)) {
