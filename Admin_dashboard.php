@@ -1266,130 +1266,108 @@ function getTopOrLeastBoughtProducts($query, $conn) {
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="modal.html"></script>
     <script>
-            document.getElementById('sidebarCollapseButton').addEventListener('click', function() {
-                document.getElementById('sidebar').classList.toggle('active');
-                document.body.classList.toggle('sidebar-active');
-            });
-            var chartData = <?php echo $chart_data_json; ?>;
+        document.getElementById('sidebarCollapseButton').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.body.classList.toggle('sidebar-active');
+        });
+        var chartData = <?php echo $chart_data_json; ?>;
 
-    // Access labels and data from PHP variable
-    var chartData = <?php echo $chart_data_json; ?>;
+        // Access labels and data from PHP variable
+        var chartData = <?php echo $chart_data_json; ?>;
 
-// Access labels and data from PHP variable
-var labels = chartData.labels.map(function(dateString) {
-    var date = new Date(dateString); // Convert string to Date object
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-});
-var data = chartData.data;
+        // Access labels and data from PHP variable
+        var labels = chartData.labels.map(function(dateString) {
+            var date = new Date(dateString); // Convert string to Date object
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        });
+        var data = chartData.data;
 
-// Chart.js configuration
-var ctx = document.getElementById('myChart').getContext('2d');
-var myChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: labels,  // Formatted date labels
-        datasets: [{
-            label: '<?php echo $type === 'transactions' ? 'Daily Transactions' : 'Daily Sales'; ?>',
-            data: data,
-            fill: false,
-            borderColor: 'rgb(75, 192, 192)',
-            tension: 0.1
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false, // Set to false to fill the whole container
-        scales: {
-            y: {
-                beginAtZero: true
+        // Chart.js configuration
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,  // Formatted date labels
+                datasets: [{
+                    label: '<?php echo $type === 'transactions' ? 'Daily Transactions' : 'Daily Sales'; ?>',
+                    data: data,
+                    fill: false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // Set to false to fill the whole container
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Display success message based on URL parameter
+        var urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('success')) {
+            var successType = urlParams.get('success');
+            if (successType === 'add') {
+                alert("Added successfully.");
             }
         }
-    }
-});
 
-        // Check if the URL has the success query parameter
-        var urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.has('success')) 
-        {
-            // Retrieve the successType value
-            var successType = urlParams.get('success');
+        // Show and hide modals for adding categories, products, and employees
+        document.getElementById('addCategoryBtn').addEventListener('click', function() {
+            document.getElementById('addCategoryModal').style.display = "block";
+        });
 
-            // Check the value of successType
-            if (successType === 'add') 
-            {
-                alert("Added successfully.");
-            } 
+        document.getElementsByClassName("close")[0].onclick = function() {
+            document.getElementById('addCategoryModal').style.display = "none";
+        };
 
-            // Reset successType and urlParams
-            successType = null;
-            urlParams = null;
-        }
-        
-// ----------------------------------------- ADD CATEGORY MODAL ----------------------------------------- //
+        document.getElementById('addProductBtn').addEventListener('click', function() {
+            document.getElementById('addProductModal').style.display = "block";
+            blank(); // Assuming `blank()` is defined elsewhere
+        });
 
-        // Show Add Category Modal
-	    document.getElementById('addCategoryBtn').addEventListener('click', function() {
-        var modal = document.getElementById('addCategoryModal');
-        modal.style.display = "block";
-        console.log('Add New Category button clicked');
-	    });
-	
-	    // Close Modal
-	    var closeBtn = document.getElementsByClassName("close")[0];
-	    closeBtn.onclick = function() {
-        var modal = document.getElementById('addCategoryModal');
-        modal.style.display = "none";
-        console.log('Modal closed');
-	    };
-	
-	    // Clear Form Button
-	    document.getElementById('clearFormBtnCategory').addEventListener('click', function() {
-        document.getElementById('addCategoryForm').reset();
-	    });
-        
-// ----------------------------------------- ADD PRODUCT MODAL ----------------------------------------- //
+        document.getElementsByClassName("close")[1].onclick = function() {
+            document.getElementById('addProductModal').style.display = "none";
+        };
 
-        // Show Add Category Modal
-	    document.getElementById('addProductBtn').addEventListener('click', function() {
-        var modal = document.getElementById('addProductModal');
-        modal.style.display = "block";
-        blank();
-        console.log('Add New Product button clicked');
-	    });
-	
-	    // Close Modal
-	    var closeBtn = document.getElementsByClassName("close")[1];
-	    closeBtn.onclick = function() {
-        var modal = document.getElementById('addProductModal');
-        modal.style.display = "none";
-        console.log('Modal closed');
-	    };
-	
-	    // Clear Form Button
-	    document.getElementById('clearFormBtnProduct').addEventListener('click', function() {
-        document.getElementById('addProductForm').reset();
-	    });  
-        
-        function getCategoryID() 
-        {
-            // Get the value of the CategoryType input field
+        document.getElementById('addEmployeeBtn').addEventListener('click', function() {
+            document.getElementById('addEmployeeModal').style.display = "block";
+        });
+
+        document.getElementsByClassName("close")[2].onclick = function() {
+            document.getElementById('addEmployeeModal').style.display = "none";
+        };
+
+        // Clear form buttons for category, product, and employee forms
+        document.getElementById('clearFormBtnCategory').addEventListener('click', function() {
+            document.getElementById('addCategoryForm').reset();
+        });
+
+        document.getElementById('clearFormBtnProduct').addEventListener('click', function() {
+            document.getElementById('addProductForm').reset();
+        });
+
+        document.getElementById('clearFormBtnEmployee').addEventListener('click', function() {
+            document.getElementById('addEmployeeForm').reset();
+        }); 
+
+        // Fetch category ID based on category type input
+        function getCategoryID() {
             var categoryTypeProd = document.getElementById('CategoryTypeProd').value;
-
-            // Check if the categoryTypeProd is not empty
             if (categoryTypeProd) {
-                // Fetch the category ID from the server
                 fetch(`getCategoryID.php?category_type=${encodeURIComponent(categoryTypeProd)}`)
                     .then(response => {
-                        // Ensure the response is in JSON format
                         if (!response.ok) {
                             throw new Error('Network response was not ok');
                         }
                         return response.json();
                     })
                     .then(data => {
-                        // Check if the category_id exists in the returned data
                         if (data.category_id !== undefined) {
-                            // Set the CategoryID input field to the fetched category ID
                             document.getElementById('CategoryIDProd').value = data.category_id;
                         } else {
                             alert('Category ID not found in the response data');
@@ -1401,115 +1379,40 @@ var myChart = new Chart(ctx, {
             }
         }
 
-        // Set up an event listener for the input event on the CategoryType field
         window.onload = function() {
             document.getElementById('CategoryTypeProd').addEventListener('input', getCategoryID);
-        }
-
-        // Prevents entering numerical values for NAME
-        document.getElementById('ProductName').addEventListener('input', function(e) {
-            let input = e.target;
-            let value = input.value;
-    
-            // Remove any non-alphabetic characters
-            input.value = value.replace(/[^A-Za-z\s]/g, '');
-        });
-
-        // Prevents entering numerical values for POSITION
-        document.getElementById('ProductStatus').addEventListener('input', function(e) {
-            let input = e.target;
-            let value = input.value;
-    
-            // Remove any non-alphabetic characters
-            input.value = value.replace(/[^A-Za-z\s]/g, '');
-        });
-
-// ----------------------------------------- ADD EMPLOYEE MODAL ----------------------------------------- //
-
-	    // Show Add Employee Modal
-	    document.getElementById('addEmployeeBtn').addEventListener('click', function() {
-        var modal = document.getElementById('addEmployeeModal');
-        modal.style.display = "block";
-        console.log('Add New Employee button clicked');
-	    });
-    
-	    // Close Modal
-	    var closeBtn = document.getElementsByClassName("close")[2];
-	    closeBtn.onclick = function() {
-        var modal = document.getElementById('addEmployeeModal');
-        modal.style.display = "none";
-        console.log('Modal closed');
-	    };
-	
-	    // Clear Form Button
-	    document.getElementById('clearFormBtnEmployee').addEventListener('click', function() {
-        document.getElementById('addEmployeeForm').reset();
-	    });
-
-        // Prevents entering numerical values for NAME
-        document.getElementById('EmployeeName').addEventListener('input', function(e) {
-            let input = e.target;
-            let value = input.value;
-    
-            // Remove any non-alphabetic characters
-            input.value = value.replace(/[^A-Za-z\s]/g, '');
-        });
-
-        // Prevents entering numerical values for POSITION
-        document.getElementById('EmployeePosition').addEventListener('input', function(e) {
-            let input = e.target;
-            let value = input.value;
-    
-            // Remove any non-alphabetic characters
-            input.value = value.replace(/[^A-Za-z\s]/g, '');
-        });
-
-        // Prevents entering alphabets for PHONE NUMBER
-        document.getElementById('EmployeePhoneNum').addEventListener('input', function(e) {
-            let input = e.target;
-            let value = input.value;
-
-            // Remove any non-numeric characters
-            input.value = value.replace(/[^0-9]/g, '');
-        });
-         
-// -------------------------------------------------- DISPLAY AGE AUTOMATICALLY -------------------------------------------------- //
-
-        function calculateAge() 
-        {
-            var birthdate = document.getElementById('employeeBirthdate').value;
-            if (birthdate) {
-                var today = new Date();
-                var birthDate = new Date(birthdate);
-                var age = today.getFullYear() - birthDate.getFullYear();
-                var monthDifference = today.getMonth() - birthDate.getMonth();
-                if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
-                    age--;
+            document.getElementById('EmployeeName').addEventListener('input', function(e) {
+                e.target.value = e.target.value.replace(/[^A-Za-z\s]/g, '');
+            });
+            document.getElementById('EmployeePosition').addEventListener('input', function(e) {
+                e.target.value = e.target.value.replace(/[^A-Za-z\s]/g, '');
+            });
+            document.getElementById('EmployeePhoneNum').addEventListener('input', function(e) {
+                e.target.value = e.target.value.replace(/[^0-9]/g, '');
+            });
+            document.getElementById('employeeBirthdate').addEventListener('input', function() {
+                var birthdate = document.getElementById('employeeBirthdate').value;
+                if (birthdate) {
+                    var today = new Date();
+                    var birthDate = new Date(birthdate);
+                    var age = today.getFullYear() - birthDate.getFullYear();
+                    var monthDifference = today.getMonth() - birthDate.getMonth();
+                    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+                        age--;
+                    }
+                    document.getElementById('employeeAge').value = age;
                 }
-                document.getElementById('employeeAge').value = age;
-            }
-        }
+            });
+        };
 
-        window.onload = function() {
-            document.getElementById('employeeBirthdate').addEventListener('input', calculateAge);
-        }
-        
-// ----------------------------------------- HELP MODAL ----------------------------------------- //
+        // Help modal functionality
+        document.getElementById('HelpLink').addEventListener('click', function() {
+            document.getElementById('helpModal').style.display = "block";
+        });
 
-        // Show Help Modal
-	    document.getElementById('HelpLink').addEventListener('click', function() {
-        var modal = document.getElementById('helpModal');
-        modal.style.display = "block";
-        console.log('Help modal opened');
-	    });
-        
-        // Close Modal
-	    var closeBtn = document.getElementsByClassName("close")[3];
-	    closeBtn.onclick = function() {
-        var modal = document.getElementById('helpModal');
-        modal.style.display = "none";
-        console.log('Modal closed');
-	    };
+        document.getElementsByClassName("close")[3].onclick = function() {
+            document.getElementById('helpModal').style.display = "none";
+        };
     </script>
 </body>
 </html>
