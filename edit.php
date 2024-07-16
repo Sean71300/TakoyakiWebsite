@@ -231,6 +231,10 @@
                         <input type="radio" name="gender" value="Others" required <?php echo gender_check(search_Value("gender",htmlspecialchars($_SESSION["id"])),"Others")?>>
                         <label for="female">Others</label>
                     </div>        
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Enter Password to Save Changes</label>
+                        <input type="Password" id="pass" name="pass" class="form-control" rows="" autocomplete="off"></input>
+                    </div>
                     <button type="submit" class="btn btn-primary save-changes-button">Save Changes</button>
                     <?php echo $Confirmation?>
                 </form>
