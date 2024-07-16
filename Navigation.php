@@ -7,7 +7,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ps-5 mb-2 mb-lg-0 col d-flex justify-content-between">                  
+            <ul class="navbar-nav ps-5 fs-3 fw-bold mb-2 mb-lg-0 col d-flex justify-content-end">                  
                 <li class="nav-item">
                 <a class="nav-link" href="index.php">Home</a>
                 </li>
