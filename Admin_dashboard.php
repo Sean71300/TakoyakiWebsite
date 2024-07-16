@@ -1416,7 +1416,24 @@ var myChart = new Chart(ctx, {
                         console.error('Error fetching category data:', error);
                     });
             }
-        }
+        }  
+        
+// ----------------------------------------- HELP MODAL ----------------------------------------- //
+
+        // Show Help Modal
+	    document.getElementById('HelpLink').addEventListener('click', function() {
+        var modal = document.getElementById('helpModal');
+        modal.style.display = "block";
+        console.log('Help modal opened');
+	    });
+        
+        // Close Modal
+	    var closeBtn = document.getElementsByClassName("close")[3];
+	    closeBtn.onclick = function() {
+        var modal = document.getElementById('helpModal');
+        modal.style.display = "none";
+        console.log('Modal closed');
+	    };
     </script>
 </body>
 </html>
