@@ -1,3 +1,57 @@
+<?php
+#Files
+require_once "connect.php";
+require_once "setup.php";
+$message = "";
+
+if(isset($_POST['Submit'])){
+    #Set variables
+    $email = $_POST['email'];
+    $token = bin2hex(random_bytes(16));
+    $token_hash = hash("sha256", $token);
+    
+
+    #TOKEN will expire in 5 minutes [change 5 if needed]
+    $expire = date("Y-m-d H:i:s", time() + 60 * 5);
+
+    $conn = connect();
+
+    #add TOKEN and set EXPIRE
+    $sql = "UPDATE customers 
+            SET reset_token_hash = '$token_hash', reset_token_expires_at = '$expire'
+            WHERE email = '$email'";
+
+    if ($conn->query($sql) === TRUE) {
+        $mail = require_once "forgot-mailer.php";
+        
+        $mail->setFrom("noreply@email.com");
+        $mail->addAddress($email);
+        $mail->Subject = "Password Reset";
+        $mail->Body = <<<END
+        <h4>Hello!</h4>
+        <br>
+        <p>We've received a request to reset your password for your account on our website. If you did not make this request, please ignore this email.</p>
+        <br>
+        <p>Click this link to reset your password!</p>
+        <br>
+        <a href="http://localhost/finals-takoyaki/Takoyaki/TakoyakiWebsite/forgot-reset.php?token=$token">CLICK ME!</a> 
+        END;
+
+        try {
+            $mail->send();
+            $message = "Password reset has been sent to your inbox, please check.";
+            $success = true;
+        } catch (Exception $e) {
+            $message = "Error:  {$mail->ErrorInfo}";
+            $success = false;
+        }
+    } else {
+        $message = "Critical error regarding with the database.";
+        $success = false;
+    }
+}
+?>
+
 <html>
     <head>       
         <title>Forgot Password</title>
@@ -31,13 +85,27 @@
                         <h3 class="text-center mt-3 mb-3">Forgot Password</h3>
                         <p class="text-secondary">Enter your email address below. We will send you a link to reset your password.</p>
                         <p>Email:</p>
-                        <form action="forgot-send.php" method="post">
-                            <input type="email" name="email" id="email" class="form-control">
-                            <input type="submit" value="Submit" class="mt-4 btn btn-primary w-100">
+                        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+                            <input type="email" name="email" id="email" class="form-control" required>
+                            <input type="submit" name="Submit" value="Submit" class="mt-4 btn btn-primary w-100">
                         </form>
                         <a class="btn btn-secondary w-100" href="login.php">Go back</a>
                     </div>
                 </div>
+                <?php
+                if(isset($_POST['Submit'])){
+                    if ($success = true) {
+                        echo '<div class="alert alert-success w-75 text-center">
+                                '. $message .'
+                                </div>';
+                    }
+                    if ($success = false){
+                        echo '<div class="alert alert-danger text-center">
+                                '. $message .'
+                            </div>';
+                    }
+                }
+                ?>
             </div>
 
         </div>
