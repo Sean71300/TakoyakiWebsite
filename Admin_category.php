@@ -9,6 +9,8 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Category</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="customCodes/custom.css">
     <!-- Custom CSS -->
     <style>
     body {
@@ -394,7 +396,7 @@ session_start();
             <li><a href="Admin_category.php"><i class="fas fa-th fa-fw"></i> <span class="nav-text">Categories</span></a></li>
             <li><a href="Admin_products.php"><i class="fas fa-box-open fa-fw"></i> <span class="nav-text">Products</span></a></li>
             <li><a href="Admin_ratings.php"><i class="fas fa-star fa-fw"></i> <span class="nav-text">Ratings</span></a></li>
-            <li><a href="Admin_gallery.php"><i class="fa fa-picture-o"></i> <span class="nav-text">Gallery</span></a></li>
+            <li><a href="Admin_gallery.php"><i class="fas fa-image fa-fw"></i> <span class="nav-text">Gallery</span></a></li>
             <li><a href="logout.php"><i class="fas fa-sign-out-alt fa-fw"></i> <span class="nav-text">Sign Out</span></a></li>
             <li><a href="#" id="HelpLink"><i class="fas fa-question-circle fa-fw"></i> <span class="nav-text">Help</span></a></li>
 		</ul>
@@ -751,5 +753,7 @@ session_start();
         console.log('Modal closed');
 	    };         
     </script>
+      <!-- Footer -->
+      <?php include "Footer.php"?>      
 </body>
 </html>

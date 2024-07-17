@@ -16,6 +16,9 @@
         $checkQuery = "SELECT product_id FROM products WHERE product_id = ?";
         $id = checkDuplication(generate_ProductID(), $checkQuery);
 
+        $checkQuery = "SELECT product_name FROM products WHERE product_name LIKE ?";
+        $name = checkDuplicationName($product_name, $checkQuery);
+
         $sql = "INSERT INTO products (product_id, product_name, category_id, category_type, status, price) VALUES (?, ?, ?, ?, ?, ?)";
 
         $stmt = $conn->prepare($sql);
@@ -24,7 +27,7 @@
             die("Error preparing statement: " . $conn->error);
         }
 
-        $stmt->bind_param("isissd", $id, $product_name, $categoryID, $categoryType, $status, $price);
+        $stmt->bind_param("isissd", $id, $name, $categoryID, $categoryType, $status, $price);
 
         if ($stmt->execute()) 
         {
@@ -153,5 +156,31 @@
             // Handle unexpected cases or errors
             echo "Invalid request parameters.";
         }
+    }
+
+// -------------------------------------- CHECK FOR PRODUCT DUPLICATION -------------------------------------- //
+
+
+    function checkDuplicationName($name, $checkQuery) {
+        $conn = connect();
+        // Function to check for duplicate ID
+        while (true) {
+            // Prepare the query to check for the duplicate ID
+            $stmt = $conn->prepare($checkQuery);
+            $stmt->bind_param("s", $name);
+            $stmt->execute();
+            $stmt->store_result();
+    
+            if ($stmt->num_rows == 0) {
+                break;
+            }
+            echo '<script>alert("Product already exist.");</script>';
+            header("Location: Admin_products.php?");
+    
+            $stmt->close();
+        }
+        $stmt->close();
+        $conn->close();
+        return $name;
     }
 ?>
