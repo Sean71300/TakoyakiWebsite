@@ -90,7 +90,9 @@
                 phone_number VARCHAR(11),
                 address VARCHAR(300),
                 password VARCHAR(255),
-                registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
+                registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                reset_token_hash VARCHAR(64) DEFAULT NULL,
+                reset_token_expires_at DATETIME DEFAULT NULL)";
 
         if (mysqli_query($conn, $sql))
         {
