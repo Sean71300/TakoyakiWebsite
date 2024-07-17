@@ -1,8 +1,7 @@
 <?php
 // -------------------------------------- CONNECTION -------------------------------------- //
-    function connect()
+    function connect() 
     {
-        // Configuration
         $db_host = 'localhost';
         $db_username = 'root';
         $db_password = '';
@@ -78,22 +77,21 @@
         $conn = connect();
 
 
-        $sql = "CREATE TABLE employees (
-            employee_id INT(10) PRIMARY KEY,
-            employee_img LONGBLOB,
-            position VARCHAR(30),
-            full_name VARCHAR(100),
-            age INT(3),
-            birthdate DATE,
-            gender VARCHAR(10),
-            email VARCHAR(50),
-            phone_number VARCHAR(11),
-            address VARCHAR(300),
-            password VARCHAR(255),
-            registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            reset_token_hash VARCHAR(64) DEFAULT NULL,
-            reset_token_expires_at DATETIME DEFAULT NULL
-        )";
+        $sql = "CREATE TABLE customers(
+                customer_id INT(10) PRIMARY KEY,
+                position VARCHAR(10),
+                customer_img LONGBLOB,
+                full_name VARCHAR(100),
+                age INT(3),
+                birthdate DATE,
+                gender VARCHAR(10),
+                email VARCHAR(50),
+                phone_number VARCHAR(11),
+                address VARCHAR(300),
+                password VARCHAR(255),
+                registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                reset_token_hash VARCHAR(64) DEFAULT NULL,
+                reset_token_expires_at DATETIME DEFAULT NULL)";
 
         if (mysqli_query($conn, $sql))
         {
@@ -122,6 +120,7 @@
     }
 
     function position(){
+
         return Client;
     }
 // -------------------------------------- CUSTOMER ID CREATION -------------------------------------- //
