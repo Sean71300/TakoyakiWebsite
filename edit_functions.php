@@ -30,11 +30,11 @@ function editdata()
     $phone_num = $_POST["phone"];    
     $address = $_POST["address"];
     
-    
     if (pass_Check()===true){
         if (update_Customer($image,$customer_name,$age,$birthdate,$gender,$email,$phone_num,$address,$customerID)==true)
         {
             $_SESSION["full_name"] = $customer_name; 
+            $_SESSION["img"] =($image);
             return true;   
         }   
         else

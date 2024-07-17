@@ -2,9 +2,7 @@
     session_start();
     include_once 'edit_functions.php';
     
-    function imaged(){
-        
-    }
+
     if (isset($_POST['ChangePass'])) {
         header("location: change_Pass.php");
     }
