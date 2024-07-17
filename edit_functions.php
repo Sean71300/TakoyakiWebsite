@@ -3,11 +3,25 @@
     include_once 'setup.php';
     $Confirmation = "";
     $passcheck = "";
-    
+    $result = "";
+
+// ---------------------------------------------------------- START EDIT DATA -------------------------------------------------------------//
+
+
 
 // ---------------------------------------------------------- GATHER USERS DATA -------------------------------------------------------------//
 function editdata()
-{    
+{        
+    $customerID = htmlspecialchars($_SESSION["id"]);
+    $image = search_Value("customer_img",$customerID);
+    $filename = $_FILES["Dpict"]["name"];
+    $tempname = $_FILES["Dpict"]["tmp_name"];
+    $folder = "Images/" . $filename;    
+    if ($filename != null && $tempname != null)
+    {
+        $image = file_get_contents($tempname);
+        move_uploaded_file($tempname, $folder);
+    }   
     $customer_name = $_POST["custoname"];
     $birthdate = $_POST["BirthD"];
     $age = calculateAge($_POST["BirthD"]);    
@@ -15,10 +29,10 @@ function editdata()
     $email = $_POST["email"];
     $phone_num = $_POST["phone"];    
     $address = $_POST["address"];
-    $customerID = htmlspecialchars($_SESSION["id"]);
+    
     
     if (pass_Check()===true){
-        if (update_Customer($customer_name,$age,$birthdate,$gender,$email,$phone_num,$address,$customerID)==true)
+        if (update_Customer($image,$customer_name,$age,$birthdate,$gender,$email,$phone_num,$address,$customerID)==true)
         {
             $_SESSION["full_name"] = $customer_name; 
             return true;   
@@ -39,13 +53,13 @@ function editdata()
 
 // ---------------------------------------------------------- UPDATE USERS DATA -------------------------------------------------------------//
 
-function update_Customer($customer_name,$age,$birthdate,$gender,$email,$phone_num,$address,$customerID)
+function update_Customer($image,$customer_name,$age,$birthdate,$gender,$email,$phone_num,$address,$customerID)
     {
         $conn = connect();
         
-        $stmt = $conn->prepare("UPDATE customers SET full_name = ?, age = ?, birthdate = ?, gender = ?, email = ?, phone_number = ?, address = ? WHERE customer_id = ?");
-        $stmt->bind_param("sisssssi", $customer_name, $age, $birthdate, $gender, $email, $phone_num, $address,$customerID);
-    
+        $stmt = $conn->prepare("UPDATE customers SET customer_img = ?,full_name = ?, age = ?, birthdate = ?, gender = ?, email = ?, phone_number = ?, address = ? WHERE customer_id = ?");
+        $stmt->bind_param("ssisssssi",$image, $customer_name, $age, $birthdate, $gender, $email, $phone_num, $address,$customerID);
+
         if ($stmt->execute()) 
         {
             return true;         
@@ -113,12 +127,7 @@ function pass_Check()
     
 }
 // ---------------------------------------------------------- GET IMAGE -------------------------------------------------------------//
-function getUploadedImage($fieldName) {
-    if (isset($_FILES[$fieldName]) && $_FILES[$fieldName]['error'] === UPLOAD_ERR_OK) {
-        $file = $_FILES[$fieldName];
-        $img_Data = file_get_contents($file['tmp_name']);
-        return $img_Data;
-    } else {
-        return null;
-    }
+function getUploadedImage() {
+    
+        
 }

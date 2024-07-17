@@ -2,9 +2,16 @@
     session_start();
     include_once 'edit_functions.php';
     
+    function imaged(){
+        
+    }
+    if (isset($_POST['ChangePass'])) {
+        header("location: change_Pass.php");
+    }
+ 
 
     if ($_SERVER["REQUEST_METHOD"] == "POST")
-    {       
+    {               
         if (editdata()==true)
         {
             $Confirmation ='<h4 class="mt-3 text-success">Record edited successfully!</h4><br>';  
@@ -21,6 +28,21 @@
             $Confirmation ='<h4 class="mt-3 text-danger">Record unsuccesfully edited!</h4><br>';  
         }
     }
+        $checker = false;
+        $id = htmlspecialchars($_SESSION["id"]);
+        $conn = mysqli_connect("localhost", "root", "", "hentoki_db");
+        $sql = "SELECT customer_img FROM customers WHERE customer_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('s',$id );
+        $stmt->execute();                
+        $result = $stmt->get_result();
+        $row = $result->fetch_array();'"/>';
+        $value = $row ["customer_img"];
+        if ($value != null && $value != "")
+        {
+            $checker = true;
+        }
+    
 ?>
 
 <html>
@@ -177,7 +199,7 @@
     </script>
     <div class="loading-screen">
         <img src="Images/loading.png" alt="Loading...">
-    </div>
+    </div>  
 <!-- Navbar -->
 <?php include "Navigation.php"?>      
 
@@ -188,29 +210,38 @@
             <!-- Profile Picture -->
             <div class="profile-section text-center">
                 
-                <form action="<?php echo ($_SERVER["PHP_SELF"]); ?>" method="post"
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post"
                       enctype="multipart/form-data">
                     <div class="profile-picture mx-auto">
-                        <img src="Images/authentic.png" alt="picture" id="picture" class="picture">
-                        <div class="edit-icon">
-                            <i class="fas fa-edit"></i>
-                        </div>
+                        
+                        <?php 
+
+                            if ($checker == true)
+                            {
+                                echo '<img src="data:image/jpeg;base64,'.base64_encode($row['customer_img']).'" id="picture" class="picture"/>';
+                            }
+                            else if ($checker == false)
+                            {
+                                echo '<img src="Images/authentic.png" alt="picture" id="picture" class="picture">';
+                            }
+                        
+                        ?>
+                        
+                     
                     </div>
-                    <label for="profile_picture" class="btn btn-success add-picture-button mt-3">
-                        <input type="file" id="profile_picture" name="profile_picture" accept=".jpg, .png, .jpeg"required onchange="profilePicture(this)" style="display:none;"> Add Picture
-                    </label>  
-                
-                <a href="reset.php">
-                    <button class="btn btn-primary edit-profile-button mt-1 ">Change Password</button>
+                    <label for="Dpict" class="btn btn-success add-picture-button mt-3">
+                        <input type="file" id="Dpict" name="Dpict" accept=".jpg, .png, .jpeg" onchange="profilePicture(this)" style="display:none;"> Add Picture
+                    </label>                        
                 </a>
-                </form>
+                <a href="change_Pass.php">
+                        <button class="btn btn-primary edit-profile-button" name="ChangePass">Change Password</button>
+                </a>
             </div>
         </div>
         <div class="col-md-9">        
             <!-- Edit Profile Form -->
             <div class="profile-section">
-            <form action="<?php echo ($_SERVER["PHP_SELF"]); ?>" method="post"
-            enctype="multipart/form-data">
+            
                     <div class="mb-0">
                         <label for="name" class="form-label">User ID: <?php echo htmlspecialchars($_SESSION["id"])?></label>
                     </div>                    
@@ -252,7 +283,7 @@
                         <input type="Password" id="pass" name="pass" class="form-control" rows="" autocomplete="new-password"></input> 
                         <?php echo $passcheck?>                       
                     </div>
-                    <button type="submit" class="btn btn-primary save-changes-button">Save Changes</button>
+                    <button type="submit" name="update" class="btn btn-primary save-changes-button">Save Changes</button>
                     <?php echo $Confirmation?>
                 </form>
             </div>
