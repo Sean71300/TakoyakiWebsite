@@ -202,46 +202,72 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST["password"];
     $confirm_password = $_POST["confirm_password"];
     $email_pattern = "/^[a-zA-Z0-0._%+-]+@[a-zA-Z0-9.-]+\\.com$/";
+    
+    $error_messages = []; // Array to store error messages
 
-        $errors = 0;
-        $error_display = "";
+        // Validate email
+        if (!preg_match($email_pattern, $email)) 
+        {
+            $error_messages[] = "Please enter a valid email address with a .com extension.";
+        }
 
-        if (!preg_match($email_pattern, $email) ) {
-            $error_display = "Please enter a valid email address with a .com extension.";
-            $errors++;
+        // Validate phone number
+        if (checkPhone($phone_number) == false) 
+        {
+            $error_messages[] = "Invalid phone number, please check or try again.";
         }
-        if(checkPhone($phone_number) == false){
-            $error_display = "Invalid phone number, please check or try again.";
-            $errors++;
+
+        // Validate password length
+        if (strlen($password) < 8) 
+        {
+            $error_messages[] = "Password should be more than 8 characters.";
         }
-        if(strlen($password) < 8){
-            $error_display = "Password should be more than 8 characters.";
-            $errors++;
+
+        // Validate special characters in password
+        if (!specialChars($password)) 
+        {
+            $error_messages[] = "Password should have special symbols.";
         }
-        if(!specialChars($password)){
-            $error_display = "Password should have special symbols.";
-            $errors++;
+
+        // Validate upper and lower case in password
+        if (cases($password) == 0) 
+        {
+            $error_messages[] = "Password should have a combination of upper and lower cases.";
         }
-        if(cases($password)==0){
-            $error_display = "Password should have a combination of upper and lower cases.";
-            $errors++;
+
+        // Validate password match
+        if ($password != $confirm_password) 
+        {
+            $error_messages[] = "Passwords do not match.";
+        }
+
+        // Display errors
+        if (!empty($error_messages)) 
+        {
+            echo '<div class="mt-4 alert alert-danger">';
+            echo '<ul>';
+            foreach ($error_messages as $error_message) 
+            {
+                echo '<li>' . $error_message . '</li>';
+            }
+            echo '</ul>';
+            echo '</div>';
         } 
-        if ($password != $confirm_password) {
-            $error_display = "Passwords do not match";
-            $errors++; 
-        }  
-
-        if ($errors == 0) {
-            if ($password == $confirm_password) {
+        else 
+        {
+            // Proceed with database insertion if no errors
+            if ($password == $confirm_password) 
+            {
                 // Hash password
                 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
                 $full = $first_name . ' ' . $middle_name . ' ' . $last_name;
-                $record = array($full,$email,$phone_number,$address);
+                $record = array($full, $email, $phone_number, $address);
 
                 $res = checkRecord($record);
 
-                if ($res["result"] == 0) {
+                if ($res["result"] == 0) 
+                {
                     $unique = $res['array'];
                     // Insert data into database
                     $conn = connect();
@@ -249,16 +275,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             (customer_id, position, full_name, birthdate, age, gender, email, phone_number, address, password) 
                             VALUES 
                             ($gen_id, '$type', '$unique[0]', '$birthdate', $age, '$gender', '$unique[1]', '$unique[2]', '$unique[3]', '$hashed_password')";
-                    if ($conn->query($sql) === TRUE) {
+                    if ($conn->query($sql) === TRUE) 
+                    {
                         $message = "Successfully Registered!";
                         header("Refresh: 3; url=login.php");
-                    } else {
-                        echo "Error occured in connecting to the database, please try again.";
                     } 
+                    else 
+                    {
+                        echo "Error occurred in connecting to the database, please try again.";
+                    }
                     $conn->close();
-                } else {
-                    $errors++;
-                    $error_display = $res['duplicates'];
+                } 
+                else 
+                {
+                    echo '<div class="mt-4 alert alert-danger">' . $res['duplicates'] . '</div>';
                 }
             }
         }

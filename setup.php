@@ -1,8 +1,7 @@
 <?php
 // -------------------------------------- CONNECTION -------------------------------------- //
-    function connect()
+    function connect() 
     {
-        // Configuration
         $db_host = 'localhost';
         $db_username = 'root';
         $db_password = '';

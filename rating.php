@@ -162,24 +162,24 @@ require_once 'setup.php';
 
     <?php
 
-    function getFullName() {
+    // function getFullName() {
      
-        if(isset($_SESSION['full_name']))
-        $fullname =  $_SESSION['full_name'];
+    //     if(isset($_SESSION['full_name']))
+    //     $fullname =  $_SESSION['full_name'];
 
-        return $fullname;
-    }
+    //     return $fullname;
+    // }
 
-    function getUserID() {
-        if(isset($_SESSION['id']))
-        $uID =  $_SESSION['id'];
-        return $uID;
-    }
+    // function getUserID() {
+    //     if(isset($_SESSION['id']))
+    //     $uID =  $_SESSION['id'];
+    //     return $uID;
+    // }
 
-    function getProductID() {
+    // function getProductID() {
 
-        return 2024160001;
-    }
+    //     return 2024160001;
+    // }
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $star = $_POST['rating'];
