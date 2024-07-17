@@ -163,6 +163,8 @@ function getTopOrLeastBoughtProducts($query, $conn) {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="customCodes/custom.css">
 
 <style>
         body {
@@ -661,7 +663,7 @@ function getTopOrLeastBoughtProducts($query, $conn) {
             <li><a href="Admin_category.php"><i class="fas fa-th fa-fw"></i> <span class="nav-text">Categories</span></a></li>
             <li><a href="Admin_products.php"><i class="fas fa-box-open fa-fw"></i> <span class="nav-text">Products</span></a></li>
             <li><a href="Admin_ratings.php"><i class="fas fa-star fa-fw"></i> <span class="nav-text">Ratings</span></a></li>
-            <li><a href="Admin_gallery.php"><i class="fa fa-picture-o"></i> <span class="nav-text">Gallery</span></a></li>
+            <li><a href="Admin_gallery.php"><i class="fas fa-image fa-fw"></i> <span class="nav-text">Gallery</span></a></li>
             <li><a href="logout.php"><i class="fas fa-sign-out-alt fa-fw"></i> <span class="nav-text">Sign Out</span></a></li>
             <li><a href="#" id="HelpLink"><i class="fas fa-question-circle fa-fw"></i> <span class="nav-text">Help</span></a></li>
         </ul>
@@ -889,7 +891,7 @@ function getTopOrLeastBoughtProducts($query, $conn) {
                 <h2 class="centered-text" id="title">Add New Product</h2>
                 <form id="addProductForm" method="post" action="product_functions.php">
                     <div class="mb-3">
-                        <label for="productID" class="form-label"><b style="color: red;">*</b>Product ID <i style="color: lightgrey;">(automated)</i></label>
+                        <label for="categoryID" class="form-label"><b style="color: red;">*</b>Product ID <i style="color: lightgrey;">(automated)</i></label>
                         <input type="text" class="form-control" id="ProductID" name="productID" placeholder="202416----" readonly>
                     </div>
                     <div class="mb-3">
@@ -897,24 +899,49 @@ function getTopOrLeastBoughtProducts($query, $conn) {
                         <input type="text" class="form-control" id="ProductName" name="productName" pattern="[A-Za-z\s]+" required title="Please enter only alphabetic characters." required>
                     </div>
                     <div class="mb-3">
-                        <label for="categoryIDProd" class="form-label"><b style="color: red;">*</b>Category ID <i style="color: lightgrey;">(automated)</i></label>
+                        <label for="categoryID" class="form-label"><b style="color: red;">*</b>Category ID <i style="color: lightgrey;">(automated)</i></label>
                         <input type="text" class="form-control" id="CategoryIDProd" name="categoryID" placeholder="202403----" readonly>
                     </div>
                     <div class="mb-3">
-                        <label for="categoryTypeProd" class="form-label"><b style="color: red;">*</b>Category Type</label>
-                        <input type="text" class="form-control" id="CategoryTypeProd" name="categoryType" required>
+                        <label for="categoryType" class="form-label"><b style="color: red;">*</b>Category Type</label>
+                        <select class="form-select" id="CategoryTypeProd" name="categoryType" required>
+                            <?php
+                                $conn = connect();
+        
+                                $sql = "SELECT * FROM categories";
+                                $retval = $conn->query($sql);
+                            
+                                if (!$retval) 
+                                {
+                                    echo "Error: " . $conn->error;
+                                } 
+                                else 
+                                {
+                                    if ($retval->num_rows > 0) 
+                                    {
+                                        while ($row = $retval->fetch_assoc()) 
+                                        {
+                                            echo "<option value='" . $row["category_type"] . "'>" . $row["category_type"] . "</option>";
+                                        }
+                                    }
+                                }
+                            ?>
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="productStatus" class="form-label"><b style="color: red;">*</b>Status</label>
-                        <input type="text" class="form-control" id="ProductStatus" name="productStatus" pattern="[A-Za-z\s]+" required title="Please enter only alphabetic characters." required>
+                        <select class="form-select" id="ProductStatus" name="productStatus" required>
+                            <option value="Male">Available</option>
+                            <option value="Female">Not Available</option>
+                        </select>
                     </div>
                     <div class="mb-3">
-                        <label for="productPrice" class="form-label"><b style="color: red;">*</b>Price</label>
+                        <label for="categoryType" class="form-label"><b style="color: red;">*</b>Price</label>
                         <input type="text" class="form-control" id="ProductPrice" name="productPrice" required>
                     </div>
                     <div  class="form-group d-flex justify-content-center align-items-center">
                         <button type="submit" class="btn btn-primary" id="updateBtn">Add Product</button>
-                        <button type="button" class="btn btn-clear" id="clearFormBtnProduct">Clear</button>
+                        <button type="button" class="btn btn-clear" id="clearFormBtn">Clear</button>
                     </div>
                 </form>
             </div>
@@ -1259,6 +1286,8 @@ function getTopOrLeastBoughtProducts($query, $conn) {
                 </div>
             </div> -->
     </div>
+      <!-- Footer -->
+      <?php include "Footer.php"?>  
     <!-- Bootstrap JavaScript -->
     <!-- Bootstrap JS and other scripts -->
     <script src="js/bootstrap.bundle.min.js"></script>
@@ -1416,6 +1445,6 @@ function getTopOrLeastBoughtProducts($query, $conn) {
         document.getElementsByClassName("close")[3].onclick = function() {
             document.getElementById('helpModal').style.display = "none";
         };
-    </script>
+    </script>    
 </body>
 </html>

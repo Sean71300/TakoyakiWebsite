@@ -8,6 +8,7 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Products</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="customCodes/custom.css">
     <!-- Custom CSS -->
     <style>
     body {
@@ -382,7 +383,7 @@ session_start();
             <li><a href="Admin_category.php"><i class="fas fa-th fa-fw"></i> <span class="nav-text">Categories</span></a></li>
             <li><a href="Admin_products.php"><i class="fas fa-box-open fa-fw"></i> <span class="nav-text">Products</span></a></li>
             <li><a href="Admin_ratings.php"><i class="fas fa-star fa-fw"></i> <span class="nav-text">Ratings</span></a></li>
-            <li><a href="Admin_gallery.php"><i class="fa fa-picture-o"></i> <span class="nav-text">Gallery</span></a></li>
+            <li><a href="Admin_gallery.php"><i class="fas fa-image fa-fw"></i> <span class="nav-text">Gallery</span></a></li>
             <li><a href="logout.php"><i class="fas fa-sign-out-alt fa-fw"></i> <span class="nav-text">Sign Out</span></a></li>
             <li><a href="#" id="HelpLink"><i class="fas fa-question-circle fa-fw"></i> <span class="nav-text">Help</span></a></li>
         </ul>
@@ -456,11 +457,36 @@ session_start();
                     </div>
                     <div class="mb-3">
                         <label for="categoryType" class="form-label"><b style="color: red;">*</b>Category Type</label>
-                        <input type="text" class="form-control" id="CategoryType" name="categoryType" required>
+                        <select class="form-select" id="CategoryType" name="categoryType" required>
+                            <?php
+                                $conn = connect();
+        
+                                $sql = "SELECT * FROM categories";
+                                $retval = $conn->query($sql);
+                            
+                                if (!$retval) 
+                                {
+                                    echo "Error: " . $conn->error;
+                                } 
+                                else 
+                                {
+                                    if ($retval->num_rows > 0) 
+                                    {
+                                        while ($row = $retval->fetch_assoc()) 
+                                        {
+                                            echo "<option value=" . $row["category_type"] . ">" . $row["category_type"] . "</option>";
+                                        }
+                                    }
+                                }
+                            ?>
+                        </select>
                     </div>
                     <div class="mb-3">
-                        <label for="categoryType" class="form-label"><b style="color: red;">*</b>Status</label>
-                        <input type="text" class="form-control" id="ProductStatus" name="productStatus" pattern="[A-Za-z\s]+" required title="Please enter only alphabetic characters." required>
+                        <label for="productStatus" class="form-label"><b style="color: red;">*</b>Status</label>
+                        <select class="form-select" id="ProductStatus" name="productStatus" required>
+                            <option value="Male">Available</option>
+                            <option value="Female">Not Available</option>
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="categoryType" class="form-label"><b style="color: red;">*</b>Price</label>
@@ -821,5 +847,7 @@ session_start();
         console.log('Modal closed');
 	    };
     </script>
+      <!-- Footer -->
+      <?php include "Footer.php"?>      
 </body>
 </html>
