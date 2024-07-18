@@ -254,9 +254,10 @@
                     </div>
                     <div class="mb-3">
                         <label for="phone" class="form-label">Phone Number</label>
-                        <input type="number" min="0"   id="phone" name="phone" class="form-control"   value="<?php echo search_Value("phone_number",htmlspecialchars($_SESSION["id"]))?>"
+                        <input type="number" min="0"   id="phone" name="phone" class="form-control" value="<?php echo search_Value("phone_number",htmlspecialchars($_SESSION["id"]))?>"
                                required>
                     </div>
+                    <div id="phoneValidationMessage" class="error text-danger"></div>
                     <div class="mb-3">
                         <label for="birthday" class="form-label">Birthdate:</label>
                         <input type="date" id="BirthD" name="BirthD" class="form-control"  value="<?php echo search_Value("birthdate",htmlspecialchars($_SESSION["id"]))?>"
@@ -312,6 +313,30 @@
             } else {
                 document.getElementById("picture").src = "#";
             }
+    }
+    const phoneNumberInput = document.getElementById('phone');
+    const phoneValidationMessage = document.getElementById('phoneValidationMessage');
+
+    phoneNumberInput.addEventListener('focusout', validatePhoneNumber);
+
+    function validatePhoneNumber() {
+      const phoneNumber = phoneNumberInput.value.replace(/\D/g, '');
+      const allowedPrefixes = [
+        '02', '032', '033', '034', '035', '036', '037', '038', '039',
+        '041', '042', '043', '044', '045', '046', '047', '048', '049',
+        '052', '053', '054', '055', '056', '057', '058', '059',
+        '063', '064', '065', '066', '067', '068',
+        '077', '078', '09',
+        '082', '083', '084', '085', '086', '087', '088', '089'
+      ];
+      const phoneNumberPattern = /^[0-9]{10,13}$/;
+
+      if (phoneNumberPattern.test(phoneNumber) && allowedPrefixes.some(prefix => phoneNumber.startsWith(prefix))) {
+        phoneValidationMessage.classList.remove('error');
+      } else {
+        phoneValidationMessage.textContent = 'Please enter a valid phone number';
+        phoneValidationMessage.classList.add('error');
+      }
     }
   </script>
 </body>
