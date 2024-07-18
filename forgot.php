@@ -34,7 +34,7 @@ if(isset($_POST['Submit'])){
         <br>
         <p>Click this link to reset your password!</p>
         <br>
-        <a href="http://localhost/finals-takoyaki/Takoyaki/TakoyakiWebsite/forgot-reset.php?token=$token">CLICK ME!</a> 
+        <a href="http://localhost/bon/TakoyakiWebsite-1/forgot-reset.php?token=$token">CLICK ME!</a> 
         END;
 
         try {
