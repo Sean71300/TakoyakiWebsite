@@ -192,7 +192,7 @@ include_once 'setup.php';
               <br>
               <span class="fs-6 fw-light" id="caption">Within a few clicks, find meals that will satisfy you.</span>
               <br>
-              <a href="About.php">
+              <a href='About.php'>
                 <button type="button" class="btn Bcol rounded-5 text-light mt-4" style="animation: btn-fade-left 3s ease 0s 1 normal forwards;"><b>About Us</b></button>
               </a>
             </div>
