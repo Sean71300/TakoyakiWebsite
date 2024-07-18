@@ -46,7 +46,7 @@ function cases($password) {
     }
     
 #No errors
-    if ($password == $confirm_password){
+    if ($password == $confirm_password && empty($error_messages)){
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
         $sql = "UPDATE customers 
@@ -91,7 +91,7 @@ function cases($password) {
                 </div>
 
                 <div class="form-group">
-                    <input type="submit" class="btn btn-primary w-100" name="reset" value="Submit"></input>
+                    <input type="submit" class="btn btn-primary w-100" name="reset" value="Submit" <?php if(!empty($messages)){echo 'disabled';}?>></input>
                     <a href="index.php" class="mt-3 btn btn-secondary w-100">Back</a>
                 </div>
             </form>
@@ -115,6 +115,7 @@ function cases($password) {
                     echo '<div class="mt-4 alert alert-success">';
                         echo '<p>'.$messages.'</p>';
                     echo '</div>';
+                    header("Refresh: 1; url=login.php");
                 }
                 ?>
             </div>
