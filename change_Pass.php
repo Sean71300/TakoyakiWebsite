@@ -14,9 +14,13 @@ $new_password_err = $confirm_password_err = "";
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     if(empty(trim($_POST["new_password"]))){
-        $new_password_err = "Please enter the new password.";     
-    } elseif(strlen(trim($_POST["new_password"])) < 3){
-        $new_password_err = "Password must have atleast 3 characters.";
+        $new_password_err = "Please enter the new password.<br>";     
+    } if(strlen(trim($_POST["new_password"])) < 8){
+        $new_password_err .= "Password must have atleast 8 characters.<br>";
+    } if((!specialChars($_POST["new_password"]))){
+        $new_password_err .= "Password must have special symbols.<br>";
+    } if(cases($_POST["new_password"]) == 0){
+        $new_password_err .= "Password should have a combination of upper and lower cases.<br>";
     } else{
         $new_password = trim($_POST["new_password"]);
     }
@@ -54,6 +58,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     mysqli_close($link);
 }
+
+//function for password symbol checker
+function specialChars($password) {
+    return preg_match('/[^a-zA-Z0-9]/', $password) > 0;
+}
+//function for password lower and upper cases checker
+function cases($password) { 
+    return preg_match('/^(?=.*[a-z])(?=.*[A-Z]).*$/', $password) === 1;
+} 
 ?>
 
 <html>
