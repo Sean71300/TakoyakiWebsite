@@ -176,9 +176,9 @@
     </head>
     <body class="bg-body-tertiary">
     <?php
-session_start();
-include_once 'setup.php';
-?>
+      session_start();
+      include_once 'setup.php';
+    ?>
 	
     <!-- Loading Functionality -->
 
