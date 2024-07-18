@@ -492,7 +492,12 @@ session_start();
                     </div>
                     <div class="mb-3">
                         <label for="employeePosition" class="form-label"><b style="color: red;">*</b>Position</label>
-                        <input type="text" class="form-control" id="EmployeePosition" name="employeePosition" pattern="[A-Za-z\s]+" required title="Please enter only alphabetic characters." required>
+                        <select class="form-select" id="EmployeePosition" name="employeePosition" required>
+                            <option value="Admin">Admin</option>
+                            <option value="Manager">Manager</option>
+                            <option value="Employee">Employee</option>
+                            <option value="Cashier">Cashier</option>
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="employeeEmail" class="form-label"><b style="color: red;">*</b>Email</label>
