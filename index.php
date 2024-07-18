@@ -175,10 +175,6 @@
         </style>
     </head>
     <body class="bg-body-tertiary">
-    <?php
-      session_start();
-      include_once 'setup.php';
-    ?>
 	
     <!-- Loading Functionality -->
 
@@ -193,7 +189,7 @@
               <br>
               <span class="fs-6 fw-light" id="caption">Within a few clicks, find meals that will satisfy you.</span>
               <br>
-              <a href="./About.php">
+              <a href="About.php">
                 <button type="button" class="btn Bcol rounded-5 text-light mt-4" style="animation: btn-fade-left 3s ease 0s 1 normal forwards;"><b>About Us</b></button>
               </a>
             </div>
@@ -265,7 +261,7 @@
             <div class="col-1 text-center"></div>                  
           </div>
           <div class="text-center">
-            <a href="./Menu.php">
+            <a href="Menu.php">
               <button type="button" class="btn Bcol rounded-5 text-light mt-4" style="animation: fade 4s ease 0s 1 normal forwards;"><b>See More</b></button>
             </a>
           </div>
