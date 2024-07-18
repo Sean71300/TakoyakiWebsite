@@ -178,18 +178,9 @@ include_once 'setup.php';
         </style>
     </head>
     <body class="bg-body-tertiary">
-	<script>
-		window.onload = function() {
-		  const loadingScreen = document.querySelector('.loading-screen');
-		  loadingScreen.style.opacity = 0;
-		  setTimeout(() => {
-			loadingScreen.remove();
-			document.body.style.display = 'block';
-		  }, 1000);
-		}
-	</script>
+	
     <!-- Loading Functionality -->
-	     
+
     <!-- NavBar -->
       <?php include "Navigation.php"?> 
       <div class="forOpener">
