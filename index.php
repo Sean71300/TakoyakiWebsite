@@ -265,7 +265,7 @@
             <div class="col-1 text-center"></div>                  
           </div>
           <div class="text-center">
-            <a href="Menu.php">
+            <a href="./Menu.php">
               <button type="button" class="btn Bcol rounded-5 text-light mt-4" style="animation: fade 4s ease 0s 1 normal forwards;"><b>See More</b></button>
             </a>
           </div>
