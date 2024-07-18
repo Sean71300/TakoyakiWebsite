@@ -1,4 +1,7 @@
-
+<?php
+session_start();
+include_once 'setup.php';
+?>
 
 <html>
     <head>
@@ -175,9 +178,20 @@
         </style>
     </head>
     <body class="bg-body-tertiary">
-	
+	<script>
+		window.onload = function() {
+		  const loadingScreen = document.querySelector('.loading-screen');
+		  loadingScreen.style.opacity = 0;
+		  setTimeout(() => {
+			loadingScreen.remove();
+			document.body.style.display = 'block';
+		  }, 1000);
+		}
+	</script>
     <!-- Loading Functionality -->
-
+	  <div class="loading-screen">
+		  <img src="Images/loading.png" alt="Loading...">
+	  </div>    
     <!-- NavBar -->
       <?php include "Navigation.php"?> 
       <div class="forOpener">

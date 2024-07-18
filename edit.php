@@ -329,10 +329,11 @@
         '077', '078', '09',
         '082', '083', '084', '085', '086', '087', '088', '089'
       ];
-      const phoneNumberPattern = /^[0-9]{10,13}$/;
+      const phoneNumberPattern = /^[0-9]{11}$/;
 
       if (phoneNumberPattern.test(phoneNumber) && allowedPrefixes.some(prefix => phoneNumber.startsWith(prefix))) {
         phoneValidationMessage.classList.remove('error');
+        phoneValidationMessage.textContent = '';
       } else {
         phoneValidationMessage.textContent = 'Please enter a valid phone number';
         phoneValidationMessage.classList.add('error');
