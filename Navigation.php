@@ -24,7 +24,7 @@
                 <a class="nav-link" href="Contact.php">Contact</a>
                 </li>                 
                 <li class="nav-item m-2">
-                <a class="nav-link" href="rating.php">Rating</a>
+                <a class="nav-link" href="posted-rate.php">Rating</a>
                 </li>                         
                 <li class="nav-item m-2">
                 <a class="nav-link" href="Client_Gallery.php">Gallery</a>
